@@ -19,10 +19,6 @@
   <a href="https://github.com/giftdee/RACHEL-XMD"><img title="Repo Size" src="https://img.shields.io/github/repo-size/giftdee/RACHEL-XMD?style=flat-square&color=green"></a>
 </p>
 
----
-
-## External Plugins 💢
-Click [Go to External Plugins](https://github.com/giftdee/External-plugins/tree/main)
 
 ---
 
