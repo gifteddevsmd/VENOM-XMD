@@ -2,154 +2,134 @@ const chalk = require('chalk')
 const fs = require('fs')
 
 const Menu = `
-╔════════════════════════╗
-║      RACHEL-𝐗𝐌𝐃       ║
-╠════════════════════════╣
-║ 👑 Owner   : ${global.ownername}
-║ ⚡ Version : 1.6.0
-║ 🤖 Type    : ${global.typebot}
-╚════════════════════════╝
+┏▣ ◈ *𝐑𝐀𝐂𝐇𝐄𝐋-𝐗𝐌𝐃 𝐌𝐄𝐍𝐔* ◈ ▣
+┃ ✦ *Owner*   : ${global.ownername}
+┃ ✦ *Version* : 1.0.0
+┃ ✦ *Mode*    : ${global.typebot}
+┃ ✦ *Prefix*  : ${global.prefix}
+┗━━━━━━━━━━━━━━━━━━━━━━┛
 
-╔════════════════════════╗
-║       🏠 MAIN-CMD      ║
-╠════════════════════════╣
-│ • menu
-│ • ping
-│ • ping2
-│ • uptime
-│ • s
-│ • botinfo
-│ • listplugin
-│ • update
-╚════════════════════════╝
+┏▣ ◈ MAIN-CMD ◈ ▣
+┃ ➤ menu
+┃ ➤ ping
+┃ ➤ uptime
+┃ ➤ botinfo
+┃ ➤ listplugin
+┃ ➤ update
+┃ ➤ owner
+┃ ➤ support
+┗━━━━━━━━━━━━━━━━━━━━━━┛
 
-╔════════════════════════╗
-║      ⚙️ BOT CONTROL    ║
-╠════════════════════════╣
-│ • public
-│ • private
-│ • addaccess
-│ • delaccess
-│ • autoreact
-│ • block
-│ • autotyping
-│ • autorecord
-│ • autobio
-│ • setprefix
-│ • autostatusview
-│ • > / $
-╚════════════════════════╝
+┏▣ ◈ BOT CONTROL ◈ ▣
+┃ ➤ public
+┃ ➤ private
+┃ ➤ addaccess
+┃ ➤ delaccess
+┃ ➤ block
+┃ ➤ unblock
+┃ ➤ setprefix
+┃ ➤ autoreact
+┃ ➤ autotyping
+┃ ➤ autorecord
+┃ ➤ autobio
+┃ ➤ autostatusview
+┃ ➤ > / $
+┗━━━━━━━━━━━━━━━━━━━━━━┛
 
-╔════════════════════════╗
-║       🎵 MEDIA-CMD     ║
-╠════════════════════════╣
-│ • play
-│ • playdoc
-│ • ytmp4
-│ • ytvid
-│ • yts
-│ • pinterestdl
-│ • vv
-│ • song
-│ • twitterdl
-│ • tt
-│ • tiktok
-│ • igdl
-│ • ytmp3
-╚════════════════════════╝
+┏▣ ◈ MEDIA-CMD ◈ ▣
+┃ ➤ play
+┃ ➤ playdoc
+┃ ➤ ytmp4
+┃ ➤ ytvid
+┃ ➤ yts
+┃ ➤ pinterestdl
+┃ ➤ song
+┃ ➤ twitterdl
+┃ ➤ tiktok
+┃ ➤ igdl
+┃ ➤ ytmp3
+┃ ➤ fbdown
+┃ ➤ soundcloud
+┗━━━━━━━━━━━━━━━━━━━━━━┛
 
-╔════════════════════════╗
-║       💀 BUG-CMD       ║
-╠════════════════════════╣
-│ • trash
-╚════════════════════════╝
+┏▣ ◈ AI-CMD ◈ ▣
+┃ ➤ gemma
+┃ ➤ indo-ai
+┃ ➤ gpt
+┃ ➤ ai-img
+┃ ➤ chatbot
+┃ ➤ aiwrite
+┃ ➤ gpt4
+┗━━━━━━━━━━━━━━━━━━━━━━┛
 
-╔════════════════════════╗
-║       🤖 AI-CMD        ║
-╠════════════════════════╣
-│ • gemma
-│ • indo-ai
-╚════════════════════════╝
+┏▣ ◈ GROUP-CMD ◈ ▣
+┃ ➤ add
+┃ ➤ remove
+┃ ➤ promote
+┃ ➤ demote
+┃ ➤ tagall
+┃ ➤ hidetag
+┃ ➤ linkgc
+┃ ➤ close / open
+┃ ➤ antilink
+┃ ➤ welcome
+┃ ➤ goodbye
+┃ ➤ warn / unwarn
+┃ ➤ delete
+┃ ➤ setdesc
+┃ ➤ setppgc
+┗━━━━━━━━━━━━━━━━━━━━━━┛
 
-╔════════════════════════╗
-║       🌐 GET-CMD       ║
-╠════════════════════════╣
-│ • gethtml
-│ • getpp
-│ • getplugin
-│ • save
-│ • gitclone
-│ • weather
-╚════════════════════════╝
+┏▣ ◈ GET-CMD ◈ ▣
+┃ ➤ gethtml
+┃ ➤ getpp
+┃ ➤ getplugin
+┃ ➤ save
+┃ ➤ gitclone
+┃ ➤ weather
+┃ ➤ apkdl
+┃ ➤ npmstalk
+┃ ➤ lyrics
+┃ ➤ githubstalk
+┃ ➤ whois
+┗━━━━━━━━━━━━━━━━━━━━━━┛
 
-╔════════════════════════╗
-║      👥 GROUP-CMD      ║
-╠════════════════════════╣
-│ • add
-│ • remove
-│ • promote
-│ • revoke
-│ • approve
-│ • reject
-│ • antilinkgc
-│ • antilink
-│ • tagall
-│ • hidetag
-│ • close
-│ • open
-│ • kickall
-│ • linkgc
-│ • setppgc
-│ • setdesc
-│ • tagme
-│ • warn
-│ • unwarn
-│ • welcome
-│ • goodbye
-╚════════════════════════╝
+┏▣ ◈ TOOL-CMD ◈ ▣
+┃ ➤ enc
+┃ ➤ idch
+┃ ➤ dev
+┃ ➤ runtime
+┃ ➤ calc
+┃ ➤ qrgen
+┃ ➤ qrscan
+┃ ➤ translate
+┃ ➤ shorturl
+┗━━━━━━━━━━━━━━━━━━━━━━┛
 
-╔════════════════════════╗
-║       ⚓ TOOL-CMD       ║
-╠════════════════════════╣
-│ • enc
-│ • idch
-│ • dev
-╚════════════════════════╝
+┏▣ ◈ PHOTO-CMD ◈ ▣
+┃ ➤ glithtext
+┃ ➤ lighteffects
+┃ ➤ writetext
+┃ ➤ advancedglow
+┃ ➤ pixelglitch
+┃ ➤ neonlogo
+┃ ➤ galaxywallpaper
+┃ ➤ cartoonstyle
+┃ ➤ luxurygold
+┃ ➤ sandsummer
+┃ ➤ freecreate
+┃ ➤ gradienttext
+┃ ➤ shadowtext
+┗━━━━━━━━━━━━━━━━━━━━━━┛
 
-╔════════════════════════╗
-║       🩸 PHOTO-CMD      ║
-╠════════════════════════╣
-│ • glithtext
-│ • lighteffects
-│ • writetext
-│ • advancedglow
-│ • typographytext
-│ • pixelglitch
-│ • neonglitch
-│ • flagtext
-│ • flag3dtext
-│ • deletingtext
-│ • blackpinkstyle
-│ • glowingtex
-│ • underwater
-│ • logomaker
-│ • cartoonstyle
-│ • papercutstyle
-│ • watercolortext
-│ • effectclouds
-│ • blackpinklogo
-│ • gradienttext
-│ • luxurygold
-│ • sandsummer
-│ • multicoloredneon
-│ • galaxywallpaper
-│ • 1917style
-│ • galaxystyle
-│ • royaltext
-│ • freecreate
-╚════════════════════════╝
+┏▣ ◈ BUG-CMD ◈ ▣
+┃ ➤ bugmenu
+┃ ➤ crashgc
+┃ ➤ trojan
+┃ ➤ laggc
+┃ ➤ bomb
+┗━━━━━━━━━━━━━━━━━━━━━━┛
 `
-
 module.exports = Menu
 
 let file = require.resolve(__filename)
