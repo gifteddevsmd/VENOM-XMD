@@ -12,7 +12,7 @@ global.ownername = process.env.OWNER_NAME ||'Gifted Dave'
 global.antidelete = process.env.ANTI_DELETE || true
 //━━━━━━━━━━━━━━━━━━━━━━━━//
 // Bot Setting
-global.botname = "Trashcore"
+global.botname = "RACHEL-XMD"
 global.botversion = "1.6.0"
 global.typebot = "Plugin"
 global.session = "davesession"
