@@ -9,292 +9,291 @@ const Menu = `
 ┃ ✦ Prefix  : ${global.xprefix || '.'}
 ┗━━━━━━━━━━━━━━━━━━━━━━
 ╭──• ❰ *Owner Menu* ❱
-║◦autoread
-║◦autobio 
-║◦autotype 
-║◦unavailable 
+║◦${xprefix}autoread
+║◦${xprefix}autobio 
+║◦${xprefix}autotype 
+║◦${xprefix}unavailable 
 ║◦autorecord 
-║◦autorecordtype 
-║◦autoswview 
-║◦setautoblock 
-║◦setantiforeign 
-║◦autoblock 
-║◦onlygc 
-║◦onlypc 
-║◦anticall 
-║◦self 
-║◦public 
-║◦join 
-║◦poll 
-║◦bc 
-║◦bcgroup 
-║◦setmenu 
-║◦setimgmenu 
-║◦setvidmenu 
-║◦setgifmenu 
-║◦setreply 
-║◦setprefix 
-║◦addlimit 
-║◦dellimit 
-║◦resethit 
-║◦resetuser 
-║◦creategc 
-║◦setexif 
-║◦userjid 
-║◦setbotbio 
-║◦delppbot 
-║◦trackip 
-║◦setppbot 
-║◦addprem 
-║◦delprem 
-║◦addowner 
-║◦delowner 
-║◦block 
-║◦unblock 
-║◦leavegc 
+║◦${xprefix}autorecordtype 
+║◦${xprefix}autoswview 
+║◦${xprefix}setautoblock 
+║◦${xprefix}setantiforeign 
+║◦${xprefix}autoblock 
+║◦${xprefix}onlygc 
+║◦${xprefix}onlypc 
+║◦${xprefix}anticall 
+║◦${xprefix}self 
+║◦${xprefix}public 
+║◦${xprefix}join 
+║◦${xprefix}poll 
+║◦${xprefix}bc 
+║◦${xprefix}bcgroup 
+║◦${xprefix}setmenu 
+║◦${xprefix}setimgmenu 
+║◦${xprefix}setvidmenu 
+║◦${xprefix}setgifmenu 
+║◦${xprefix}setreply 
+║◦${xprefix}setprefix 
+║◦${xprefix}addlimit 
+║◦${xprefix}dellimit 
+║◦${xprefix}resethit 
+║◦${xprefix}resetuser 
+║◦${xprefix}creategc 
+║◦${xprefix}setexif 
+║◦${xprefix}userjid 
+║◦${xprefix}setbotbio 
+║◦${xprefix}delppbot 
+║◦${xprefix}trackip 
+║◦${xprefix}setppbot 
+║◦${xprefix}addprem 
+║◦${xprefix}delprem 
+║◦${xprefix}addowner 
+║◦${xprefix}delowner 
+║◦${xprefix}block 
+║◦${xprefix}unblock 
+║◦${xprefix}leavegc 
 ╰⟢
 ╭──• ❰ *Group Menu* ❱
-║◦antibot 
-║◦antiviewonce 
-║◦welcome 
-║◦adminevent 
-║◦groupevent 
-║◦antiforeign 
-║◦antimedia 
-║◦antiaudio 
-║◦antivideo 
-║◦antiimage 
-║◦antidocument 
-║◦antilocation 
-║◦anticontact 
-║◦antisticker 
-║◦antipoll 
-║◦antilink 
-║◦antilinkgc 
-║◦antivirtex 
-║◦grouplink 
-║◦listadmin 
-║◦invite 
-║◦delete 
-║◦setppgroup 
-║◦delppgroup 
-║◦setnamegc 
-║◦setdesc 
-║◦add 
-║◦kick 
-║◦promote 
-║◦demote 
-║◦getcontact 
-║◦savecontact 
-║◦sendcontact 
-║◦contactag 
-║◦hidetag 
-║◦totag 
-║◦tagall 
-║◦editinfo 
-║◦opentime 
-║◦closetime 
-║◦resetlink 
-║◦getbio 
-║◦vote 
-║◦upvote 
-║◦downvote 
-║◦checkvote 
-║◦delvote 
-║◦autostickergc 
-║◦react 
-║◦kickall
-║◦open
-║◦close
+║◦${xprefix}antibot 
+║◦${xprefix}antiviewonce 
+║◦${xprefix}welcome 
+║◦${xprefix}adminevent 
+║◦${xprefix}groupevent 
+║◦${xprefix}antiforeign 
+║◦${xprefix}antimedia 
+║◦${xprefix}antiaudio 
+║◦${xprefix}antivideo 
+║◦${xprefix}antiimage 
+║◦${xprefix}antidocument 
+║◦${xprefix}antilocation 
+║◦${xprefix}anticontact 
+║◦${xprefix}antisticker 
+║◦${xprefix}antipoll 
+║◦${xprefix}antilink 
+║◦${xprefix}antilinkgc 
+║◦${xprefix}antivirtex 
+║◦${xprefix}grouplink 
+║◦${xprefix}listadmin 
+║◦${xprefix}invite 
+║◦${xprefix}delete 
+║◦${xprefix}setppgroup 
+║◦${xprefix}delppgroup 
+║◦${xprefix}setnamegc 
+║◦${xprefix}setdesc 
+║◦${xprefix}add 
+║◦${xprefix}kick 
+║◦${xprefix}promote 
+║◦${xprefix}demote 
+║◦${xprefix}getcontact 
+║◦${xprefix}savecontact 
+║◦${xprefix}sendcontact 
+║◦${xprefix}contactag 
+║◦${xprefix}hidetag 
+║◦${xprefix}totag 
+║◦${xprefix}tagall 
+║◦${xprefix}editinfo 
+║◦${xprefix}opentime 
+║◦${xprefix}closetime 
+║◦${xprefix}resetlink 
+║◦${xprefix}getbio 
+║◦${xprefix}vote 
+║◦${xprefix}upvote 
+║◦${xprefix}downvote 
+║◦${xprefix}checkvote 
+║◦${xprefix}delvote 
+║◦${xprefix}autostickergc 
+║◦${xprefix}react 
+║◦${xprefix}kickall
+║◦${xprefix}open
+║◦${xprefix}close
 ╰⟢
 ╭──• ❰ *Download Menu* ❱
-║◦ytsearch 
-║◦play 
-║◦ytmp3 
-║◦ytmp4 
-║◦tiktokaudio 
-║◦tiktok 
-║◦igvideo 
-║◦igimage 
-║◦facebook 
-║◦mediafire 
-║◦google 
-║◦imdb 
-║◦weather 
-║◦wanumber 
-║◦spotify 
-║◦gitclone 
-║◦happymod 
-║◦gdrive 
-║◦pinterest 
-║◦ringtone 
+║◦${xprefix}ytsearch 
+║◦${xprefix}play 
+║◦${xprefix}ytmp3 
+║◦${xprefix}ytmp4 
+║◦${xprefix}tiktokaudio 
+║◦${xprefix}tiktok 
+║◦${xprefix}igvideo 
+║◦${xprefix}igimage 
+║◦${xprefix}facebook 
+║◦${xprefix}mediafire 
+║◦${xprefix}google 
+║◦${xprefix}imdb 
+║◦${xprefix}weather 
+║◦${xprefix}wanumber 
+║◦${xprefix}spotify 
+║◦${xprefix}gitclone 
+║◦${xprefix}happymod 
+║◦${xprefix}gdrive 
+║◦${xprefix}pinterest 
+║◦${xprefix}ringtone 
 ╰⟢
 ╭──• ❰ *Random Video* ❱
-║◦tiktokgirl 
-║◦tiktoknukthy 
-║◦tiktokkayes 
-║◦tiktokpanrika 
-║◦tiktoknotnot 
-║◦tiktokghea 
-║◦tiktoksantuy 
-║◦tiktokbocil 
+║◦${xprefix}tiktokgirl 
+║◦${xprefix}tiktoknukthy 
+║◦${xprefix}tiktokkayes 
+║◦${xprefix}tiktokpanrika 
+║◦${xprefix}tiktoknotnot 
+║◦${xprefix}tiktokghea 
+║◦${xprefix}tiktoksantuy 
+║◦${xprefix}tiktokbocil 
 ╰⟢
 ╭──• ❰ *Stalker* ❱
-║◦igstalk 
-║◦tiktokstalk 
-║◦mlstalk 
-║◦npmstalk 
-║◦ghstalk 
+║◦${xprefix}igstalk 
+║◦${xprefix}tiktokstalk 
+║◦${xprefix}mlstalk 
+║◦${xprefix}npmstalk 
+║◦${xprefix}ghstalk 
 ╰⟢
 
 ╭──• ❰ *OpenAI* ❱
-║◦openai 
-║◦dalle 
-║◦ai 
-║◦remini 
+║◦${xprefix}openai 
+║◦${xprefix}dalle 
+║◦${xprefix}ai 
+║◦${xprefix}remini 
 ╰⟢
 ╭──• ❰ *Fun Menu* ❱
-║◦define 
-║◦lyrics 
-║◦suit 
-║◦math 
-║◦tictactoe 
-║◦fact 
-║◦truth 
-║◦dare 
-║◦couple 
-║◦soulmate 
-║◦stupidcheck 
-║◦handsomecheck 
-║◦uncleancheck 
-║◦hotcheck 
-║◦smartcheck 
-║◦greatcheck 
-║◦evilcheck 
-║◦dogcheck 
-║◦coolcheck 
-║◦waifucheck 
-║◦awesomecheck 
-║◦gaycheck 
-║◦cutecheck 
-║◦lesbiancheck 
-║◦hornycheck 
-║◦prettycheck 
-║◦lovelycheck 
-║◦uglycheck 
-║◦pick 
-║◦pickupline 
-║◦quotes 
-║◦can 
-║◦is 
-║◦gecg 
-║◦checkme 
-║◦tqto 
+║◦${xprefix}define 
+║◦${xprefix}lyrics 
+║◦${xprefix}suit 
+║◦${xprefix}math 
+║◦${xprefix}tictactoe 
+║◦${xprefix}fact 
+║◦${xprefix}truth 
+║◦${xprefix}dare 
+║◦${xprefix}couple 
+║◦${xprefix}soulmate 
+║◦${xprefix}stupidcheck 
+║◦${xprefix}handsomecheck 
+║◦${xprefix}uncleancheck 
+║◦${xprefix}hotcheck 
+║◦${xprefix}smartcheck 
+║◦${xprefix}greatcheck 
+║◦${xprefix}evilcheck 
+║◦${xprefix}dogcheck 
+║◦${xprefix}coolcheck 
+║◦${xprefix}waifucheck 
+║◦${xprefix}awesomecheck 
+║◦${xprefix}gaycheck 
+║◦${xprefix}cutecheck 
+║◦${xprefix}lesbiancheck 
+║◦${xprefix}hornycheck 
+║◦${xprefix}prettycheck 
+║◦${xprefix}lovelycheck 
+║◦${xprefix}uglycheck 
+║◦${xprefix}pick 
+║◦${xprefix}pickupline 
+║◦${xprefix}quotes 
+║◦${xprefix}can 
+║◦${xprefix}is 
+║◦${xprefix}gecg 
+║◦${xprefix}checkme 
+║◦${xprefix}tqto 
 ╰⟢
 ╭──• ❰ *PhotoOxy Maker* ❱
-║◦shadow   
-║◦write  
-║◦romantic  
-║◦burnpaper 
-║◦smoke 
-║◦narutobanner  
-║◦love  
-║◦undergrass 
-║◦doublelove  
-║◦coffecup 
-║◦underwaterocean 
-║◦smokyneon 
-║◦starstext 
-║◦rainboweffect 
-║◦balloontext 
-║◦metalliceffect 
-║◦embroiderytext 
-║◦flamingtext 
-║◦stonetext 
-║◦writeart 
-║◦summertext 
-║◦wolfmetaltext 
-║◦nature3dtext 
-║◦rosestext 
-║◦naturetypography 
-║◦quotesunder 
-║◦shinetext 
+║◦${xprefix}shadow   
+║◦${xprefix}write  
+║◦${xprefix}romantic  
+║◦${xprefix}burnpaper 
+║◦${xprefix}smoke 
+║◦${xprefix}narutobanner  
+║◦${xprefix}love  
+║◦${xprefix}undergrass 
+║◦${xprefix}doublelove  
+║◦${xprefix}coffecup 
+║◦${xprefix}underwaterocean 
+║◦${xprefix}smokyneon 
+║◦${xprefix}starstext 
+║◦${xprefix}rainboweffect 
+║◦${xprefix}balloontext 
+║◦${xprefix}metalliceffect 
+║◦${xprefix}embroiderytext 
+║◦${xprefix}flamingtext 
+║◦${xprefix}stonetext 
+║◦${xprefix}writeart 
+║◦${xprefix}summertext 
+║◦${xprefix}wolfmetaltext 
+║◦${xprefix}nature3dtext 
+║◦${xprefix}rosestext 
+║◦${xprefix}naturetypography 
+║◦${xprefix}quotesunder 
+║◦${xprefix}shinetext 
 ╰⟢
 ╭──• ❰ *Ephoto360 Maker* ❱
-║◦glitchtext 
-║◦writetext 
-║◦advancedglow 
-║◦typographytext 
-║◦pixelglitch 
-║◦neonglitch 
-║◦flagtext 
-║◦flag3dtext 
-║◦deletingtext 
-║◦blackpinkstyle 
-║◦glowingtext 
-║◦underwatertext 
-║◦logomaker 
-║◦cartoonstyle 
-║◦papercutstyle 
-║◦watercolortext 
-║◦effectclouds 
-║◦blackpinklogo 
-║◦gradienttext 
-║◦summerbeach 
-║◦luxurygold 
-║◦multicoloredneon 
-║◦sandsummer 
-║◦galaxywallpaper 
-║◦1917style 
-║◦makingneon 
-║◦freecreate 
-║◦galaxystyle 
-║◦lighteffects 
+║◦${xprefix}glitchtext 
+║◦${xprefix}writetext 
+║◦${xprefix}advancedglow 
+║◦${xprefix}typographytext 
+║◦${xprefix}pixelglitch 
+║◦${xprefix}neonglitch 
+║◦${xprefix}flagtext 
+║◦${xprefix}flag3dtext 
+║◦${xprefix}deletingtext 
+║◦${xprefix}blackpinkstyle 
+║◦${xprefix}glowingtext 
+║◦${xprefix}underwatertext 
+║◦${xprefix}logomaker 
+║◦${xprefix}cartoonstyle 
+║◦${xprefix}papercutstyle 
+║◦${xprefix}watercolortext 
+║◦${xprefix}effectclouds 
+║◦${xprefix}blackpinklogo 
+║◦${xprefix}gradienttext 
+║◦${xprefix}summerbeach 
+║◦${xprefix}luxurygold 
+║◦${xprefix}multicoloredneon 
+║◦${xprefix}sandsummer 
+║◦${xprefix}galaxywallpaper 
+║◦${xprefix}1917style 
+║◦${xprefix}makingneon 
+║◦${xprefix}freecreate 
+║◦${xprefix}galaxystyle 
+║◦${xprefix}lighteffects 
 ╰⟢
-> BELLAH XMD VERSION 1 
 ╭──• ❰ *Other Menu* ❱
-║◦ping 
-║◦menu 
-║◦repo 
-║◦listpc 
-║◦listgc 
-║◦idgroup 
-║◦owner 
-║◦tts 
-║◦say 
-║◦checkaccount 
-║◦vv 
-║◦quran 
-║◦bible 
+║◦${xprefix}ping 
+║◦${xprefix}menu 
+║◦${xprefix}repo 
+║◦${xprefix}listpc 
+║◦${xprefix}listgc 
+║◦${xprefix}idgroup 
+║◦${xprefix}owner 
+║◦${xprefix}tts 
+║◦${xprefix}say 
+║◦${xprefix}checkaccount 
+║◦${xprefix}vv 
+║◦${xprefix}quran 
+║◦${xprefix}bible 
 ╰⟢
 ╭──• ❰ *Bug & War* ❱
-║◦amountbug 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
-║◦pmbug 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
-║◦delaybug 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
-║◦docubug 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
-║◦unlimitedbug 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
-║◦bombug 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
-║◦lagbug 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
-║◦trollybug 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
-║◦gcbug 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
-║◦delaygcbug 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
-║◦laggcbug 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
-║◦bomgcbug 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
-║◦unlimitedgcbug 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
-║◦trollygcbug 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
-║◦docugcbug 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
-║◦verif 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
-║◦banv1 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
-║◦banv2 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
-║◦banv3 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
-║◦banv4 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
-║◦banv5 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
-║◦banv6 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
-║◦unbanv1 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
-║◦unbanv2 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
-║◦unbanv3 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
-║◦unbanv4 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
-║◦unbanv5 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
+║◦${xprefix}amountbug 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
+║◦${xprefix}pmbug 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
+║◦${xprefix}delaybug 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
+║◦${xprefix}docubug 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
+║◦${xprefix}unlimitedbug 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
+║◦${xprefix}bombug 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
+║◦${xprefix}lagbug 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
+║◦${xprefix}trollybug 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
+║◦${xprefix}gcbug 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
+║◦${xprefix}delaygcbug 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
+║◦${xprefix}laggcbug 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
+║◦${xprefix}bomgcbug 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
+║◦${xprefix}unlimitedgcbug 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
+║◦${xprefix}trollygcbug 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
+║◦${xprefix}docugcbug 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
+║◦${xprefix}verif 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
+║◦${xprefix}banv1 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
+║◦${xprefix}banv2 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
+║◦${xprefix}banv3 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
+║◦${xprefix}banv4 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
+║◦${xprefix}banv5 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
+║◦${xprefix}banv6 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
+║◦${xprefix}unbanv1 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
+║◦${xprefix}unbanv2 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
+║◦${xprefix}unbanv3 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
+║◦${xprefix}unbanv4 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
+║◦${xprefix}unbanv5 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
 ╰⟢
 > RACHEL-XMD VERSION 1
 > GIFTED DAVE
@@ -306,8 +305,8 @@ module.exports = Menu
 
 let file = require.resolve(__filename)
 fs.watchFile(file, () => {
-	fs.unwatchFile(file)
-	console.log(chalk.redBright(`Update ${__filename}`))
-	delete require.cache[file]
-	require(file)
+        fs.unwatchFile(file)
+        console.log(chalk.redBright(`Update ${__filename}`))
+        delete require.cache[file]
+        require(file)
 })
