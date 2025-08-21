@@ -192,7 +192,7 @@ async function startdave() {
             }
           }
         });
-        console.log(color('>DAVE-MD is Connected< [ ! ]', 'red'))
+        console.log(color('>RACHEL-XMD is Connected< [ ! ]', 'red'))
       }
 
     } catch (err) {
