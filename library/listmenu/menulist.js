@@ -2,7 +2,7 @@ const chalk = require('chalk')
 const fs = require('fs')
 
 const Menu = `
-▣ ◈ *${global.botname || 'BOT'} MENU* ◈ ▣
+▣ ◈ *RACHEL-𝐗𝐌𝐃 MENU* ◈ ▣
 ┃ ✦ Owner   : ${global.ownername}
 ┃ ✦ Version : 1.0.0
 ┃ ✦ Mode    : ${global.typebot}
