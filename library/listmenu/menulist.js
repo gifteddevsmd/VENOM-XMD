@@ -267,7 +267,7 @@ const Menu = `
 ║◦${xprefix}bible 
 ╰⟢
 ╭──• ❰ *Bug & War* ❱
-║◦${xprefix}amountbug 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
+║◦${xprefix}dave 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
 ║◦${xprefix}pmbug 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
 ║◦${xprefix}delaybug 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
 ║◦${xprefix}docubug 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
@@ -279,21 +279,6 @@ const Menu = `
 ║◦${xprefix}delaygcbug 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
 ║◦${xprefix}laggcbug 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
 ║◦${xprefix}bomgcbug 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
-║◦${xprefix}unlimitedgcbug 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
-║◦${xprefix}trollygcbug 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
-║◦${xprefix}docugcbug 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
-║◦${xprefix}verif 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
-║◦${xprefix}banv1 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
-║◦${xprefix}banv2 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
-║◦${xprefix}banv3 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
-║◦${xprefix}banv4 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
-║◦${xprefix}banv5 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
-║◦${xprefix}banv6 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
-║◦${xprefix}unbanv1 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
-║◦${xprefix}unbanv2 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
-║◦${xprefix}unbanv3 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
-║◦${xprefix}unbanv4 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
-║◦${xprefix}unbanv5 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
 ╰⟢
 > RACHEL-XMD VERSION 1
 > GIFTED DAVE
