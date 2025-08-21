@@ -11,7 +11,7 @@ function formatBytes(bytes) {
     return `${(bytes / Math.pow(1024, i)).toFixed(2)} ${sizes[i]}`
 }
 
-// Get uptime in h:m:s
+// Get uptime
 function getUptime() {
     let totalSeconds = process.uptime()
     const hours = Math.floor(totalSeconds / 3600)
@@ -21,7 +21,7 @@ function getUptime() {
     return `${hours}h ${minutes}m ${seconds}s`
 }
 
-// Get RAM usage
+// RAM usage
 function getMemoryUsage() {
     const used = process.memoryUsage().heapUsed
     const total = os.totalmem()
@@ -33,18 +33,19 @@ function getPing() {
     return `${Math.floor(Math.random() * 50) + 30} ms`
 }
 
-// Main menu function
+// Menu function
 function Menu() {
     return `
-┏▣ ◈ *${global.botname || 'BOT'} 𝐌𝐄𝐍𝐔* ◈ ▣
-┃ ✦ *Owner*   : ${global.ownername || 'Not Set'}
-┃ ✦ *Version* : ${global.botversion || '1.0.0'}
-┃ ✦ *Mode*    : ${global.typebot || 'Plugin'}
-┃ ✦ *Prefix*  : ${global.xprefix || '.'}
-┃ ✦ *Uptime*  : ${getUptime()}
-┃ ✦ *RAM*     : ${getMemoryUsage()}
-┃ ✦ *Ping*    : ${getPing()}
+┏▣ ◈ *RACHEL-XMD MENU* ◈ ▣
+┃ ✦ Owner   : ${global.ownername || 'Not Set'}
+┃ ✦ Version : ${global.botversion || '1.0.0'}
+┃ ✦ Mode    : ${global.typebot || 'Plugin'}
+┃ ✦ Prefix  : ${global.xprefix || '.'}
+┃ ✦ Uptime  : ${getUptime()}
+┃ ✦ RAM     : ${getMemoryUsage()}
+┃ ✦ Ping    : ${getPing()}
 ┗━━━━━━━━━━━━━━━━━━━━━━┛
+
 
 ┏▣ ◈ *MAIN CMD* ◈ ▣
 ┃ ➤ menu
