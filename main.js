@@ -183,7 +183,7 @@ try{
                         await delay(1999)
                         dave.sendMessage(dave.user.id, {
 image: {
-url: 'https://url.bwmxmd.online/Adams.jin9796u.jpg'
+url: 'https://files.catbox.moe/eh7hlm.jpg'
 }, 
 caption: ` [ ༑📚𝑪𝒓𝒆𝒂𝒕𝒆𝒅 𝒃𝒚 dave ⿻ ༑]]
 ┏─•⛩️ ${global.botname} ⛩️•─⬣[⿻
