@@ -1497,34 +1497,92 @@ case 'song': {
 }
 break
 //==================================================//     
-        case "play":{
-                if (!text) return reply(`\n*ex:* ${prefix + command} impossible\n`)
-           
-    let res = await fetch(`https://ochinpo-helper.hf.space/yt?query=${encodeURIComponent(text)}`);
-    if (!res.ok) throw new Error('API not found');
-  let json = await res.json();
-    if (!json.success || !json.result) throw new Error('an api error occured');         
-  const {
-      title,
-      url,
-      image,
-      duration,
-      author,
-      download
-    } = json.result;            
-               await reply(`downloading song ${title}`);
-                let mbut = await fetchJson(`https://ochinpo-helper.hf.space/yt?query=${text}`)
-                let ahh = mbut.result
-                let crot = ahh.download.audio
+        case "play": {
+    try {
+        if (!text) return reply(`\n*Example:* ${prefix + command} despacito\n`);
 
-                dave.sendMessage(m.chat, {
-                    audio: { url: crot },
-                    mimetype: "audio/mpeg", 
-                    ptt: true
-                }, { quoted: fkontak })
+        let result;
+        let apis = [
+            `https://api.xplodderapis.xyz/api/ytdl/ytmp3?url=${encodeURIComponent(text)}`, // Xplodder
+            `https://api.davidcyril.xyz/ytmp3?url=${encodeURIComponent(text)}`,           // Davidcyril
+            `https://api.ryzendesu.vip/api/ytmp3?url=${encodeURIComponent(text)}`        // Ryzendesu
+        ];
+
+        for (let api of apis) {
+            try {
+                let res = await fetch(api);
+                if (!res.ok) continue;
+
+                let json = await res.json();
+
+                // Normalize different API responses
+                if (json.result) {
+                    result = {
+                        title: json.result.title || json.result.videoTitle || "Unknown Title",
+                        download: json.result.download?.audio || json.result.dl_url || json.result.url,
+                        thumb: json.result.image || json.result.thumbnail || null,
+                        duration: json.result.duration || "Unknown",
+                        author: json.result.author || json.result.channel || "Unknown"
+                    };
+                    break;
+                }
+            } catch (err) {
+                continue; // if one API fails, try next
             }
-            break
+        }
+
+        if (!result) throw new Error("❌ All APIs failed. Please try again later.");
+
+        await reply(`🎶 Downloading *${result.title}* ...`);
+
+        await dave.sendMessage(
+            m.chat,
+            {
+                audio: { url: result.download },
+                mimetype: "audio/mpeg",
+                ptt: true
+            },
+            { quoted: fkontak }
+        );
+
+    } catch (e) {
+        reply(`❌ Error: ${e.message}`);
+    }
+}
+break
 //==================================================//
+case 'poll': {
+    if (!isBot) return m.reply(mess.owner)
+    let [poll, opt] = text.split("|")
+    if (text.split("|") < 2)
+        return await reply(
+            `Mention question and atleast 2 options\nExample: ${prefix}poll Who is best admin?|Xeon,Cheems,Doge...`
+        )
+    let options = []
+    for (let i of opt.split(',')) {
+        options.push(i)
+    }
+    await dave.sendMessage(m.chat, {
+        poll: {
+            name: poll,
+            values: options
+        }
+    })
+}
+break
+//==================================================// 
+case 'listblock': {
+    if (!isBot) return m.reply(mess.owner)
+    let block = await dave.fetchBlocklist()
+    reply(
+        'List Block :\n\n' +
+        `Total : ${block == undefined ? '*0* BLOCKED NUMBERS' : '*' + block.length + '* Blocked Contacts'}\n` +
+        block.map(v => '🔸 ' + v.replace(/@.+/, '')).join`\n`
+    )
+}
+break
+
+//==================================================// 
 case 'fb': case 'facebook': case 'fbdl':
 case 'ig': case 'instagram': case 'igdl': {
  if (!args[0]) return reply("💠 provide a facebook or Instagram link!");
@@ -1669,7 +1727,7 @@ interactiveMessage: {
 body: {
 text: teks }, 
 footer: {
-text: "𝗕𝗮𝘀𝗲-𝗕𝗼𝘁𝘀-𝗩2" }, //input watermark footer
+text: "Dave-𝗕𝗼𝘁𝘀" }, //input watermark footer
   nativeFlowMessage: {
   buttons: [
              {
