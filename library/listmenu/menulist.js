@@ -5,7 +5,7 @@ const Menu = `
 ▣ ◈ *RACHEL-𝐗𝐌𝐃 MENU* ◈ ▣
 ┃ ✦ Owner   : ${global.ownername}
 ┃ ✦ Version : 1.0.0
-┃ ✦ Mode    : ${global.typebot}
+┃ ✦ BotType : ${global.typebot}
 ┃ ✦ Prefix  : ${global.xprefix || '.'}
 ┗━━━━━━━━━━━━━━━━━━━━━━
 ╭──• ❰ *Owner Menu* ❱
