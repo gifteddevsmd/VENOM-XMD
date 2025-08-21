@@ -1,34 +1,11 @@
-const fs = require('fs')
-const os = require('os')
-const process = require('process')
 const chalk = require('chalk')
+const fs = require('fs')
 
-// Function to get live bot stats
-function getBotStats() {
-    const upTime = process.uptime() // seconds
-    const hours = Math.floor(upTime / 3600)
-    const minutes = Math.floor((upTime % 3600) / 60)
-    const seconds = Math.floor(upTime % 60)
-
-    const ramUsed = process.memoryUsage().rss / 1024 / 1024 // MB
-    const ramTotal = os.totalmem() / 1024 / 1024 // MB
-
-    return {
-        uptime: `${hours}h ${minutes}m ${seconds}s`,
-        ram: `${ramUsed.toFixed(2)}MB / ${ramTotal.toFixed(2)}MB`,
-        mode: global.typebot || "Public"
-    }
-}
-
-// Menu function that returns dynamic menu string
-function Menu() {
-    const stats = getBotStats()
-    return `
-┏▣ ◈ *𝐑𝐀𝐂𝐇𝐄𝐋-𝐗𝐌𝐃 𝐌𝐄𝐍𝐔* ◈ ▣
+const Menu = `
+┏▣ ◈ *𝐃𝐀𝐕𝐄-𝐗𝐌𝐃 𝐌𝐄𝐍𝐔* ◈ ▣
 ┃ ✦ *Owner*   : ${global.ownername}
-┃ ✦ *Uptime*  : ${stats.uptime}
-┃ ✦ *RAM*     : ${stats.ram}
-┃ ✦ *Mode*    : ${stats.mode}
+┃ ✦ *Version* : 1.0.0
+┃ ✦ *Mode*    : ${global.typebot}
 ┃ ✦ *Prefix*  : ${global.prefix}
 ┗━━━━━━━━━━━━━━━━━━━━━━┛
 
