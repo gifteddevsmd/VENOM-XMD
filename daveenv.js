@@ -12,7 +12,7 @@ global.ownername = process.env.OWNER_NAME ||'Gifted Dave'
 global.antidelete = process.env.ANTI_DELETE || true
 //━━━━━━━━━━━━━━━━━━━━━━━━//
 // Bot Setting
-global.botname = "RACHEL-XMD"
+global.botname = "*𝐑𝐀𝐂𝐇𝐄𝐋-𝐗𝐌𝐃*"
 global.botversion = "1.0.0"
 global.typebot = "Plugin"
 global.session = "davesession"
@@ -26,7 +26,7 @@ global.wagc = "https://chat.whatsapp.com/LfTFxkUQ1H7Eg2D0vR3n6g?mode=ac_t"
 global.caption = "Dave media"
 //━━━━━━━━━━━━━━━━━━━━━━━━//
 // Sticker Marker
-global.packname = process.env.PACK_NAME ||'RACHEL-XMD'
+global.packname = process.env.PACK_NAME ||'𝐑𝐀𝐂𝐇𝐄𝐋-𝐗𝐌𝐃'
 global.packname = process.env.AUTHOR||'𝐏𝐀𝐂𝐊𝐒'
 //━━━━━━━━━━━━━━━━━━━━━━━━//
 // Respon Message
