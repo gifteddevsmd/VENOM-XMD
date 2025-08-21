@@ -146,9 +146,7 @@ const Menu = `
 ║◦npmstalk 
 ║◦ghstalk 
 ╰⟢
-> RACHEL-XMD VERSION 1
-> GIDDY TENNOR
-> ENJOY
+
 ╭──• ❰ *OpenAI* ❱
 ║◦openai 
 ║◦dalle 
@@ -298,6 +296,9 @@ const Menu = `
 ║◦unbanv4 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
 ║◦unbanv5 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
 ╰⟢
+> RACHEL-XMD VERSION 1
+> GIFTED DAVE
+> ENJOY
 `;
 
 
