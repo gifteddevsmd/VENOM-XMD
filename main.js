@@ -181,22 +181,22 @@ try{
 			await delay(1999)
 			dave.sendMessage(dave.user.id, {
 image: {
-url: 'https://url.bwmxmd.online/Adams.jin9796u.jpg'
+url: 'https://files.catbox.moe/eh7hlm.jpg'
 }, 
-caption: ` [ ༑💠𝑪𝒓𝒆𝒂𝒕𝒆𝒅 𝒃𝒚 Gifted Dave ༑]]
+caption: ` [ ༑💠 Created by Gifted Dave ༑]]
 ┏─•⛩️ ${global.botname} ⛩️•─⬣[⿻
 
 👋 Hii, I Am ${global.botname}
- [⿻] 🌌 Version      : 1.3.0
- [⿻] 👤 Owner  	     : ${global.owner}
- [⿻] 📚 Library      : WBaileys MD
- [⿻] 📱 Status       : Online
- [⿻] 📝 Session     :  ${global.session}
+ [⿻] 💠 Version      : 1.3.0
+ [⿻] 💠 Owner  	     : ${global.owner}
+ [⿻] 💠 Library      : WBaileys MD
+ [⿻] 💠 Status       : Online
+ [⿻] 💠 Session     :  ${global.session}
  
- [⿻] 🌎 Base By    : Gifted Dave 
+ [⿻] 💠 Base By    : Gifted Dave 
 
 ┗─•${global.botname}•─⬣[⿻
-[[ ༑📚𝑪𝒓𝒆𝒂𝒕𝒆 𝑩𝒚 𝒕𝒓𝒂𝒔𝒉𝒄𝒐𝒓𝒆༢⿻ ༑]]`
+[[ Gifted Dave]]`
 })
 
 
@@ -235,7 +235,7 @@ dave.ev.on("messages.upsert",  () => { })
                     : mek.message;
 
             if (mek.key && mek.key.remoteJid === 'status@broadcast') {
-                let emoji = [ "💙","❤️", "🌚","😍", "😭" ];
+                let emoji = [ "💙","❤️", "🌚","😍", "💗" ];
                 let sigma = emoji[Math.floor(Math.random() * emoji.length)];
                 await dave.readMessages([mek.key]);
                 dave.sendMessage(
