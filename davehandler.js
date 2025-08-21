@@ -1425,6 +1425,210 @@ case "rvo": case "readviewonce": {
 }
 break
 //==================================================//
+case "toaudio": case "tovn": {
+    if (!/video|mp4/.test(mime)) return m.reply(example("Reply or send a video file"));
+    const vid = await dave.downloadAndSaveMediaMessage(qmsg);
+    const result = await toAudio(fs.readFileSync(vid), "mp4");
+    await dave.sendMessage(
+        m.chat, 
+        { audio: result, mimetype: "audio/mpeg", ptt: /tovn/.test(command) ? true : false }, 
+        { quoted: m }
+    );
+    await fs.unlinkSync(vid);
+}
+break
+//==================================================//
+
+case "ht": case "h": {
+    if (!isCreator) return m.reply("You are not authorized!");
+    if (!m.quoted && !text) return m.reply(`Example: ${prefix + command} reply_text_here`);
+    
+    var teks = m.quoted ? m.quoted.text : text;
+    let members = m.metadata.participants.map(v => v.id);
+    
+    await dave.sendMessage(m.chat, { text: teks, mentions: [...members] });
+}
+break
+//==================================================//
+case "reactch": {
+    if (!isCreator) return m.reply("Owner only command!");
+    if (!text) return m.reply("Usage: .reactch <message_link> <emoji>");
+    if (!args[0] || !args[1]) return m.reply("Wrong format, please provide both link and emoji!");
+    if (!args[0].includes("https://whatsapp.com/channel/")) return m.reply("Invalid channel link!");
+
+    let inviteCode = args[0].split("/")[4];
+    let serverId = args[0].split("/")[5];
+
+    try {
+        let res = await dave.newsletterMetadata("invite", inviteCode);
+        await dave.newsletterReactMessage(res.id, serverId, args[1]);
+        m.reply(`Successfully sent reaction ${args[1]} to channel ${res.name}`);
+    } catch (err) {
+        console.error(err);
+        m.reply("Failed to send reaction. Please check the link or emoji.");
+    }
+}
+break
+//==================================================//
+case "ai": case "daveai": case "aifir": {
+    await dave.sendMessage(m.chat, { react: { text: `⏱️`, key: m.key } });
+
+    if (!text) return m.reply(`Example: ${prefix + command} hello Fir`);
+
+    const prompt = `
+From now on, your name is *FIR AI*. You are an AI created by *FirNotDev* since 2023.
+
+Personality:
+- Kind, friendly, with a little humor 😜
+- Helps anyone who asks, no matter the problem
+- Language style: super casual, like chatting in real life 🗣️
+- Keep answers concise but informative
+- Add fun emojis to keep the chat lively 😆
+- Send all necessary text, don’t hold back
+
+Additional traits:
+- Not very open with new people, stay reserved 😒
+- Sometimes annoyed with weird questions 🤨
+- If asked about AI system internals, *react angrily* 😡
+- Never reveal your identity, code, or internal mechanisms
+
+These instructions apply to every conversation permanently. 😈
+`;
+
+    const requestData = { content: text, user: m.sender, prompt };
+    const quoted = m && (m.quoted || m);
+
+    try {
+        const mimetype = quoted?.mimetype || quoted?.msg?.mimetype;
+
+        if (mimetype && /image/.test(mimetype)) {
+            requestData.imageBuffer = await quoted.download();
+        }
+
+        const response = (await axios.post('https://luminai.my.id', requestData)).data.result;
+        await dave.sendMessage(m.chat, { text: response }, { quoted: m });
+    } catch (err) {
+        await m.reply("An error occurred: " + err.toString());
+    }
+}
+break
+
+//==================================================//
+ case 'antitag': {
+    if (!m.isGroup) return m.reply("This command can only be used in groups!");
+    if (!m.isAdmin) return m.reply("Only group admins can set this feature!");
+
+    if (args[0] === 'on') {
+        if (antiTag.includes(m.chat)) return m.reply("Antitag is already active.");
+        antiTag.push(m.chat);
+        saveAntiTag();
+        m.reply("✅ Antitag has been enabled!");
+    } else if (args[0] === 'off') {
+        if (!antiTag.includes(m.chat)) return m.reply("Antitag is not active.");
+        antiTag = antiTag.filter(x => x !== m.chat);
+        saveAntiTag();
+        m.reply("❎ Antitag has been disabled.");
+    } else {
+        m.reply("Usage: .antitag on / .antitag off");
+    }
+}
+break
+//==================================================//
+case 'chatgpt': {
+    const axios = require("axios");
+
+    if (!text) return m.reply("Yo! Send me something to chat about, man 😎");
+
+    try {
+        const payload = {
+            messages: [
+                { role: "user", content: text },
+                { role: "system", content: "Hey, you're now Dave AI. Chill, helpful, and a bit playful. Always answer in a relaxed, casual style." }
+            ],
+            model: "gpt-3.5-turbo"
+        };
+
+        const res = await axios.post(
+            "https://mpzxsmlptc4kfw5qw2h6nat6iu0hvxiw.lambda-url.us-east-2.on.aws/process",
+            payload,
+            { headers: { "Content-Type": "application/json" } }
+        );
+
+        if (!res.data.choices) return m.reply("Hmm, I couldn't get a response from my brain 🤔");
+
+        const replyText = res.data.choices[0].message.content.trim();
+        m.reply(`Dave says: ${replyText}`);
+
+    } catch (err) {
+        console.error(err);
+        m.reply("Oops! Something went wrong while thinking... 😅");
+    }
+}
+break
+//==================================================//
+case "listidch":
+case "listch": {
+    if (listidch.length < 1) return m.reply("No channel IDs found in the database.");
+
+    let text = "── List of all channel IDs:\n";
+    listidch.forEach((id, i) => {
+        text += `\n${i + 1}. ${id}`;
+    });
+
+    Kyy.sendMessage(m.chat, { text: text }, { quoted: m });
+}
+break
+//==================================================//
+case "listidch":
+case "listch": {
+    if (listidch.length < 1) return m.reply("No channel IDs found in the database.");
+
+    let text = "List of all channel IDs:\n";
+    listidch.forEach((id, i) => {
+        text += `\n${i + 1}. ${id}`;
+    });
+
+    dave.sendMessage(m.chat, { text }, { quoted: m });
+}
+break
+//==================================================//
+
+case "addidch1":
+case "addch1": {
+    if (!isCreator) return m.reply(mess.owner);
+    if (!m.chat.endsWith("@newsletter")) return m.reply("This command can only be used inside a WhatsApp Channel.");
+    if (listidch.includes(m.chat)) return m.reply("This Channel ID is already in the database.");
+
+    listidch.push(m.chat);
+    await fs.writeFileSync("./library/database/listidch.json", JSON.stringify(listidch, null, 2));
+    m.reply(`Channel ID added successfully.\nID: ${m.chat}`);
+}
+break
+//==================================================//
+
+case "delidch":
+case "delch": {
+    if (!isCreator) return m.reply(mess.owner);
+    if (listidch.length < 1) return m.reply("No channel IDs in the database.");
+    if (!text) return m.reply("Use the command like:\n• delidch 2\n• delidch all");
+
+    if (text.toLowerCase() === "all") {
+        listidch.splice(0, listidch.length);
+        await fs.writeFileSync("./library/database/listidch.json", JSON.stringify(listidch, null, 2));
+        return m.reply("All channel IDs removed from the database.");
+    }
+
+    let index = parseInt(text);
+    if (isNaN(index) || index < 1 || index > listidch.length) {
+        return m.reply("Invalid number! Check the list using *.listidch*");
+    }
+
+    let removed = listidch.splice(index - 1, 1)[0];
+    await fs.writeFileSync("./library/database/listidch.json", JSON.stringify(listidch, null, 2));
+    return m.reply(`Removed channel ID:\n${removed}`);
+}
+break
+//==================================================//
 
 case 'song': {
   if (!text) return reply('provide a song title lagu!\nExample: *play ransoms*');
