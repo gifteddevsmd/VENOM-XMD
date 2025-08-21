@@ -4,49 +4,58 @@ if (fs.existsSync('.env')) require('dotenv').config({ path: __dirname+'/.env' })
 
 
 global.SESSION_ID = process.env.SESSION_ID || '' 
-// Owner Setting
-global.xprefix = process.env.BOT_PREFIX ||'.'
-global.owner = ["254104260236",]
-global.error = ["6666",]
+//~~~~~~~~~~~ Settings Owner ~~~~~~~~~~~//
+global.owner = "254104260236"
+global.developer = "254104260236"
+global.bot = ""
+global.devname = "Dave"
 global.ownername = process.env.OWNER_NAME ||'Gifted Dave'
-global.antidelete = process.env.ANTI_DELETE || true
-//━━━━━━━━━━━━━━━━━━━━━━━━//
-// Bot Setting
-global.botname = "RACHEL-XMD"
-global.botversion = "1.6.0"
-global.typebot = "Plugin"
-global.session = "davesession"
-global.connect = true
+global.botname = "𝐃𝐀𝐕𝐄-𝐗𝐌𝐃"
+global.versisc = "2"
+global.packname = "𝐃𝐀𝐕𝐄-𝐗𝐌𝐃"
+//~~~~~~~~~~~ Settings Sosmed ~~~~~~~~~~~//
+global.linkwa = "https://wa.me/254104260236"
+global.linkyt = "https://www.youtube.com/Davke"
+global.linktt = "https://tiktok.com"
+global.linktele = "https://t.me"
+
+//~~~~~~~~~~~ Settings Bot ~~~~~~~~~~~//
+global.prefix = process.env.BOT_PREFIX ||'.'
+global.autoRecording = false
+global.autoTyping = true
+global.autorecordtype = false
+global.autoread = process.env.AUTO_READ || false
+global.autobio = false
+global.anti92 = false
+global.owneroff = false
 global.statusview = process.env.AUTO_STATUS || true
-global.antilinkgc = process.env.ANTILINK_GROUP || true
-global.autoTyping = process.env.AUTO_TYPE || false
-global.autoRecord = process.env.AUTO_RECORD || false
-global.thumb = "https://files.catbox.moe/eh7hlm.jpg"
-global.wagc = "https://chat.whatsapp.com/LfTFxkUQ1H7Eg2D0vR3n6g?mode=ac_t"
-global.caption = "Dave media"
-//━━━━━━━━━━━━━━━━━━━━━━━━//
-// Sticker Marker
-global.packname = process.env.PACK_NAME ||'RACHEL-XMD'
-global.packname = process.env.AUTHOR||'𝐏𝐀𝐂𝐊𝐒'
-//━━━━━━━━━━━━━━━━━━━━━━━━//
-// Respon Message
+
+//~~~~~~~~~~~ Settings Thumbnail ~~~~~~~~~~~//
+global.thumbbot = "https://files.catbox.moe/lidsgj.jpg"
+global.thumbown = "https://files.catbox.moe/lidsgj.jpg"
+
+//~~~~~~~~~~~ Settings Channel ~~~~~~~~~~~//
+global.idchannel = "120363400480173280@newsletter*"
+global.channelname = "DAVE-XMD UPDATES"
+global.channel = "https://whatsapp.com/channel/0029VbApvFQ2Jl84lhONkc3k"
+
+//~~~~~~~~~~~ Settings Message ~~~~~~~~~~~//
 global.mess = {
-    success: '✅ Done.',
-    admin: '🚨 Admin only.',
-    premium: '🆘must be a premium user.',
-    botAdmin: '🤖 Make me admin first.',
-    owner: '👑 Owner only.',
-    OnlyGrup: '👥 Group only.',
-    private: '📩 Private chat only.',
-    wait: '⏳ Processing...',
-    error: '⚠️ Error occurred.',
+  developer: " `[ Developer Only!! ]` \n This feature is for developers only!!",
+  owner: " `[ Owner Only!! ]` \n This feature is for owners only!!",
+  group: " `[ Group Only!! ]` \n This feature is for group chats only!!",
+  private: " `[ Private Only!! ]` \n This feature is for private chats only!!",
+  admin: " `[ Admin Only!! ]` \n This feature is for admins only!!",
+  botadmin: " `[ Bot Admin Only!! ]` \n This feature is for bot admins only!!",
+  wait: " `[ Wait!! ]` \n Please wait, loading...",
+  error: " `[ Error!! ]` \n An error occurred!!",
+  done: " `[ Done!! ]` \n Process completed!!"
 }
-//━━━━━━━━━━━━━━━━━━━━━━━━//
-// File Update
+
 let file = require.resolve(__filename)
-fs.watchFile(file, () => {
-fs.unwatchFile(file)
-console.log(`Update File 📁 : ${__filename}`)
-delete require.cache[file]
-require(file)
+require('fs').watchFile(file, () => {
+  require('fs').unwatchFile(file)
+  console.log('\x1b[0;32m'+__filename+' \x1b[1;32mupdated!\x1b[0m')
+  delete require.cache[file]
+  require(file)
 })
