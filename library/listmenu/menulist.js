@@ -24,7 +24,7 @@ function getBotStats() {
 function Menu() {
     const stats = getBotStats()
     return `
-┏▣ ◈ *𝐃𝐀𝐕𝐄-𝐗𝐌𝐃 𝐌𝐄𝐍𝐔* ◈ ▣
+┏▣ ◈ *𝐑𝐀𝐂𝐇𝐄𝐋-𝐗𝐌𝐃 𝐌𝐄𝐍𝐔* ◈ ▣
 ┃ ✦ *Owner*   : ${global.ownername}
 ┃ ✦ *Uptime*  : ${stats.uptime}
 ┃ ✦ *RAM*     : ${stats.ram}
