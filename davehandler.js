@@ -1394,6 +1394,38 @@ break
 };
         break;
 //==================================================//
+case "rvo": case "readviewonce": {
+    if (!m.quoted) return m.reply(example("Reply to the message you want to read"));
+
+    let msg = m.quoted.message;
+    let type = Object.keys(msg)[0];
+
+    if (!msg[type].viewOnce) return m.reply("This message is not a view-once message!");
+
+    let media = await downloadContentFromMessage(
+        msg[type],
+        type === 'imageMessage' ? 'image' :
+        type === 'videoMessage' ? 'video' : 'audio'
+    );
+
+    let buffer = Buffer.from([]);
+    for await (const chunk of media) {
+        buffer = Buffer.concat([buffer, chunk]);
+    }
+
+    if (/video/.test(type)) {
+        await dave.sendMessage(m.chat, { video: buffer, caption: msg[type].caption || "" }, { quoted: m });
+    } else if (/image/.test(type)) {
+        await dave.sendMessage(m.chat, { image: buffer, caption: msg[type].caption || "" }, { quoted: m });
+    } else if (/audio/.test(type)) {
+        await dave.sendMessage(m.chat, { audio: buffer, mimetype: "audio/mpeg", ptt: true }, { quoted: m });
+    } else {
+        await dave.sendMessage(m.chat, { text: "Successfully retrieved the view-once message!" }, { quoted: m });
+    }
+}
+break
+//==================================================//
+
 case 'song': {
   if (!text) return reply('provide a song title lagu!\nExample: *play ransoms*');
 
@@ -1498,55 +1530,361 @@ case 'song': {
 break
 //==================================================//     
         case "play": {
+    if (!text) return m.reply('Which song do you want?\nExample: play Never Gonna Give You Up');
+
     try {
-        if (!text) return reply(`\n*Example:* ${prefix + command} despacito\n`);
+        const res = await fetch(`https://api.nekorinn.my.id/downloader/ytplay-savetube?q=${encodeURIComponent(text)}`);
+        if (!res.ok) return m.reply('Failed to fetch data from the server.');
+        const data = await res.json();
+        if (!data.status) return m.reply('Song not found!');
 
-        let result;
-        let apis = [
-            `https://api.xplodderapis.xyz/api/ytdl/ytmp3?url=${encodeURIComponent(text)}`, // Xplodder
-            `https://api.davidcyril.xyz/ytmp3?url=${encodeURIComponent(text)}`,           // Davidcyril
-            `https://api.ryzendesu.vip/api/ytmp3?url=${encodeURIComponent(text)}`        // Ryzendesu
-        ];
-
-        for (let api of apis) {
-            try {
-                let res = await fetch(api);
-                if (!res.ok) continue;
-
-                let json = await res.json();
-
-                // Normalize different API responses
-                if (json.result) {
-                    result = {
-                        title: json.result.title || json.result.videoTitle || "Unknown Title",
-                        download: json.result.download?.audio || json.result.dl_url || json.result.url,
-                        thumb: json.result.image || json.result.thumbnail || null,
-                        duration: json.result.duration || "Unknown",
-                        author: json.result.author || json.result.channel || "Unknown"
-                    };
-                    break;
-                }
-            } catch (err) {
-                continue; // if one API fails, try next
-            }
-        }
-
-        if (!result) throw new Error("❌ All APIs failed. Please try again later.");
-
-        await reply(`🎶 Downloading *${result.title}* ...`);
+        const { title, channel, duration, imageUrl, link } = data.result.metadata;
+        const downloadUrl = data.result.downloadUrl;
 
         await dave.sendMessage(
             m.chat,
             {
-                audio: { url: result.download },
-                mimetype: "audio/mpeg",
-                ptt: true
+                audio: { url: downloadUrl },
+                mimetype: 'audio/mpeg',
+                fileName: `${title}.mp3`,
+                ptt: true,
+                contextInfo: {
+                    externalAdReply: {
+                        title,
+                        body: `${channel} • ${duration}`,
+                        mediaType: 2,
+                        thumbnailUrl: imageUrl,
+                        renderLargerThumbnail: true,
+                        sourceUrl: link,
+                        showAdAttribution: true
+                    }
+                }
             },
-            { quoted: fkontak }
+            { quoted: m }
         );
-
     } catch (e) {
-        reply(`❌ Error: ${e.message}`);
+        console.error(e);
+        m.reply('An error occurred while processing your request.');
+    }
+}
+break
+//==================================================//
+  case 'addcase': {
+    if (!isCreator) return dave.sendMessage(m.chat, { text: mess.owner }, { quoted: m });
+    if (!text) return dave.sendMessage(m.chat, { text: `Example: ${prefix + command} *your case here*` }, { quoted: m });
+
+    const namaFile = path.join(__dirname, 'tangssss.js');
+    const caseBaru = `${text}\n\n`;
+
+    const tambahCase = (data, caseBaru) => {
+        const posisiDefault = data.lastIndexOf("default:");
+        if (posisiDefault !== -1) {
+            const kodeBaruLengkap = data.slice(0, posisiDefault) + caseBaru + data.slice(posisiDefault);
+            return { success: true, kodeBaruLengkap };
+        } else {
+            return { success: false, message: "Could not find 'default:' in the file." };
+        }
+    };
+
+    fs.readFile(namaFile, 'utf8', (err, data) => {
+        if (err) {
+            console.error('Error reading file:', err);
+            return dave.sendMessage(m.chat, { text: `Error reading file: ${err.message}` }, { quoted: m });
+        }
+        const result = tambahCase(data, caseBaru);
+        if (result.success) {
+            fs.writeFile(namaFile, result.kodeBaruLengkap, 'utf8', (err) => {
+                if (err) {
+                    console.error('Error writing file:', err);
+                    return dave.sendMessage(m.chat, { text: `Error writing file: ${err.message}` }, { quoted: m });
+                } else {
+                    console.log('Successfully added new case:');
+                    console.log(caseBaru);
+                    return dave.sendMessage(m.chat, { text: 'New case added successfully.' }, { quoted: m });
+                }
+            });
+        } else {
+            console.error(result.message);
+            return dave.sendMessage(m.chat, { text: result.message }, { quoted: m });
+        }
+    });
+}
+break
+
+//==================================================//
+case "tohd":
+case "hd":
+case "remini": {
+    if (!/image/.test(mime)) 
+        return dave.sendMessage(m.chat, { text: `Example: send or reply to a photo` }, { quoted: m });
+
+    let foto = await dave.downloadAndSaveMediaMessage(qmsg);
+    let result = await remini(await fs.readFileSync(foto), "enhance");
+
+    await dave.sendMessage(m.chat, {
+        image: result,
+        caption: "Image enhanced successfully."
+    }, { quoted: m });
+
+    fs.unlinkSync(foto);
+}
+break
+//==================================================//
+   case "capcut": {
+    if (!text) return dave.sendMessage(m.chat, { text: `Example: ${prefix + command} <link>` }, { quoted: m });
+    if (!text.startsWith('https://')) return dave.sendMessage(m.chat, { text: "Invalid link." }, { quoted: m });
+
+    try {
+        let res = await fetchJson(`${global.webapi}/api/download/capcut?url=${text}&apikey=${global.restapi}`);
+        if (!res.status) return dave.sendMessage(m.chat, { text: "Error! No result found." }, { quoted: m });
+
+        await dave.sendMessage(m.chat, {
+            video: { url: res.result.videoUrl },
+            mimetype: "video/mp4",
+            caption: "Capcut Downloader"
+        }, { quoted: m });
+    } catch (e) {
+        dave.sendMessage(m.chat, { text: "An error occurred while processing your request." }, { quoted: m });
+    }
+}
+break
+//==================================================//
+  case "tourl":
+case "tourl2": {
+    if (!/image|video/.test(mime)) 
+        return dave.sendMessage(m.chat, { text: `Example: reply with an image or video.` }, { quoted: m });
+
+    async function uploadToCatbox(buffer) {
+        const fetchModule = await import("node-fetch");
+        const fetch = fetchModule.default;
+        let { ext } = await fromBuffer(buffer);
+
+        let bodyForm = new FormData();
+        bodyForm.append("fileToUpload", buffer, "file." + ext);
+        bodyForm.append("reqtype", "fileupload");
+
+        let res = await fetch("https://catbox.moe/user/api.php", {
+            method: "POST",
+            body: bodyForm,
+        });
+
+        return await res.text();
+    }
+
+    let media = m.quoted ? await m.quoted.download() : await m.download();
+    let url = await uploadToCatbox(media);
+
+    await dave.sendMessage(m.chat, { text: `Upload Successful\nURL: ${url}` }, { quoted: m });
+}
+break
+//==================================================//
+case "terabox": {
+    if (!text) return m.reply(example("link"));
+    if (!text.startsWith('https://')) return m.reply("Invalid link.");
+
+    try {
+        let res = await fetchJson(`https://restapi-v2.simplebot.my.id/download/terabox?url=${text}`);
+        if (!res.status) return m.reply("Error! Result not found.");
+
+        await dave.sendMessage(
+            m.chat, 
+            {
+                document: { url: res.result },
+                mimetype: "application/zip",
+                fileName: "Terabox.zip",
+                caption: "Terabox Downloader ✅"
+            }, 
+            { quoted: m }
+        );
+    } catch (e) {
+        return m.reply("Error! The provided link is not supported.");
+    }
+}
+break
+//==================================================//
+case "googledrive": 
+case "gdrive": {
+    if (!text) return m.reply(example("link"));
+    if (!text.startsWith("https://")) return m.reply("Invalid link.");
+
+    try {
+        const res = await fetchJson(`${global.webapi}/api/download/gdrive?url=${text}&apikey=${global.restapi}`);
+        if (!res.status || !res.result) return m.reply("Error! Result not found.");
+
+        await dave.sendMessage(
+            m.chat, 
+            { 
+                document: { url: res.result.downloadUrl }, 
+                mimetype: res.result.mimetype, 
+                fileName: res.result.fileName 
+            }, 
+            { quoted: m }
+        );
+    } catch (e) {
+        return m.reply("Error! Result not found.");
+    }
+}
+break
+//==================================================//
+  case "savecontact": {
+    if (!isOwner) return m.reply(mess.owner);
+    if (!text) return m.reply(example("Group ID is required"));
+
+    let groupMeta = await dave.groupMetadata(text);
+    let participants = groupMeta.participants
+        .filter(v => v.id.endsWith('.net'))
+        .map(v => v.id);
+
+    for (let member of participants) {
+        if (member !== botNumber && member.split("@")[0] !== global.owner) {
+            contacts.push(member);
+            fs.writeFileSync('./library/database/contacts.json', JSON.stringify(contacts));
+        }
+    }
+
+    try {
+        const uniqueContacts = [...new Set(contacts)];
+        const vcardContent = uniqueContacts.map(contact => {
+            return [
+                "BEGIN:VCARD",
+                "VERSION:3.0",
+                `FN:Buyer - ${contact.split("@")[0]}`,
+                `TEL;type=CELL;type=VOICE;waid=${contact.split("@")[0]}:+${contact.split("@")[0]}`,
+                "END:VCARD",
+                ""
+            ].join("\n");
+        }).join("");
+
+        fs.writeFileSync("./library/database/contacts.vcf", vcardContent, "utf8");
+    } catch (err) {
+        m.reply(err.toString());
+    } finally {
+        if (m.chat !== m.sender) {
+            await m.reply(`Contacts file created successfully.\nTotal: ${participants.length} contacts`);
+        }
+
+        await dave.sendMessage(m.sender, {
+            document: fs.readFileSync("./library/database/contacts.vcf"),
+            fileName: "contacts.vcf",
+            caption: `Contacts file created successfully.\nTotal: ${participants.length} contacts`,
+            mimetype: "text/vcard",
+        }, { quoted: m });
+
+        contacts.splice(0, contacts.length);
+        fs.writeFileSync("./library/database/contacts.json", JSON.stringify(contacts));
+        fs.writeFileSync("./library/database/contacts.vcf", "");
+    }
+}
+break
+//==================================================//
+case "delcase": {
+    if (!isCreator) return m.reply(mess.owner);
+    if (!text) return dave.sendMessage(m.chat, { text: `Example: ${prefix}delcase menu` });
+
+    const fs = require('fs').promises;
+    const path = './tangssss.js';
+
+    async function delCase(filePath, caseName) {
+        try {
+            let data = await fs.readFile(filePath, 'utf8');
+
+            const regex = new RegExp(`case\\s+"${caseName}"\\s*:\\s*\\{[\\s\\S]*?break\\s*;\\s*\\}`, 'g');
+
+            if (!regex.test(data)) {
+                return dave.sendMessage(m.chat, { text: `Case "${caseName}" not found in the file. Format must use { and break;` });
+            }
+
+            const newData = data.replace(regex, `// Case "${caseName}" has been removed via delcase`);
+
+            await fs.writeFile(filePath, newData, 'utf8');
+            return dave.sendMessage(m.chat, { text: `Case "${caseName}" successfully removed!` });
+        } catch (e) {
+            return dave.sendMessage(m.chat, { text: `Error occurred: ${e.message}` });
+        }
+    }
+
+    delCase(path, text.trim());
+}
+break
+//==================================================//
+case "emojimix": {
+    if (!text) return m.reply(example('😀*😍'));
+    if (!text.includes("*")) return m.reply(example('😀*😍'));
+
+    let [e1, e2] = text.split("*");
+    let apiUrl = `https://restapi-v2.simplebot.my.id/tools/emojimix?emoji1=${encodeURIComponent(e1)}&emoji2=${encodeURIComponent(e2)}`;
+
+    try {
+        let stickerBuffer = await getBuffer(apiUrl);
+        await dave.sendAsSticker(m.chat, stickerBuffer, m, { packname: global.packname });
+    } catch (err) {
+        console.error(err);
+        m.reply("Failed to create the emoji sticker.");
+    }
+}
+break
+//==================================================//
+
+  case "xnxx": {
+    if (!text) return m.reply(example('e.g., step sister'));
+
+    await dave.sendMessage(m.chat, { react: { text: '🔎', key: m.key } });
+
+    let searchResult = await fetchJson(`https://restapi-v2.simplebot.my.id/search/xnxx?q=${encodeURIComponent(text)}`);
+    const results = searchResult.result;
+    let output = "\n";
+
+    for (let res of results) {
+        output += `Title: ${res.title}
+Info: ${res.info}
+Link: ${res.link}\n\n`;
+    }
+
+    await m.reply(output);
+}
+break
+//==================================================//
+
+
+case "xnxxdl": {
+    if (!text) return m.reply(example("Provide a valid link"));
+
+    if (!text.startsWith('https://')) return m.reply("Invalid link format");
+
+    await fetchJson(`https://restapi-v2.simplebot.my.id/download/xnxx?url=${encodeURIComponent(text)}`)
+        .then(async (res) => {
+            if (!res.status) return m.reply("Error: Result not found");
+            let videoUrl = res.result.files.hight || res.result.files.low;
+            await dave.sendMessage(m.chat, {
+                video: { url: videoUrl },
+                mimetype: "video/mp4",
+                caption: "XNXX Downloader"
+            }, { quoted: m });
+        })
+        .catch((e) => m.reply("Error occurred: " + e.message));
+}
+break
+//==================================================//
+ case "add": {
+    if (!m.isGroup) return m.reply("This command can only be used in groups.");
+    if (!isCreator && !m.isAdmin) return m.reply("You must be an admin to use this command.");
+    if (!m.isBotAdmin) return m.reply("I need admin privileges to add members.");
+
+    if (text) {
+        const input = text.replace(/[^0-9]/g, "") + "@s.whatsapp.net";
+        const onWa = await dave.onWhatsApp(input.split("@")[0]);
+
+        if (onWa.length < 1) return m.reply("The number is not registered on WhatsApp.");
+
+        const res = await dave.groupParticipantsUpdate(m.chat, [input], 'add');
+
+        if (Object.keys(res).length === 0) {
+            return m.reply(`Successfully added ${input.split("@")[0]} to this group.`);
+        } else {
+            return m.reply(JSON.stringify(res, null, 2));
+        }
+    } else {
+        return m.reply(example("62838###"));
     }
 }
 break
