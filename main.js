@@ -13,7 +13,6 @@ const path = require('path')
 const axios = require('axios')
 const _ = require('lodash')
 const moment = require('moment-timezone')
-const FileType = require('file-type');
 const PhoneNumber = require('awesome-phonenumber')
 const { imageToWebp, videoToWebp, writeExifImg, writeExifVid } = require('./library/lib/exif')
 const { smsg, isUrl, generateMessageTag, getBuffer, getSizeMedia, fetch, await, sleep, reSize } = require('./library/lib/function')
@@ -58,20 +57,19 @@ const useMobile = process.argv.includes("--mobile")
 const rl = readline.createInterface({ input: process.stdin, output: process.stdout })
 const question = (text) => new Promise((resolve) => rl.question(text, resolve))
 const welcomeMessage = `
-[[ ༑📚𝑪𝒓𝒆𝒂𝒕𝒆𝒅 𝒃𝒚 dave ⿻ ༑]]
-┏─•⛩️ ${global.botname} ⛩️•─⬣[⿻
+[[ Created by Gifted Dave ]]
+┏─► ${global.botname} ◄─┓
 
-👋 Hii, I Am ${global.botname}
- [⿻] 🌌 Version      : 1.5.0
- [⿻] 👤 Owner               : ${global.owner}
- [⿻] 📚 Library      : WBaileys MD
- [⿻] 📱 Status       : Online
- [⿻] 📝 Session     :  ${global.session}
- 
- [⿻] 🌎 Base By    : davedevs
+Hii, I Am ${global.botname}
+➤ Version   : 1.5.0
+➤ Owner     : ${global.owner}
+➤ Status    : Online
+➤ Session   : ${global.session}
 
-┗─•${global.botname}•─⬣[⿻
-[[ ༑📚𝑪𝒓𝒆𝒂𝒕𝒆 𝑩𝒚 dave⿻ ༑]]
+➤ Base By   : dave
+
+┗─► ${global.botname} ◄─┛
+[[ Made by Gifted Dave ]]
 `;
     console.log(welcomeMessage);  
 const sessionDir = path.join(__dirname, 'session');
@@ -88,9 +86,9 @@ async function downloadSessionData() {
       }
 
       const base64Data = global.SESSION_ID.split("DAVE-XMD-WHATSAPP-BOT;;;=>")[1];
-
+      
       const sessionData = Buffer.from(base64Data, 'base64');
-
+      
         await fs.promises.writeFile(credsPath, sessionData);
       console.log(color(`Session successfully saved, please wait!!`, 'green'));
       await startdave();
@@ -126,14 +124,14 @@ const {  state, saveCreds } =await useMultiFileAuthState(`./session`)
       msgRetryCounterCache, // Resolve waiting messages
       defaultQueryTimeoutMs: undefined, // for this issues https://github.com/WhiskeySockets/Baileys/issues/276
    })
-
+   
    store.bind(dave.ev)
 
     // login use pairing code
    // source code https://github.com/WhiskeySockets/Baileys/blob/master/Example/example.ts#L61
         if (global.connect && !dave.authState.creds.registered) {
         try {
-            const phoneNumber = await question(chalk.cyan(`\n[ ᯤ ] dave (--||--) Enter Your Number:\n`));
+            const phoneNumber = await question(chalk.cyan(`\n[ ᯤ ] Dave (--||--) Enter Your Number:\n`));
             const code = await dave.requestPairingCode(phoneNumber.trim());
             console.log(chalk.green(`\n[ ᯤ ] dave (--||--) Pairing Code:\n`), code);
         } catch (error) {
@@ -143,74 +141,74 @@ const {  state, saveCreds } =await useMultiFileAuthState(`./session`)
     }
     store?.bind(dave.ev)
 dave.ev.on('connection.update', async (update) => {
-        const {
-
-                connection,
-                lastDisconnect
-        } = update
+	const {
+        
+		connection,
+		lastDisconnect
+	} = update
 try{
-                if (connection === 'close') {
-                        let reason = new Boom(lastDisconnect?.error)?.output.statusCode
-                        if (reason === DisconnectReason.badSession) {
-                                console.log(`Bad Session File, Please Delete Session and Scan Again`);
-                                startdave()
-                        } else if (reason === DisconnectReason.connectionClosed) {
-                                console.log("Connection closed, reconnecting....");
-                                startdave();
-                        } else if (reason === DisconnectReason.connectionLost) {
-                                console.log("Connection Lost from Server, reconnecting...");
-                                startdave();
-                        } else if (reason === DisconnectReason.connectionReplaced) {
-                                console.log("Connection Replaced, Another New Session Opened, Please Close Current Session First");
-                                startdave()
-                        } else if (reason === DisconnectReason.loggedOut) {
-                                console.log(`Device Logged Out, Please Delete Session and Scan Again.`);
-                                startdave();
-                        } else if (reason === DisconnectReason.restartRequired) {
-                                console.log("Restart Required, Restarting...");
-                                startdave();
-                        } else if (reason === DisconnectReason.timedOut) {
-                                console.log("Connection TimedOut, Reconnecting...");
-                                startdave();
-                        } else dave.end(`Unknown DisconnectReason: ${reason}|${connection}`)
-                }
-                if (update.connection == "connecting" || update.receivedPendingNotifications == "false") {
-                        console.log(color(`\nConnecting...`, 'white'))
-                }
-                if (update.connection == "open" || update.receivedPendingNotifications == "true") {
-                        console.log(color(` `,'magenta'))
+		if (connection === 'close') {
+			let reason = new Boom(lastDisconnect?.error)?.output.statusCode
+			if (reason === DisconnectReason.badSession) {
+				console.log(`Bad Session File, Please Delete Session and Scan Again`);
+				startdave()
+			} else if (reason === DisconnectReason.connectionClosed) {
+				console.log("Connection closed, reconnecting....");
+				startdave();
+			} else if (reason === DisconnectReason.connectionLost) {
+				console.log("Connection Lost from Server, reconnecting...");
+				startdave();
+			} else if (reason === DisconnectReason.connectionReplaced) {
+				console.log("Connection Replaced, Another New Session Opened, Please Close Current Session First");
+				startdave()
+			} else if (reason === DisconnectReason.loggedOut) {
+				console.log(`Device Logged Out, Please Delete Session and Scan Again.`);
+				startdave();
+			} else if (reason === DisconnectReason.restartRequired) {
+				console.log("Restart Required, Restarting...");
+				startdave();
+			} else if (reason === DisconnectReason.timedOut) {
+				console.log("Connection TimedOut, Reconnecting...");
+				startdave();
+			} else dave.end(`Unknown DisconnectReason: ${reason}|${connection}`)
+		}
+		if (update.connection == "connecting" || update.receivedPendingNotifications == "false") {
+			console.log(color(`\nConnecting...`, 'white'))
+		}
+		if (update.connection == "open" || update.receivedPendingNotifications == "true") {
+			console.log(color(` `,'magenta'))
             console.log(color(`Connected to => ` + JSON.stringify(dave.user, null, 2), 'green'))
-                        await delay(1999)
-                        dave.sendMessage(dave.user.id, {
+			await delay(1999)
+			dave.sendMessage(dave.user.id, {
 image: {
-url: 'https://files.catbox.moe/eh7hlm.jpg'
+url: 'https://url.bwmxmd.online/Adams.jin9796u.jpg'
 }, 
-caption: ` [ ༑📚𝑪𝒓𝒆𝒂𝒕𝒆𝒅 𝒃𝒚 dave ⿻ ༑]]
+caption: ` [ ༑💠𝑪𝒓𝒆𝒂𝒕𝒆𝒅 𝒃𝒚 Gifted Dave ༑]]
 ┏─•⛩️ ${global.botname} ⛩️•─⬣[⿻
 
 👋 Hii, I Am ${global.botname}
- [⿻] 🌌 Version      : ${global.botversion}
- [⿻] 👤 Owner               : ${global.owner}
+ [⿻] 🌌 Version      : 1.3.0
+ [⿻] 👤 Owner  	     : ${global.owner}
  [⿻] 📚 Library      : WBaileys MD
  [⿻] 📱 Status       : Online
  [⿻] 📝 Session     :  ${global.session}
  
- [⿻] 🌎 Base By    : davedevs
+ [⿻] 🌎 Base By    : Gifted Dave 
 
 ┗─•${global.botname}•─⬣[⿻
-[[ ༑📚𝑪𝒓𝒆𝒂𝒕𝒆 𝑩𝒚 dave⿻ ༑]]`
+[[ ༑📚𝑪𝒓𝒆𝒂𝒕𝒆 𝑩𝒚 𝒕𝒓𝒂𝒔𝒉𝒄𝒐𝒓𝒆༢⿻ ༑]]`
 })
 
 
+			
 
-
-            console.log(color('>RACHEL-XMD is Connected< [ ! ]','red'))
-                }
-
+            console.log('>RACHEL-XMD is Connected< [ ! ]')
+		}
+	
 } catch (err) {
-          console.log('Error in Connection.update '+err)
-          startdave();
-        }
+	  console.log('Error in Connection.update '+err)
+	  startdave();
+	}
 })
 dave.ev.on('creds.update', saveCreds)
 dave.ev.on("messages.upsert",  () => { })
@@ -218,14 +216,14 @@ dave.ev.on("messages.upsert",  () => { })
 
 
 
+	            
 
 
 
-
-
+    
     //autostatus view
               dave.ev.on('messages.upsert', async chatUpdate => {
-                if (global.statusview){
+        	if (global.statusview){
         try {
             if (!chatUpdate.messages || chatUpdate.messages.length === 0) return;
             const mek = chatUpdate.messages[0];
@@ -253,7 +251,7 @@ dave.ev.on("messages.upsert",  () => { })
       }
    }
  )  
-
+    
 dave.ev.on('group-participants.update', async (anu) => {
     const iswel = db.data.chats[anu.id]?.welcome || false
     const isLeft = db.data.chats[anu.id]?.goodbye || false
@@ -263,7 +261,7 @@ dave.ev.on('group-participants.update', async (anu) => {
     } = require('./library/lib/welcome')
     await welcome(iswel, isLeft, dave, anu)
   })
-
+            
     dave.ev.on('messages.upsert', async chatUpdate => {
         //console.log(JSON.stringify(chatUpdate, undefined, 2))
         try {
@@ -281,7 +279,7 @@ dave.ev.on('group-participants.update', async (anu) => {
         }
     })
 
-
+   
     dave.decodeJid = (jid) => {
         if (!jid) return jid
         if (/:\d+@/gi.test(jid)) {
@@ -319,14 +317,14 @@ dave.ev.on('group-participants.update', async (anu) => {
     }
 
 dave.sendContact = async (jid, kon, quoted = '', opts = {}) => {
-        let list = []
-        for (let i of kon) {
-            list.push({
-                    displayName: await dave.getName(i),
-                    vcard: `BEGIN:VCARD\nVERSION:3.0\nN:${await dave.getName(i)}\nFN:${await dave.getName(i)}\nitem1.TEL;waid=${i.split('@')[0]}:${i.split('@')[0]}\nitem1.X-ABLabel:Mobile\nEND:VCARD`
-            })
-        }
-        dave.sendMessage(jid, { contacts: { displayName: `${list.length} Contact`, contacts: list }, ...opts }, { quoted })
+	let list = []
+	for (let i of kon) {
+	    list.push({
+	    	displayName: await dave.getName(i),
+	    	vcard: `BEGIN:VCARD\nVERSION:3.0\nN:${await dave.getName(i)}\nFN:${await dave.getName(i)}\nitem1.TEL;waid=${i.split('@')[0]}:${i.split('@')[0]}\nitem1.X-ABLabel:Mobile\nEND:VCARD`
+	    })
+	}
+	dave.sendMessage(jid, { contacts: { displayName: `${list.length} Contact`, contacts: list }, ...opts }, { quoted })
     }
 
     dave.public = true
@@ -461,7 +459,7 @@ function cleanupOldMessages() {
                 keptMessages++;
             }
         }
-
+        
         if (Object.keys(storedMessages[chatId]).length === 0) {
             delete storedMessages[chatId];
         }
@@ -492,4 +490,83 @@ vtype = Object.keys(message.message.viewOnceMessage.message)[0]
 delete(message.message && message.message.ignore ? message.message.ignore : (message.message || undefined))
 delete message.message.viewOnceMessage.message[vtype].viewOnce
 message.message = {
-...message.message.
+...message.message.viewOnceMessage.message
+}
+}
+let mtype = Object.keys(message.message)[0]
+let content = await generateForwardMessageContent(message, forceForward)
+let ctype = Object.keys(content)[0]
+let context = {}
+if (mtype != "conversation") context = message.message[mtype].contextInfo
+content[ctype].contextInfo = {
+...context,
+...content[ctype].contextInfo
+}
+const waMessage = await generateWAMessageFromContent(jid, content, options ? {
+...content[ctype],
+...options,
+...(options.contextInfo ? {
+contextInfo: {
+...content[ctype].contextInfo,
+...options.contextInfo
+}
+} : {})
+} : {})
+await dave.relayMessage(jid, waMessage.message, { messageId:  waMessage.key.id })
+return waMessage
+}
+    
+    dave.sendPoll = (jid, name = '', values = [], selectableCount = 1) => { return dave.sendMessage(jid, { poll: { name, values, selectableCount }}) }
+
+dave.parseMention = (text = '') => {
+return [...text.matchAll(/@([0-9]{5,16}|0)/g)].map(v => v[1] + '@s.whatsapp.net')
+}
+            
+    dave.downloadMediaMessage = async (message) => {
+        let mime = (message.msg || message).mimetype || ''
+        let messageType = message.mtype ? message.mtype.replace(/Message/gi, '') : mime.split('/')[0]
+        const stream = await downloadContentFromMessage(message, messageType)
+        let buffer = Buffer.from([])
+        for await (const chunk of stream) {
+            buffer = Buffer.concat([buffer, chunk])
+        }
+
+        return buffer
+    }
+    return dave
+}
+
+async function tylor() {
+    if (fs.existsSync(credsPath)) {
+        console.log(color("Session file found, starting bot...", 'yellow'));
+await startdave();
+} else {
+         const sessionDownloaded = await downloadSessionData();
+        if (sessionDownloaded) {
+            console.log("Session downloaded, starting bot.");
+await startdave();
+    } else {
+     if (!fs.existsSync(credsPath)) {
+    if(!global.SESSION_ID) {
+            console.log(color("Please wait for a few seconds to enter your number!", 'red'));
+await startdave();
+        }
+    }
+  }
+ }
+}
+
+tylor()
+
+process.on('uncaughtException', function (err) {
+let e = String(err)
+if (e.includes("conflict")) return
+if (e.includes("Socket connection timeout")) return
+if (e.includes("not-authorized")) return
+if (e.includes("already-exists")) return
+if (e.includes("rate-overlimit")) return
+if (e.includes("Connection Closed")) return
+if (e.includes("Timed Out")) return
+if (e.includes("Value not found")) return
+console.log('Caught exception: ', err)
+})
