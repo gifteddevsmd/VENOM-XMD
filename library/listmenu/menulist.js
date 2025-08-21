@@ -1,13 +1,57 @@
 const chalk = require('chalk')
 const fs = require('fs')
+const os = require('os')
+const process = require('process')
 
-const Menu = `
+
+function formatBytes(bytes) {
+    const sizes = ['B', 'KB', 'MB', 'GB', 'TB']
+    if (bytes === 0) return '0 B'
+    const i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)))
+    return `${(bytes / Math.pow(1024, i)).toFixed(2)} ${sizes[i]}`
+}
+
+function getUptime() {
+    let totalSeconds = process.uptime()
+    const hours = Math.floor(totalSeconds / 3600)
+    totalSeconds %= 3600
+    const minutes = Math.floor(totalSeconds / 60)
+    const seconds = Math.floor(totalSeconds % 60)
+    return `${hours}h ${minutes}m ${seconds}s`
+}
+
+function getMemoryUsage() {
+    const used = process.memoryUsage().heapUsed
+    const total = os.totalmem()
+    return `${formatBytes(used)} / ${formatBytes(total)}`
+}
+
+function getPing() {
+    return `${Math.floor(Math.random() * 50) + 30} ms` // placeholder
+}
+
+module.exports = function Menu() {
+    return `
 ┏▣ ◈ *𝐃𝐀𝐕𝐄-𝐗𝐌𝐃 𝐌𝐄𝐍𝐔* ◈ ▣
-┃ ✦ *Owner*   : ${global.ownername}
+┃ ✦ *Owner*   : ${global.ownername || 'Not Set'}
 ┃ ✦ *Version* : 1.0.0
-┃ ✦ *Type*    : ${global.typebot}
-┃ ✦ *Prefix*  : ${global.prefix}
+┃ ✦ *Mode*    : ${global.typebot || 'Unknown'}
+┃ ✦ *Prefix*  : ${global.prefix || '.'}
+┃ ✦ *Uptime*  : ${getUptime()}
+┃ ✦ *RAM*     : ${getMemoryUsage()}
+┃ ✦ *Ping*    : ${getPing()}
 ┗━━━━━━━━━━━━━━━━━━━━━━┛
+
+┏▣ ◈ *MAIN CMD* ◈ ▣
+┃ ➤ menu
+┃ ➤ ping
+┃ ➤ uptime
+┃ ➤ botinfo
+┃ ➤ listplugin
+┃ ➤ update
+┃ ➤ owner
+┃ ➤ support
+┗━━━━━━━━━━━━━━
 
 ┏▣ ◈ *MAIN CMD* ◈ ▣
 ┃ ➤ menu
