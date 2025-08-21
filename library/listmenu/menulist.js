@@ -1,15 +1,38 @@
-const chalk = require('chalk')
 const fs = require('fs')
+const os = require('os')
+const process = require('process')
+const chalk = require('chalk')
 
-const Menu = `
-┏▣ ◈ *𝐑𝐀𝐂𝐇𝐄𝐋-𝐗𝐌𝐃 𝐌𝐄𝐍𝐔* ◈ ▣
+// Function to get live bot stats
+function getBotStats() {
+    const upTime = process.uptime() // seconds
+    const hours = Math.floor(upTime / 3600)
+    const minutes = Math.floor((upTime % 3600) / 60)
+    const seconds = Math.floor(upTime % 60)
+
+    const ramUsed = process.memoryUsage().rss / 1024 / 1024 // MB
+    const ramTotal = os.totalmem() / 1024 / 1024 // MB
+
+    return {
+        uptime: `${hours}h ${minutes}m ${seconds}s`,
+        ram: `${ramUsed.toFixed(2)}MB / ${ramTotal.toFixed(2)}MB`,
+        mode: global.typebot || "Public"
+    }
+}
+
+// Menu function that returns dynamic menu string
+function Menu() {
+    const stats = getBotStats()
+    return `
+┏▣ ◈ *𝐃𝐀𝐕𝐄-𝐗𝐌𝐃 𝐌𝐄𝐍𝐔* ◈ ▣
 ┃ ✦ *Owner*   : ${global.ownername}
-┃ ✦ *Version* : 1.0.0
-┃ ✦ *Mode*    : ${global.typebot}
+┃ ✦ *Uptime*  : ${stats.uptime}
+┃ ✦ *RAM*     : ${stats.ram}
+┃ ✦ *Mode*    : ${stats.mode}
 ┃ ✦ *Prefix*  : ${global.prefix}
 ┗━━━━━━━━━━━━━━━━━━━━━━┛
 
-┏▣ ◈ MAIN-CMD ◈ ▣
+┏▣ ◈ *MAIN CMD* ◈ ▣
 ┃ ➤ menu
 ┃ ➤ ping
 ┃ ➤ uptime
@@ -18,9 +41,9 @@ const Menu = `
 ┃ ➤ update
 ┃ ➤ owner
 ┃ ➤ support
-┗━━━━━━━━━━━━━━━━━━━━━━┛
+┗━━━━━━━━━━━━━━
 
-┏▣ ◈ BOT CONTROL ◈ ▣
+┏▣ ◈ *BOT CONTROL* ◈ ▣
 ┃ ➤ public
 ┃ ➤ private
 ┃ ➤ addaccess
@@ -33,80 +56,88 @@ const Menu = `
 ┃ ➤ autorecord
 ┃ ➤ autobio
 ┃ ➤ autostatusview
-┃ ➤ > / $
-┗━━━━━━━━━━━━━━━━━━━━━━┛
+┗━━━━━━━━━━━━━━
 
-┏▣ ◈ MEDIA-CMD ◈ ▣
+┏▣ ◈ *MEDIA CMD* ◈ ▣
 ┃ ➤ play
 ┃ ➤ playdoc
+┃ ➤ ytmp3
+┃ ➤ ytmp3doc
 ┃ ➤ ytmp4
+┃ ➤ ytmp4doc
 ┃ ➤ ytvid
 ┃ ➤ yts
 ┃ ➤ pinterestdl
 ┃ ➤ song
 ┃ ➤ twitterdl
 ┃ ➤ tiktok
+┃ ➤ tiktokaudio
 ┃ ➤ igdl
-┃ ➤ ytmp3
 ┃ ➤ fbdown
 ┃ ➤ soundcloud
-┗━━━━━━━━━━━━━━━━━━━━━━┛
+┗━━━━━━━━━━━━━━
 
-┏▣ ◈ AI-CMD ◈ ▣
+┏▣ ◈ *AI CMD* ◈ ▣
 ┃ ➤ gemma
 ┃ ➤ indo-ai
-┃ ➤ gpt
+┃ ➤ chatgpt
+┃ ➤ firai
 ┃ ➤ ai-img
-┃ ➤ chatbot
 ┃ ➤ aiwrite
 ┃ ➤ gpt4
-┗━━━━━━━━━━━━━━━━━━━━━━┛
+┗━━━━━━━━━━━━━━
 
-┏▣ ◈ GROUP-CMD ◈ ▣
+┏▣ ◈ *GROUP CMD* ◈ ▣
 ┃ ➤ add
-┃ ➤ remove
+┃ ➤ kick
 ┃ ➤ promote
 ┃ ➤ demote
-┃ ➤ tagall
-┃ ➤ hidetag
-┃ ➤ linkgc
-┃ ➤ close / open
 ┃ ➤ antilink
+┃ ➤ antilinkgc
+┃ ➤ antitag
+┃ ➤ antitagadmin
+┃ ➤ antibadword
+┃ ➤ antibot
 ┃ ➤ welcome
-┃ ➤ goodbye
-┃ ➤ warn / unwarn
-┃ ➤ delete
+┃ ➤ setgroupname
+┃ ➤ setppgroup
 ┃ ➤ setdesc
-┃ ➤ setppgc
-┗━━━━━━━━━━━━━━━━━━━━━━┛
+┃ ➤ hidetag
+┃ ➤ tagall
+┃ ➤ listonline
+┗━━━━━━━━━━━━━━
 
-┏▣ ◈ GET-CMD ◈ ▣
-┃ ➤ gethtml
-┃ ➤ getpp
-┃ ➤ getplugin
-┃ ➤ save
+┏▣ ◈ *DOWNLOAD CMD* ◈ ▣
+┃ ➤ apk
+┃ ➤ download
+┃ ➤ facebook
+┃ ➤ gdrive
 ┃ ➤ gitclone
-┃ ➤ weather
-┃ ➤ apkdl
-┃ ➤ npmstalk
-┃ ➤ lyrics
-┃ ➤ githubstalk
-┃ ➤ whois
-┗━━━━━━━━━━━━━━━━━━━━━━┛
+┃ ➤ image
+┃ ➤ instagram
+┃ ➤ itunes
+┃ ➤ mediafire
+┃ ➤ song
+┃ ➤ song2
+┃ ➤ play
+┃ ➤ play2
+┃ ➤ savestatus
+┃ ➤ telesticker
+┃ ➤ tiktok
+┃ ➤ tiktokaudio
+┃ ➤ twitter
+┃ ➤ video
+┃ ➤ videodoc
+┃ ➤ xvideos
+┃ ➤ ytmp3
+┃ ➤ ytmp3doc
+┃ ➤ ytmp4
+┃ ➤ ytmp4doc
+┗━━━━━━━━━━━━━━
 
-┏▣ ◈ TOOL-CMD ◈ ▣
-┃ ➤ enc
-┃ ➤ idch
-┃ ➤ dev
-┃ ➤ runtime
-┃ ➤ calc
-┃ ➤ qrgen
-┃ ➤ qrscan
-┃ ➤ translate
-┃ ➤ shorturl
-┗━━━━━━━━━━━━━━━━━━━━━━┛
-
-┏▣ ◈ PHOTO-CMD ◈ ▣
+┏▣ ◈ *PHOTO CMD* ◈ ▣
+┃ ➤ remini
+┃ ➤ wallpaper
 ┃ ➤ glithtext
 ┃ ➤ lighteffects
 ┃ ➤ writetext
@@ -120,16 +151,115 @@ const Menu = `
 ┃ ➤ freecreate
 ┃ ➤ gradienttext
 ┃ ➤ shadowtext
-┗━━━━━━━━━━━━━━━━━━━━━━┛
+┗━━━━━━━━━━━━━━
 
-┏▣ ◈ BUG-CMD ◈ ▣
-┃ ➤ bugmenu
-┃ ➤ crashgc
-┃ ➤ trojan
-┃ ➤ laggc
-┃ ➤ bomb
-┗━━━━━━━━━━━━━━━━━━━━━━┛
-`
+┏▣ ◈ *FUN CMD* ◈ ▣
+┃ ➤ dare
+┃ ➤ fact
+┃ ➤ jokes
+┃ ➤ memes
+┃ ➤ quotes
+┃ ➤ trivia
+┃ ➤ truth
+┃ ➤ truthdetector
+┃ ➤ xxqc
+┗━━━━━━━━━━━━━━
+
+┏▣ ◈ *OWNER CMD* ◈ ▣
+┃ ➤ block
+┃ ➤ delete
+┃ ➤ deljunk
+┃ ➤ disk
+┃ ➤ dlvo
+┃ ➤ listblocked
+┃ ➤ listsudo
+┃ ➤ owner
+┃ ➤ setbio
+┃ ➤ setprofilepic
+┃ ➤ setstickercmd
+┃ ➤ delstickercmd
+┃ ➤ tostatus
+┃ ➤ toviewonce
+┃ ➤ unblock
+┃ ➤ unblockall
+┃ ➤ restart
+┃ ➤ react
+┗━━━━━━━━━━━━━━
+
+┏▣ ◈ *RELIGION CMD* ◈ ▣
+┃ ➤ bible
+┃ ➤ quran
+┗━━━━━━━━━━━━━━
+
+┏▣ ◈ *SEARCH CMD* ◈ ▣
+┃ ➤ define
+┃ ➤ define2
+┃ ➤ imdb
+┃ ➤ lyrics
+┃ ➤ shazam
+┃ ➤ weather
+┃ ➤ yts
+┗━━━━━━━━━━━━━━
+
+┏▣ ◈ *SETTINGS CMD* ◈ ▣
+┃ ➤ addbadword
+┃ ➤ addignorelist
+┃ ➤ addsudo
+┃ ➤ alwaysonline
+┃ ➤ antibug
+┃ ➤ anticall
+┃ ➤ antidelete
+┃ ➤ antideletestatus
+┃ ➤ autobio
+┃ ➤ autoreactstatus
+┃ ➤ autoviewstatus
+┃ ➤ autoreact
+┃ ➤ autoread
+┃ ➤ autotype
+┃ ➤ autorecord
+┃ ➤ mode
+┃ ➤ setmenu
+┃ ➤ setprefix
+┃ ➤ setbotname
+┃ ➤ setownername
+┃ ➤ setownernumber
+┃ ➤ setwatermark
+┃ ➤ settimezone
+┃ ➤ getsettings
+┃ ➤ resetwarn
+┃ ➤ setwarn
+┃ ➤ listwarn
+┗━━━━━━━━━━━━━━
+
+┏▣ ◈ *TOOLS CMD* ◈ ▣
+┃ ➤ browse
+┃ ➤ calculate
+┃ ➤ getpp
+┃ ➤ getabout
+┃ ➤ emojimix
+┃ ➤ fliptext
+┃ ➤ gsmarena
+┃ ➤ genpass
+┃ ➤ device
+┃ ➤ obfuscate
+┃ ➤ qrcode
+┃ ➤ say
+┃ ➤ ssweb
+┃ ➤ sticker
+┃ ➤ fancy
+┃ ➤ translate
+┃ ➤ toimage
+┃ ➤ tourl
+┃ ➤ texttopdf
+┗━━━━━━━━━━━━━━
+
+┏▣ ◈ *VIDEO CMD* ◈ ▣
+┃ ➤ volvideo
+┃ ➤ toaudio
+┃ ➤ tovideo
+┗━━━━━━━━━━━━━━
+`;
+
 module.exports = Menu
 
 let file = require.resolve(__filename)
