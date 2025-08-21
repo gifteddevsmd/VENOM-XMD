@@ -176,12 +176,19 @@ async function startdave() {
         await dave.sendMessage(botNumber, {
           text:
             `
-╔══❐ *𝐃𝐀𝐕𝐄-𝐗𝐌𝐃 CONNECTED* ❐══╗
-║ ➤ *Bot:* 𝐃𝐀𝐕𝐄-𝐗𝐌𝐃
-║ ➤ *Time:* ${new Date().toLocaleString()}
-║ ➤ *Status:* Online ✅
-║ ➤ *User:* ${botNumber}
-╚════════════════════════════╝`,
+┏─•⛩️ ${global.botname} ⛩️•─⬣[⿻
+
+👋 Hii, I Am ${global.botname}
+ [⿻] 🌌 Version      : 1.3.0
+ [⿻] 👤 Owner  	     : ${global.owner}
+ [⿻] 📚 Library      : WBaileys MD
+ [⿻] 📱 Status       : Online
+ [⿻] 📝 Session     :  ${global.session}
+ 
+ [⿻] 🌎 Base By    : Gifted Dave 
+
+┗─•${global.botname}•─⬣[⿻
+[[ ༑📚𝑪𝒓𝒆𝒂𝒕𝒆 𝑩𝒚 Dave⿻ ༑]]`,
           contextInfo: {
             forwardingScore: 1,
             isForwarded: false,
