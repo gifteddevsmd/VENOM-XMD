@@ -56,23 +56,6 @@ const useMobile = process.argv.includes("--mobile")
 
 const rl = readline.createInterface({ input: process.stdin, output: process.stdout })
 const question = (text) => new Promise((resolve) => rl.question(text, resolve))
-const welcomeMessage = `
-[[ Created by Gifted Dave ]]
-┏─► ${global.botname} ◄─┓
-
-Hii, I Am ${global.botname}
-➤ Version   : 1.5.0
-➤ Owner     : ${global.owner}
-➤Library    : WBaileys MD
-➤ Status    : Online
-➤ Session   : ${global.session}
-
-➤ Base By   : dave
-
-┗─► ${global.botname} ◄─┛
-[[ Made by Gifted Dave ]]
-`;
-    console.log(welcomeMessage);  
 const sessionDir = path.join(__dirname, 'session');
 const credsPath = path.join(sessionDir, 'creds.json');
 
@@ -86,10 +69,10 @@ async function downloadSessionData() {
         return console.log(color(`Session id not found at SESSION_ID!\nCreds.json not found at session folder!\n\nWait to enter your number`, 'red'));
       }
 
-      const base64Data = global.SESSION_ID.split("trashcore~")[1];
-      
+      const base64Data = global.SESSION_ID.split("DAVE-XMD-WHATSAPP-BOT;;;=>")[1];
+
       const sessionData = Buffer.from(base64Data, 'base64');
-      
+
         await fs.promises.writeFile(credsPath, sessionData);
       console.log(color(`Session successfully saved, please wait!!`, 'green'));
       await startdave();
@@ -100,116 +83,136 @@ async function downloadSessionData() {
 }
 
 
-async function startconn() {
-    let { version, isLatest } = await fetchLatestBaileysVersion()
-    const { state, saveCreds } = await useMultiFileAuthState(`./session`)
-    const msgRetryCounterCache = new NodeCache()
 
-    const conn = makeWASocket({
-        version,
+async function startdave() {
+let { version, isLatest } = await fetchLatestBaileysVersion()
+const {  state, saveCreds } =await useMultiFileAuthState(`./session`)
+    const msgRetryCounterCache = new NodeCache() // for retry message, "waiting message"
+    const dave = makeWASocket({
+        version: [2, 3000, 1023223821],
         logger: pino({ level: 'silent' }),
-        printQRInTerminal: !pairingCode,
-        browser: ["Ubuntu", "Chrome", "20.0.04"],
-        auth: {
-            creds: state.creds,
-            keys: makeCacheableSignalKeyStore(state.keys, pino({ level: "fatal" }).child({ level: "fatal" })),
-        },
-        markOnlineOnConnect: true,
-        generateHighQualityLinkPreview: true,
-        getMessage: async (key) => {
-            let jid = jidNormalizedUser(key.remoteJid)
-            let msg = await store.loadMessage(jid, key.id)
-            return msg?.message || ""
-        },
-        msgRetryCounterCache,
-        defaultQueryTimeoutMs: undefined,
-    })
+        printQRInTerminal: !pairingCode, // popping up QR in terminal log
+      mobile: useMobile, // mobile api (prone to bans)
+      browser: [ "Ubuntu", "Chrome", "20.0.04" ], // for this issues https://github.com/WhiskeySockets/Baileys/issues/328
+     auth: {
+         creds: state.creds,
+         keys: makeCacheableSignalKeyStore(state.keys, pino({ level: "fatal" }).child({ level: "fatal" })),
+      },
+      markOnlineOnConnect: true, // set false for offline
+      generateHighQualityLinkPreview: true, // make high preview link
+      getMessage: async (key) => {
+         let jid = jidNormalizedUser(key.remoteJid)
+         let msg = await store.loadMessage(jid, key.id)
+
+         return msg?.message || ""
+      },
+      msgRetryCounterCache, // Resolve waiting messages
+      defaultQueryTimeoutMs: undefined, // for this issues https://github.com/WhiskeySockets/Baileys/issues/276
+   })
 
    
    store.bind(dave.ev)
 
     // login use pairing code
    // source code https://github.com/WhiskeySockets/Baileys/blob/master/Example/example.ts#L61
-        if (global.connect && !dave.authState.creds.registered) {
-        try {
-            const phoneNumber = await question(chalk.cyan(`\n[ ᯤ ] Dave (--||--) Enter Your Number:\n`));
-            const code = await dave.requestPairingCode(phoneNumber.trim());
-            console.log(chalk.green(`\n[ ᯤ ] dave (--||--) Pairing Code:\n`), code);
-        } catch (error) {
-            console.error(chalk.red(`\nError during pairing:`), error.message);
-            return;
+                if (pairingCode && !dave.authState.creds.registered) {
+        if (useMobile) throw new Error('Cannot use pairing code with mobile api')
+
+        let phoneNumber
+        if (!!global.phoneNumber) {
+            phoneNumber = global.phoneNumber
+        } else {
+            phoneNumber = await question(chalk.bgBlack(chalk.greenBright(`Please type your WhatsApp number 😍\nFormat: 2547XXXXX (without + or spaces) : `)))
         }
+
+        phoneNumber = phoneNumber.replace(/[^0-9]/g, '')
+
+        const pn = require('awesome-phonenumber');
+        if (!pn('+' + phoneNumber).isValid()) {
+            console.log(chalk.red('Invalid phone number. Please enter your full international number (e.g., 255792021944 for Tanzania, 254104260236 for Kenya, etc.) without + or spaces.'));
+            process.exit(1);
+        }
+
+        setTimeout(async () => {
+            try {
+                let code = await dave.requestPairingCode(phoneNumber)
+                code = code?.match(/.{1,4}/g)?.join("-") || code
+                console.log(chalk.black(chalk.bgGreen(`Your Pairing Code : `)), chalk.black(chalk.white(code)))
+                console.log(chalk.yellow(`\nPlease enter this code in your WhatsApp app:\n1. Open WhatsApp\n2. Go to Settings > Linked Devices\n3. Tap "Link a Device"\n4. Enter the code shown above`))
+            } catch (error) {
+                console.error('Error requesting pairing code:', error)
+                console.log(chalk.red('Failed to get pairing code. Please check your phone number and try again.'))
+            }
+        }, 3000)
     }
-    store?.bind(dave.ev)
+    store?.bind(conn.ev)
 dave.ev.on('connection.update', async (update) => {
-	const {
-        
-		connection,
-		lastDisconnect
-	} = update
+        const {
+
+                connection,
+                lastDisconnect
+        } = update
 try{
-		if (connection === 'close') {
-			let reason = new Boom(lastDisconnect?.error)?.output.statusCode
-			if (reason === DisconnectReason.badSession) {
-				console.log(`Bad Session File, Please Delete Session and Scan Again`);
-				startdave()
-			} else if (reason === DisconnectReason.connectionClosed) {
-				console.log("Connection closed, reconnecting....");
-				startdave();
-			} else if (reason === DisconnectReason.connectionLost) {
-				console.log("Connection Lost from Server, reconnecting...");
-				startdave();
-			} else if (reason === DisconnectReason.connectionReplaced) {
-				console.log("Connection Replaced, Another New Session Opened, Please Close Current Session First");
-				startdave()
-			} else if (reason === DisconnectReason.loggedOut) {
-				console.log(`Device Logged Out, Please Delete Session and Scan Again.`);
-				startdave();
-			} else if (reason === DisconnectReason.restartRequired) {
-				console.log("Restart Required, Restarting...");
-				startdave();
-			} else if (reason === DisconnectReason.timedOut) {
-				console.log("Connection TimedOut, Reconnecting...");
-				startdave();
-			} else dave.end(`Unknown DisconnectReason: ${reason}|${connection}`)
-		}
-		if (update.connection == "connecting" || update.receivedPendingNotifications == "false") {
-			console.log(color(`\nConnecting...`, 'white'))
-		}
-		if (update.connection == "open" || update.receivedPendingNotifications == "true") {
-			console.log(color(` `,'magenta'))
-            console.log(color(`Connected to => ` + JSON.stringify(dave.user, null, 2), 'green'))
-			await delay(1999)
-			dave.sendMessage(dave.user.id, {
-image: {
-url: 'https://url.bwmxmd.online/Adams.jin9796u.jpg'
-}, 
-caption: ` [ ༑💠 created by Gifted Dave ༑]]
-┏─•⛩️ ${global.botname} ⛩️•─⬣[⿻
+                if (connection === 'close') {
+                        let reason = new Boom(lastDisconnect?.error)?.output.statusCode
+                        if (reason === DisconnectReason.badSession) {
+                                console.log(`Bad Session File, Please Delete Session and Scan Again`);
+                                startdave()
+                        } else if (reason === DisconnectReason.connectionClosed) {
+                                console.log("Connection closed, reconnecting....");
+                                startdave();
+                        } else if (reason === DisconnectReason.connectionLost) {
+                                console.log("Connection Lost from Server, reconnecting...");
+                                startdave();
+                        } else if (reason === DisconnectReason.connectionReplaced) {
+                                console.log("Connection Replaced, Another New Session Opened, Please Close Current Session First");
+                                startdave()
+                        } else if (reason === DisconnectReason.loggedOut) {
+                                console.log(`Device Logged Out, Please Delete Session and Scan Again.`);
+                                startdave();
+                        } else if (reason === DisconnectReason.restartRequired) {
+                                console.log("Restart Required, Restarting...");
+                                startdave();
+                        } else if (reason === DisconnectReason.timedOut) {
+                                console.log("Connection TimedOut, Reconnecting...");
+                                dave();
+                        } else dave.end(`Unknown DisconnectReason: ${reason}|${connection}`)
+                }
+                if (update.connection == "connecting" || update.receivedPendingNotifications == "false") {
+                        console.log(color(`\nConnecting...`, 'white'))
+                }
+                if (update.connection == "open" || update.receivedPendingNotifications == "true") {
+                        console.log(color(` `,'magenta'))
+            console.log(color(`Connected to => ` + JSON.stringify(conn.user, null, 2), 'green'))
+await delay(1999)        
 
-👋 Hii, I Am ${global.botname}
- [⿻] 💠 Version      : 1.3.0
- [⿻] 💠 Owner  	     : ${global.owner}
- [⿻] 💠 Library      : WBaileys MD
- [⿻] 💠 Status       : Online
- [⿻] 💠 Session     :  ${global.session}
- 
- [⿻] 🌎💠 Base By    : Gifted Dave 
+                const botNumber = dave.user.id.split(':')[0] + '@s.whatsapp.net';
+            await dave.sendMessage(botNumber, { 
+                text: 
+                `
+╔══❐ *𝐃𝐀𝐕𝐄-𝐗𝐌𝐃 CONNECTED* ❐══╗
+║ ➤ *Bot:* 𝐃𝐀𝐕𝐄-𝐗𝐌𝐃
+║ ➤ *Time:* ${new Date().toLocaleString()}
+║ ➤ *Status:* Online ✅
+║ ➤ *User:* ${botNumber}
+╚════════════════════════════╝`,
+                contextInfo: {
+                    forwardingScore: 1,
+                    isForwarded: false,
+                    forwardedNewsletterMessageInfo: {
+                        newsletterJid: '120363400480173280@newsletter',
+                        newsletterName: 'RACHEL-XMD',
+                        serverMessageId: -1
+                    }
+                }
+            });
+console.log(color('>RACHEL-XMD is Connected< [ ! ]','red'))
+                }
 
-┗─•${global.botname}•─⬣[⿻
-[[ 💠created by Gifted Dave ]]`
-})
-
-
-			
-
-            console.log('>RACHEL-XMD is Connected< [ ! ]')
-		}
-	
 } catch (err) {
-	  console.log('Error in Connection.update '+err)
-	  startdave();
-	}
+          console.log('Error in Connection.update '+err)
+          startconn();
+        }
 })
 dave.ev.on('creds.update', saveCreds)
 dave.ev.on("messages.upsert",  () => { })
