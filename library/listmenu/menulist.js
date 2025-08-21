@@ -1,5 +1,7 @@
+const fs = require('fs')
 const os = require('os')
 const process = require('process')
+const chalk = require('chalk')
 
 // Format RAM bytes
 function formatBytes(bytes) {
@@ -31,13 +33,13 @@ function getPing() {
     return `${Math.floor(Math.random() * 50) + 30} ms`
 }
 
-// Export menu as function
-module.exports = function Menu() {
+// Main menu function
+function Menu() {
     return `
-┏▣ ◈ *${global.botname} 𝐌𝐄𝐍𝐔* ◈ ▣
+┏▣ ◈ *${global.botname || 'BOT'} 𝐌𝐄𝐍𝐔* ◈ ▣
 ┃ ✦ *Owner*   : ${global.ownername || 'Not Set'}
 ┃ ✦ *Version* : ${global.botversion || '1.0.0'}
-┃ ✦ *Mode*    : ${global.typebot || 'Unknown'}
+┃ ✦ *Mode*    : ${global.typebot || 'Plugin'}
 ┃ ✦ *Prefix*  : ${global.xprefix || '.'}
 ┃ ✦ *Uptime*  : ${getUptime()}
 ┃ ✦ *RAM*     : ${getMemoryUsage()}
@@ -68,6 +70,12 @@ module.exports = function Menu() {
 ┃ ➤ autorecord
 ┃ ➤ autobio
 ┃ ➤ autostatusview
+┗━━━━━━━━━━━━━━
+
+
+┏▣ ◈ *BUG CMD* ◈ ▣
+┃ ➤ dave
+┃ ➤ gcend
 ┗━━━━━━━━━━━━━━
 
 ┏▣ ◈ *MEDIA CMD* ◈ ▣
@@ -270,14 +278,17 @@ module.exports = function Menu() {
 ┃ ➤ toaudio
 ┃ ➤ tovideo
 ┗━━━━━━━━━━━━━━
-`;
+`
+}
 
+// Export at the bottom
 module.exports = Menu
 
+// Watch file for updates
 let file = require.resolve(__filename)
 fs.watchFile(file, () => {
-	fs.unwatchFile(file)
-	console.log(chalk.redBright(`Update ${__filename}`))
-	delete require.cache[file]
-	require(file)
+    fs.unwatchFile(file)
+    console.log(chalk.redBright(`Update File 📁 : ${__filename}`))
+    delete require.cache[file]
+    require(file)
 })
