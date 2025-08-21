@@ -282,50 +282,6 @@ const Menu = `
 `}
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 global.animemenu = (prefix) => {
 return `𝙊𝙒𝙉𝙀𝙍 = For Owner
 𝙂𝙍𝙊𝙐𝙋 = For Group
