@@ -51,7 +51,7 @@ if (global.db) setInterval(async () => {
 
 
 //------------------------------------------------------
-let phoneNumber = "254104245659"
+let phoneNumber = "254104260236"
 const pairingCode = !!phoneNumber || process.argv.includes("--pairing-code")
 const useMobile = process.argv.includes("--mobile")
 
