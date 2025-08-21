@@ -469,7 +469,7 @@ function cleanupOldMessages() {
 
     fs.writeFileSync(storeFile, JSON.stringify(storedMessages, null, 2));
 
-    console.log("[TRASH-BOT] 🧹 Cleaning up:");
+    console.log("[RACHEL-XMD] 🧹 Cleaning up:");
     console.log(`- Total messages processed: ${totalMessages}`);
     console.log(`- Old messages removed: ${oldMessages}`);
     console.log(`- Remaining messages: ${keptMessages}`);
