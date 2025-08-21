@@ -1,9 +1,7 @@
-const chalk = require('chalk')
-const fs = require('fs')
 const os = require('os')
 const process = require('process')
 
-
+// Format RAM bytes
 function formatBytes(bytes) {
     const sizes = ['B', 'KB', 'MB', 'GB', 'TB']
     if (bytes === 0) return '0 B'
@@ -11,6 +9,7 @@ function formatBytes(bytes) {
     return `${(bytes / Math.pow(1024, i)).toFixed(2)} ${sizes[i]}`
 }
 
+// Get uptime in h:m:s
 function getUptime() {
     let totalSeconds = process.uptime()
     const hours = Math.floor(totalSeconds / 3600)
@@ -20,38 +19,30 @@ function getUptime() {
     return `${hours}h ${minutes}m ${seconds}s`
 }
 
+// Get RAM usage
 function getMemoryUsage() {
     const used = process.memoryUsage().heapUsed
     const total = os.totalmem()
     return `${formatBytes(used)} / ${formatBytes(total)}`
 }
 
+// Placeholder ping
 function getPing() {
-    return `${Math.floor(Math.random() * 50) + 30} ms` // placeholder
+    return `${Math.floor(Math.random() * 50) + 30} ms`
 }
 
+// Export menu as function
 module.exports = function Menu() {
     return `
-┏▣ ◈ *𝐃𝐀𝐕𝐄-𝐗𝐌𝐃 𝐌𝐄𝐍𝐔* ◈ ▣
+┏▣ ◈ *${global.botname} 𝐌𝐄𝐍𝐔* ◈ ▣
 ┃ ✦ *Owner*   : ${global.ownername || 'Not Set'}
-┃ ✦ *Version* : 1.0.0
+┃ ✦ *Version* : ${global.botversion || '1.0.0'}
 ┃ ✦ *Mode*    : ${global.typebot || 'Unknown'}
-┃ ✦ *Prefix*  : ${global.prefix || '.'}
+┃ ✦ *Prefix*  : ${global.xprefix || '.'}
 ┃ ✦ *Uptime*  : ${getUptime()}
 ┃ ✦ *RAM*     : ${getMemoryUsage()}
 ┃ ✦ *Ping*    : ${getPing()}
 ┗━━━━━━━━━━━━━━━━━━━━━━┛
-
-┏▣ ◈ *MAIN CMD* ◈ ▣
-┃ ➤ menu
-┃ ➤ ping
-┃ ➤ uptime
-┃ ➤ botinfo
-┃ ➤ listplugin
-┃ ➤ update
-┃ ➤ owner
-┃ ➤ support
-┗━━━━━━━━━━━━━━
 
 ┏▣ ◈ *MAIN CMD* ◈ ▣
 ┃ ➤ menu
