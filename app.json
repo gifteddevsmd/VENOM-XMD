@@ -42,7 +42,7 @@
     },
     "AUTHOR": {
       "description": "type your author sticker name here",
-      "value": "Trashcore",
+      "value": "dave",
       "required": false
     },
     "SESSION_ID": {
