@@ -5,7 +5,7 @@ const Menu = `
 ┏▣ ◈ *𝐃𝐀𝐕𝐄-𝐗𝐌𝐃 𝐌𝐄𝐍𝐔* ◈ ▣
 ┃ ✦ *Owner*   : ${global.ownername}
 ┃ ✦ *Version* : 1.0.0
-┃ ✦ *Mode*    : ${global.typebot}
+┃ ✦ *Type*    : ${global.typebot}
 ┃ ✦ *Prefix*  : ${global.prefix}
 ┗━━━━━━━━━━━━━━━━━━━━━━┛
 
