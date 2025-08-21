@@ -9,300 +9,296 @@ const Menu = `
 ┃ ✦ Prefix  : ${global.xprefix || '.'}
 ┗━━━━━━━━━━━━━━━━━━━━━━
 ╭──• ❰ *Owner Menu* ❱
-║◦${prefix}autoread
-║◦${prefix}autobio 
-║◦${prefix}autotype 
-║◦${prefix}unavailable 
-║◦${prefix}autorecord 
-║◦${prefix}autorecordtype 
-║◦${prefix}autoswview 
-║◦${prefix}setautoblock 
-║◦${prefix}setantiforeign 
-║◦${prefix}autoblock 
-║◦${prefix}onlygc 
-║◦${prefix}onlypc 
-║◦${prefix}anticall 
-║◦${prefix}self 
-║◦${prefix}public 
-║◦${prefix}join 
-║◦${prefix}poll 
-║◦${prefix}bc 
-║◦${prefix}bcgroup 
-║◦${prefix}setmenu 
-║◦${prefix}setimgmenu 
-║◦${prefix}setvidmenu 
-║◦${prefix}setgifmenu 
-║◦${prefix}setreply 
-║◦${prefix}setprefix 
-║◦${prefix}addlimit 
-║◦${prefix}dellimit 
-║◦${prefix}resethit 
-║◦${prefix}resetuser 
-║◦${prefix}creategc 
-║◦${prefix}setexif 
-║◦${prefix}userjid 
-║◦${prefix}setbotbio 
-║◦${prefix}delppbot 
-║◦${prefix}trackip 
-║◦${prefix}setppbot 
-║◦${prefix}addprem 
-║◦${prefix}delprem 
-║◦${prefix}addowner 
-║◦${prefix}delowner 
-║◦${prefix}block 
-║◦${prefix}unblock 
-║◦${prefix}leavegc 
+║◦autoread
+║◦autobio 
+║◦autotype 
+║◦unavailable 
+║◦autorecord 
+║◦autorecordtype 
+║◦autoswview 
+║◦setautoblock 
+║◦setantiforeign 
+║◦autoblock 
+║◦onlygc 
+║◦onlypc 
+║◦anticall 
+║◦self 
+║◦public 
+║◦join 
+║◦poll 
+║◦bc 
+║◦bcgroup 
+║◦setmenu 
+║◦setimgmenu 
+║◦setvidmenu 
+║◦setgifmenu 
+║◦setreply 
+║◦setprefix 
+║◦addlimit 
+║◦dellimit 
+║◦resethit 
+║◦resetuser 
+║◦creategc 
+║◦setexif 
+║◦userjid 
+║◦setbotbio 
+║◦delppbot 
+║◦trackip 
+║◦setppbot 
+║◦addprem 
+║◦delprem 
+║◦addowner 
+║◦delowner 
+║◦block 
+║◦unblock 
+║◦leavegc 
 ╰⟢
 ╭──• ❰ *Group Menu* ❱
-║◦${prefix}antibot 
-║◦${prefix}antiviewonce 
-║◦${prefix}welcome 
-║◦${prefix}adminevent 
-║◦${prefix}groupevent 
-║◦${prefix}antiforeign 
-║◦${prefix}antimedia 
-║◦${prefix}antiaudio 
-║◦${prefix}antivideo 
-║◦${prefix}antiimage 
-║◦${prefix}antidocument 
-║◦${prefix}antilocation 
-║◦${prefix}anticontact 
-║◦${prefix}antisticker 
-║◦${prefix}antipoll 
-║◦${prefix}antilink 
-║◦${prefix}antilinkgc 
-║◦${prefix}antivirtex 
-║◦${prefix}grouplink 
-║◦${prefix}listadmin 
-║◦${prefix}invite 
-║◦${prefix}delete 
-║◦${prefix}setppgroup 
-║◦${prefix}delppgroup 
-║◦${prefix}setnamegc 
-║◦${prefix}setdesc 
-║◦${prefix}add 
-║◦${prefix}kick 
-║◦${prefix}promote 
-║◦${prefix}demote 
-║◦${prefix}getcontact 
-║◦${prefix}savecontact 
-║◦${prefix}sendcontact 
-║◦${prefix}contactag 
-║◦${prefix}hidetag 
-║◦${prefix}totag 
-║◦${prefix}tagall 
-║◦${prefix}editinfo 
-║◦${prefix}opentime 
-║◦${prefix}closetime 
-║◦${prefix}resetlink 
-║◦${prefix}getbio 
-║◦${prefix}vote 
-║◦${prefix}upvote 
-║◦${prefix}downvote 
-║◦${prefix}checkvote 
-║◦${prefix}delvote 
-║◦${prefix}autostickergc 
-║◦${prefix}react 
-║◦${prefix}kickall
-║◦${prefix}open
-║◦${prefix}close
+║◦antibot 
+║◦antiviewonce 
+║◦welcome 
+║◦adminevent 
+║◦groupevent 
+║◦antiforeign 
+║◦antimedia 
+║◦antiaudio 
+║◦antivideo 
+║◦antiimage 
+║◦antidocument 
+║◦antilocation 
+║◦anticontact 
+║◦antisticker 
+║◦antipoll 
+║◦antilink 
+║◦antilinkgc 
+║◦antivirtex 
+║◦grouplink 
+║◦listadmin 
+║◦invite 
+║◦delete 
+║◦setppgroup 
+║◦delppgroup 
+║◦setnamegc 
+║◦setdesc 
+║◦add 
+║◦kick 
+║◦promote 
+║◦demote 
+║◦getcontact 
+║◦savecontact 
+║◦sendcontact 
+║◦contactag 
+║◦hidetag 
+║◦totag 
+║◦tagall 
+║◦editinfo 
+║◦opentime 
+║◦closetime 
+║◦resetlink 
+║◦getbio 
+║◦vote 
+║◦upvote 
+║◦downvote 
+║◦checkvote 
+║◦delvote 
+║◦autostickergc 
+║◦react 
+║◦kickall
+║◦open
+║◦close
 ╰⟢
 ╭──• ❰ *Download Menu* ❱
-║◦${prefix}ytsearch 
-║◦${prefix}play 
-║◦${prefix}ytmp3 
-║◦${prefix}ytmp4 
-║◦${prefix}tiktokaudio 
-║◦${prefix}tiktok 
-║◦${prefix}igvideo 
-║◦${prefix}igimage 
-║◦${prefix}facebook 
-║◦${prefix}mediafire 
-║◦${prefix}google 
-║◦${prefix}imdb 
-║◦${prefix}weather 
-║◦${prefix}wanumber 
-║◦${prefix}spotify 
-║◦${prefix}gitclone 
-║◦${prefix}happymod 
-║◦${prefix}gdrive 
-║◦${prefix}pinterest 
-║◦${prefix}ringtone 
+║◦ytsearch 
+║◦play 
+║◦ytmp3 
+║◦ytmp4 
+║◦tiktokaudio 
+║◦tiktok 
+║◦igvideo 
+║◦igimage 
+║◦facebook 
+║◦mediafire 
+║◦google 
+║◦imdb 
+║◦weather 
+║◦wanumber 
+║◦spotify 
+║◦gitclone 
+║◦happymod 
+║◦gdrive 
+║◦pinterest 
+║◦ringtone 
 ╰⟢
 ╭──• ❰ *Random Video* ❱
-║◦${prefix}tiktokgirl 
-║◦${prefix}tiktoknukthy 
-║◦${prefix}tiktokkayes 
-║◦${prefix}tiktokpanrika 
-║◦${prefix}tiktoknotnot 
-║◦${prefix}tiktokghea 
-║◦${prefix}tiktoksantuy 
-║◦${prefix}tiktokbocil 
+║◦tiktokgirl 
+║◦tiktoknukthy 
+║◦tiktokkayes 
+║◦tiktokpanrika 
+║◦tiktoknotnot 
+║◦tiktokghea 
+║◦tiktoksantuy 
+║◦tiktokbocil 
 ╰⟢
 ╭──• ❰ *Stalker* ❱
-║◦${prefix}igstalk 
-║◦${prefix}tiktokstalk 
-║◦${prefix}mlstalk 
-║◦${prefix}npmstalk 
-║◦${prefix}ghstalk 
+║◦igstalk 
+║◦tiktokstalk 
+║◦mlstalk 
+║◦npmstalk 
+║◦ghstalk 
 ╰⟢
 > RACHEL-XMD VERSION 1
-
 > GIDDY TENNOR
-
-
 > ENJOY
 ╭──• ❰ *OpenAI* ❱
-║◦${prefix}openai 
-║◦${prefix}dalle 
-║◦${prefix}ai 
-║◦${prefix}remini 
+║◦openai 
+║◦dalle 
+║◦ai 
+║◦remini 
 ╰⟢
 ╭──• ❰ *Fun Menu* ❱
-║◦${prefix}define 
-║◦${prefix}lyrics 
-║◦${prefix}suit 
-║◦${prefix}math 
-║◦${prefix}tictactoe 
-║◦${prefix}fact 
-║◦${prefix}truth 
-║◦${prefix}dare 
-║◦${prefix}couple 
-║◦${prefix}soulmate 
-║◦${prefix}stupidcheck 
-║◦${prefix}handsomecheck 
-║◦${prefix}uncleancheck 
-║◦${prefix}hotcheck 
-║◦${prefix}smartcheck 
-║◦${prefix}greatcheck 
-║◦${prefix}evilcheck 
-║◦${prefix}dogcheck 
-║◦${prefix}coolcheck 
-║◦${prefix}waifucheck 
-║◦${prefix}awesomecheck 
-║◦${prefix}gaycheck 
-║◦${prefix}cutecheck 
-║◦${prefix}lesbiancheck 
-║◦${prefix}hornycheck 
-║◦${prefix}prettycheck 
-║◦${prefix}lovelycheck 
-║◦${prefix}uglycheck 
-║◦${prefix}pick 
-║◦${prefix}pickupline 
-║◦${prefix}quotes 
-║◦${prefix}can 
-║◦${prefix}is 
-║◦${prefix}gecg 
-║◦${prefix}checkme 
-║◦${prefix}tqto 
+║◦define 
+║◦lyrics 
+║◦suit 
+║◦math 
+║◦tictactoe 
+║◦fact 
+║◦truth 
+║◦dare 
+║◦couple 
+║◦soulmate 
+║◦stupidcheck 
+║◦handsomecheck 
+║◦uncleancheck 
+║◦hotcheck 
+║◦smartcheck 
+║◦greatcheck 
+║◦evilcheck 
+║◦dogcheck 
+║◦coolcheck 
+║◦waifucheck 
+║◦awesomecheck 
+║◦gaycheck 
+║◦cutecheck 
+║◦lesbiancheck 
+║◦hornycheck 
+║◦prettycheck 
+║◦lovelycheck 
+║◦uglycheck 
+║◦pick 
+║◦pickupline 
+║◦quotes 
+║◦can 
+║◦is 
+║◦gecg 
+║◦checkme 
+║◦tqto 
 ╰⟢
 ╭──• ❰ *PhotoOxy Maker* ❱
-║◦${prefix}shadow   
-║◦${prefix}write  
-║◦${prefix}romantic  
-║◦${prefix}burnpaper 
-║◦${prefix}smoke 
-║◦${prefix}narutobanner  
-║◦${prefix}love  
-║◦${prefix}undergrass 
-║◦${prefix}doublelove  
-║◦${prefix}coffecup 
-║◦${prefix}underwaterocean 
-║◦${prefix}smokyneon 
-║◦${prefix}starstext 
-║◦${prefix}rainboweffect 
-║◦${prefix}balloontext 
-║◦${prefix}metalliceffect 
-║◦${prefix}embroiderytext 
-║◦${prefix}flamingtext 
-║◦${prefix}stonetext 
-║◦${prefix}writeart 
-║◦${prefix}summertext 
-║◦${prefix}wolfmetaltext 
-║◦${prefix}nature3dtext 
-║◦${prefix}rosestext 
-║◦${prefix}naturetypography 
-║◦${prefix}quotesunder 
-║◦${prefix}shinetext 
+║◦shadow   
+║◦write  
+║◦romantic  
+║◦burnpaper 
+║◦smoke 
+║◦narutobanner  
+║◦love  
+║◦undergrass 
+║◦doublelove  
+║◦coffecup 
+║◦underwaterocean 
+║◦smokyneon 
+║◦starstext 
+║◦rainboweffect 
+║◦balloontext 
+║◦metalliceffect 
+║◦embroiderytext 
+║◦flamingtext 
+║◦stonetext 
+║◦writeart 
+║◦summertext 
+║◦wolfmetaltext 
+║◦nature3dtext 
+║◦rosestext 
+║◦naturetypography 
+║◦quotesunder 
+║◦shinetext 
 ╰⟢
 ╭──• ❰ *Ephoto360 Maker* ❱
-║◦${prefix}glitchtext 
-║◦${prefix}writetext 
-║◦${prefix}advancedglow 
-║◦${prefix}typographytext 
-║◦${prefix}pixelglitch 
-║◦${prefix}neonglitch 
-║◦${prefix}flagtext 
-║◦${prefix}flag3dtext 
-║◦${prefix}deletingtext 
-║◦${prefix}blackpinkstyle 
-║◦${prefix}glowingtext 
-║◦${prefix}underwatertext 
-║◦${prefix}logomaker 
-║◦${prefix}cartoonstyle 
-║◦${prefix}papercutstyle 
-║◦${prefix}watercolortext 
-║◦${prefix}effectclouds 
-║◦${prefix}blackpinklogo 
-║◦${prefix}gradienttext 
-║◦${prefix}summerbeach 
-║◦${prefix}luxurygold 
-║◦${prefix}multicoloredneon 
-║◦${prefix}sandsummer 
-║◦${prefix}galaxywallpaper 
-║◦${prefix}1917style 
-║◦${prefix}makingneon 
-║◦${prefix}freecreate 
-║◦${prefix}galaxystyle 
-║◦${prefix}lighteffects 
+║◦glitchtext 
+║◦writetext 
+║◦advancedglow 
+║◦typographytext 
+║◦pixelglitch 
+║◦neonglitch 
+║◦flagtext 
+║◦flag3dtext 
+║◦deletingtext 
+║◦blackpinkstyle 
+║◦glowingtext 
+║◦underwatertext 
+║◦logomaker 
+║◦cartoonstyle 
+║◦papercutstyle 
+║◦watercolortext 
+║◦effectclouds 
+║◦blackpinklogo 
+║◦gradienttext 
+║◦summerbeach 
+║◦luxurygold 
+║◦multicoloredneon 
+║◦sandsummer 
+║◦galaxywallpaper 
+║◦1917style 
+║◦makingneon 
+║◦freecreate 
+║◦galaxystyle 
+║◦lighteffects 
 ╰⟢
 > BELLAH XMD VERSION 1 
 ╭──• ❰ *Other Menu* ❱
-║◦${prefix}ping 
-║◦${prefix}menu 
-║◦${prefix}repo 
-║◦${prefix}listpc 
-║◦${prefix}listgc 
-║◦${prefix}idgroup 
-║◦${prefix}owner 
-║◦${prefix}tts 
-║◦${prefix}say 
-║◦${prefix}checkaccount 
-║◦${prefix}vv 
-║◦${prefix}quran 
-║◦${prefix}bible 
+║◦ping 
+║◦menu 
+║◦repo 
+║◦listpc 
+║◦listgc 
+║◦idgroup 
+║◦owner 
+║◦tts 
+║◦say 
+║◦checkaccount 
+║◦vv 
+║◦quran 
+║◦bible 
 ╰⟢
 ╭──• ❰ *Bug & War* ❱
-║◦${prefix}amountbug 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
-║◦${prefix}pmbug 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
-║◦${prefix}delaybug 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
-║◦${prefix}docubug 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
-║◦${prefix}unlimitedbug 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
-║◦${prefix}bombug 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
-║◦${prefix}lagbug 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
-║◦${prefix}trollybug 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
-║◦${prefix}gcbug 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
-║◦${prefix}delaygcbug 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
-║◦${prefix}laggcbug 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
-║◦${prefix}bomgcbug 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
-║◦${prefix}unlimitedgcbug 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
-║◦${prefix}trollygcbug 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
-║◦${prefix}docugcbug 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
-║◦${prefix}verif 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
-║◦${prefix}banv1 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
-║◦${prefix}banv2 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
-║◦${prefix}banv3 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
-║◦${prefix}banv4 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
-║◦${prefix}banv5 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
-║◦${prefix}banv6 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
-║◦${prefix}unbanv1 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
-║◦${prefix}unbanv2 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
-║◦${prefix}unbanv3 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
-║◦${prefix}unbanv4 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
-║◦${prefix}unbanv5 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
+║◦amountbug 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
+║◦pmbug 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
+║◦delaybug 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
+║◦docubug 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
+║◦unlimitedbug 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
+║◦bombug 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
+║◦lagbug 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
+║◦trollybug 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
+║◦gcbug 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
+║◦delaygcbug 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
+║◦laggcbug 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
+║◦bomgcbug 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
+║◦unlimitedgcbug 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
+║◦trollygcbug 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
+║◦docugcbug 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
+║◦verif 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
+║◦banv1 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
+║◦banv2 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
+║◦banv3 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
+║◦banv4 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
+║◦banv5 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
+║◦banv6 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
+║◦unbanv1 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
+║◦unbanv2 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
+║◦unbanv3 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
+║◦unbanv4 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
+║◦unbanv5 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
 ╰⟢
-`}
-
+`;
 
 
 module.exports = Menu
