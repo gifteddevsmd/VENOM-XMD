@@ -22,7 +22,7 @@ global.antilinkgc = process.env.ANTILINK_GROUP || true
 global.autoTyping = process.env.AUTO_TYPE || false
 global.autoRecord = process.env.AUTO_RECORD || false
 global.thumb = "https://files.catbox.moe/4ryp6k.jpg"
-global.wagc = "https://chat.whatsapp.com/BPyIptm3ZH68y4pSPrLMyq?mode=r_t"
+global.wagc = "https://chat.whatsapp.com/LfTFxkUQ1H7Eg2D0vR3n6g?mode=ac_t"
 global.caption = "dave media"
 //━━━━━━━━━━━━━━━━━━━━━━━━//
 // Sticker Marker
