@@ -204,7 +204,7 @@ caption: ` [ ༑📚𝑪𝒓𝒆𝒂𝒕𝒆𝒅 𝒃𝒚 dave ⿻ ༑]]
 
 
 
-            console.log(color('>Trashcore Bot is Connected< [ ! ]','red'))
+            console.log(color('>RACHEL-XMD is Connected< [ ! ]','red'))
                 }
 
 } catch (err) {
