@@ -17,7 +17,7 @@ const FileType = require('file-type');
 const PhoneNumber = require('awesome-phonenumber')
 const { imageToWebp, videoToWebp, writeExifImg, writeExifVid } = require('./library/lib/exif')
 const { smsg, isUrl, generateMessageTag, getBuffer, getSizeMedia, fetch, await, sleep, reSize } = require('./library/lib/function')
-const { default: trashcoreConnect, getAggregateVotesInPollMessage, delay, PHONENUMBER_MCC, makeCacheableSignalKeyStore, useMultiFileAuthState, DisconnectReason, fetchLatestBaileysVersion, generateForwardMessageContent, prepareWAMessageMedia, generateWAMessageFromContent, generateMessageID, downloadContentFromMessage, makeInMemoryStore, jidDecode, proto } = require("@whiskeysockets/baileys")
+const { default: daveConnect, getAggregateVotesInPollMessage, delay, PHONENUMBER_MCC, makeCacheableSignalKeyStore, useMultiFileAuthState, DisconnectReason, fetchLatestBaileysVersion, generateForwardMessageContent, prepareWAMessageMedia, generateWAMessageFromContent, generateMessageID, downloadContentFromMessage, makeInMemoryStore, jidDecode, proto } = require("@whiskeysockets/baileys")
 const channelId = "120363257205745956@newsletter";
 const createToxxicStore = require('./library/database/basestore');
 const store = createToxxicStore('./store', {
@@ -68,7 +68,7 @@ const welcomeMessage = `
  [⿻] 📱 Status       : Online
  [⿻] 📝 Session     :  ${global.session}
  
- [⿻] 🌎 Base By    : trashcoredevs
+ [⿻] 🌎 Base By    : davedevs
 
 ┗─•${global.botname}•─⬣[⿻
 [[ ༑📚𝑪𝒓𝒆𝒂𝒕𝒆 𝑩𝒚 𝒕𝒓𝒂𝒔𝒉𝒄𝒐𝒓𝒆༢⿻ ༑]]
@@ -87,13 +87,13 @@ async function downloadSessionData() {
         return console.log(color(`Session id not found at SESSION_ID!\nCreds.json not found at session folder!\n\nWait to enter your number`, 'red'));
       }
 
-      const base64Data = global.SESSION_ID.split("trashcore~")[1];
+      const base64Data = global.SESSION_ID.split("dave~")[1];
 
       const sessionData = Buffer.from(base64Data, 'base64');
 
         await fs.promises.writeFile(credsPath, sessionData);
       console.log(color(`Session successfully saved, please wait!!`, 'green'));
-      await starttrashcore();
+      await startdave();
     }
   } catch (error) {
     console.error('Error downloading session data:', error);
@@ -101,11 +101,11 @@ async function downloadSessionData() {
 }
 
 
-async function starttrashcore() {
+async function startdave() {
 let { version, isLatest } = await fetchLatestBaileysVersion()
 const {  state, saveCreds } =await useMultiFileAuthState(`./session`)
     const msgRetryCounterCache = new NodeCache() // for retry message, "waiting message"
-    const trashcore = makeWASocket({
+    const dave = makeWASocket({
         version: [2, 3000, 1023223821],
         logger: pino({ level: 'silent' }),
         printQRInTerminal: !pairingCode, // popping up QR in terminal log
@@ -127,22 +127,22 @@ const {  state, saveCreds } =await useMultiFileAuthState(`./session`)
       defaultQueryTimeoutMs: undefined, // for this issues https://github.com/WhiskeySockets/Baileys/issues/276
    })
 
-   store.bind(trashcore.ev)
+   store.bind(dave.ev)
 
     // login use pairing code
    // source code https://github.com/WhiskeySockets/Baileys/blob/master/Example/example.ts#L61
-        if (global.connect && !trashcore.authState.creds.registered) {
+        if (global.connect && !dave.authState.creds.registered) {
         try {
             const phoneNumber = await question(chalk.cyan(`\n[ ᯤ ] Trashcore (--||--) Enter Your Number:\n`));
-            const code = await trashcore.requestPairingCode(phoneNumber.trim());
-            console.log(chalk.green(`\n[ ᯤ ] trashcore (--||--) Pairing Code:\n`), code);
+            const code = await dave.requestPairingCode(phoneNumber.trim());
+            console.log(chalk.green(`\n[ ᯤ ] dave (--||--) Pairing Code:\n`), code);
         } catch (error) {
             console.error(chalk.red(`\nError during pairing:`), error.message);
             return;
         }
     }
-    store?.bind(trashcore.ev)
-trashcore.ev.on('connection.update', async (update) => {
+    store?.bind(dave.ev)
+dave.ev.on('connection.update', async (update) => {
         const {
 
                 connection,
@@ -153,35 +153,35 @@ try{
                         let reason = new Boom(lastDisconnect?.error)?.output.statusCode
                         if (reason === DisconnectReason.badSession) {
                                 console.log(`Bad Session File, Please Delete Session and Scan Again`);
-                                starttrashcore()
+                                startdave()
                         } else if (reason === DisconnectReason.connectionClosed) {
                                 console.log("Connection closed, reconnecting....");
-                                starttrashcore();
+                                startdave();
                         } else if (reason === DisconnectReason.connectionLost) {
                                 console.log("Connection Lost from Server, reconnecting...");
-                                starttrashcore();
+                                startdave();
                         } else if (reason === DisconnectReason.connectionReplaced) {
                                 console.log("Connection Replaced, Another New Session Opened, Please Close Current Session First");
-                                starttrashcore()
+                                startdave()
                         } else if (reason === DisconnectReason.loggedOut) {
                                 console.log(`Device Logged Out, Please Delete Session and Scan Again.`);
-                                starttrashcore();
+                                startdave();
                         } else if (reason === DisconnectReason.restartRequired) {
                                 console.log("Restart Required, Restarting...");
-                                starttrashcore();
+                                startdave();
                         } else if (reason === DisconnectReason.timedOut) {
                                 console.log("Connection TimedOut, Reconnecting...");
-                                starttrashcore();
-                        } else trashcore.end(`Unknown DisconnectReason: ${reason}|${connection}`)
+                                startdave();
+                        } else dave.end(`Unknown DisconnectReason: ${reason}|${connection}`)
                 }
                 if (update.connection == "connecting" || update.receivedPendingNotifications == "false") {
                         console.log(color(`\nConnecting...`, 'white'))
                 }
                 if (update.connection == "open" || update.receivedPendingNotifications == "true") {
                         console.log(color(` `,'magenta'))
-            console.log(color(`Connected to => ` + JSON.stringify(trashcore.user, null, 2), 'green'))
+            console.log(color(`Connected to => ` + JSON.stringify(dave.user, null, 2), 'green'))
                         await delay(1999)
-                        trashcore.sendMessage(trashcore.user.id, {
+                        dave.sendMessage(dave.user.id, {
 image: {
 url: 'https://url.bwmxmd.online/Adams.jin9796u.jpg'
 }, 
@@ -195,7 +195,7 @@ caption: ` [ ༑📚𝑪𝒓𝒆𝒂𝒕𝒆𝒅 𝒃𝒚 𝑻𝒓𝒂𝒔𝒉�
  [⿻] 📱 Status       : Online
  [⿻] 📝 Session     :  ${global.session}
  
- [⿻] 🌎 Base By    : trashcoredevs
+ [⿻] 🌎 Base By    : davedevs
 
 ┗─•${global.botname}•─⬣[⿻
 [[ ༑📚𝑪𝒓𝒆𝒂𝒕𝒆 𝑩𝒚 𝒕𝒓𝒂𝒔𝒉𝒄𝒐𝒓𝒆༢⿻ ༑]]`
@@ -209,11 +209,11 @@ caption: ` [ ༑📚𝑪𝒓𝒆𝒂𝒕𝒆𝒅 𝒃𝒚 𝑻𝒓𝒂𝒔𝒉�
 
 } catch (err) {
           console.log('Error in Connection.update '+err)
-          starttrashcore();
+          startdave();
         }
 })
-trashcore.ev.on('creds.update', saveCreds)
-trashcore.ev.on("messages.upsert",  () => { })
+dave.ev.on('creds.update', saveCreds)
+dave.ev.on("messages.upsert",  () => { })
 //------------------------------------------------------
 
 
@@ -224,7 +224,7 @@ trashcore.ev.on("messages.upsert",  () => { })
 
 
     //autostatus view
-              trashcore.ev.on('messages.upsert', async chatUpdate => {
+              dave.ev.on('messages.upsert', async chatUpdate => {
                 if (global.statusview){
         try {
             if (!chatUpdate.messages || chatUpdate.messages.length === 0) return;
@@ -239,8 +239,8 @@ trashcore.ev.on("messages.upsert",  () => { })
             if (mek.key && mek.key.remoteJid === 'status@broadcast') {
                 let emoji = [ "💙","❤️", "🌚","😍", "😭" ];
                 let sigma = emoji[Math.floor(Math.random() * emoji.length)];
-                await trashcore.readMessages([mek.key]);
-                trashcore.sendMessage(
+                await dave.readMessages([mek.key]);
+                dave.sendMessage(
                     'status@broadcast',
                     { react: { text: sigma, key: mek.key } },
                     { statusJidList: [mek.key.participant] },
@@ -254,35 +254,35 @@ trashcore.ev.on("messages.upsert",  () => { })
    }
  )  
 
-trashcore.ev.on('group-participants.update', async (anu) => {
+dave.ev.on('group-participants.update', async (anu) => {
     const iswel = db.data.chats[anu.id]?.welcome || false
     const isLeft = db.data.chats[anu.id]?.goodbye || false
 
     let {
       welcome
     } = require('./library/lib/welcome')
-    await welcome(iswel, isLeft, trashcore, anu)
+    await welcome(iswel, isLeft, dave, anu)
   })
 
-    trashcore.ev.on('messages.upsert', async chatUpdate => {
+    dave.ev.on('messages.upsert', async chatUpdate => {
         //console.log(JSON.stringify(chatUpdate, undefined, 2))
         try {
             mek = chatUpdate.messages[0]
             if (!mek.message) return
             mek.message = (Object.keys(mek.message)[0] === 'ephemeralMessage') ? mek.message.ephemeralMessage.message : mek.message
             if (mek.key && mek.key.remoteJid === 'status@broadcast') return
-            if (!trashcore.public && !mek.key.fromMe && chatUpdate.type === 'notify') return
+            if (!dave.public && !mek.key.fromMe && chatUpdate.type === 'notify') return
             if (mek.key.id.startsWith('Xeon') && mek.key.id.length === 16) return
             if (mek.key.id.startsWith('BAE5')) return
-            m = smsg(trashcore, mek, store)
-            require("./trashhandler")(trashcore, m, chatUpdate, store)
+            m = smsg(dave, mek, store)
+            require("./trashhandler")(dave, m, chatUpdate, store)
         } catch (err) {
             console.log(err)
         }
     })
 
 
-    trashcore.decodeJid = (jid) => {
+    dave.decodeJid = (jid) => {
         if (!jid) return jid
         if (/:\d+@/gi.test(jid)) {
             let decode = jidDecode(jid) || {}
@@ -290,9 +290,9 @@ trashcore.ev.on('group-participants.update', async (anu) => {
         } else return jid
     }
 
-    trashcore.ev.on('contacts.update', update => {
+    dave.ev.on('contacts.update', update => {
         for (let contact of update) {
-            let id = trashcore.decodeJid(contact.id)
+            let id = dave.decodeJid(contact.id)
             if (store && store.contacts) store.contacts[id] = {
                 id,
                 name: contact.notify
@@ -300,49 +300,49 @@ trashcore.ev.on('group-participants.update', async (anu) => {
         }
     })
 
-    trashcore.getName = (jid, withoutContact = false) => {
-        id = trashcore.decodeJid(jid)
-        withoutContact = trashcore.withoutContact || withoutContact
+    dave.getName = (jid, withoutContact = false) => {
+        id = dave.decodeJid(jid)
+        withoutContact = dave.withoutContact || withoutContact
         let v
         if (id.endsWith("@g.us")) return new Promise(async (resolve) => {
             v = store.contacts[id] || {}
-            if (!(v.name || v.subject)) v = trashcore.groupMetadata(id) || {}
+            if (!(v.name || v.subject)) v = dave.groupMetadata(id) || {}
             resolve(v.name || v.subject || PhoneNumber('+' + id.replace('@s.whatsapp.net', '')).getNumber('international'))
         })
         else v = id === '0@s.whatsapp.net' ? {
                 id,
                 name: 'WhatsApp'
-            } : id === trashcore.decodeJid(trashcore.user.id) ?
-            trashcore.user :
+            } : id === dave.decodeJid(dave.user.id) ?
+            dave.user :
             (store.contacts[id] || {})
         return (withoutContact ? '' : v.name) || v.subject || v.verifiedName || PhoneNumber('+' + jid.replace('@s.whatsapp.net', '')).getNumber('international')
     }
 
-trashcore.sendContact = async (jid, kon, quoted = '', opts = {}) => {
+dave.sendContact = async (jid, kon, quoted = '', opts = {}) => {
         let list = []
         for (let i of kon) {
             list.push({
-                    displayName: await trashcore.getName(i),
-                    vcard: `BEGIN:VCARD\nVERSION:3.0\nN:${await trashcore.getName(i)}\nFN:${await trashcore.getName(i)}\nitem1.TEL;waid=${i.split('@')[0]}:${i.split('@')[0]}\nitem1.X-ABLabel:Mobile\nEND:VCARD`
+                    displayName: await dave.getName(i),
+                    vcard: `BEGIN:VCARD\nVERSION:3.0\nN:${await dave.getName(i)}\nFN:${await dave.getName(i)}\nitem1.TEL;waid=${i.split('@')[0]}:${i.split('@')[0]}\nitem1.X-ABLabel:Mobile\nEND:VCARD`
             })
         }
-        trashcore.sendMessage(jid, { contacts: { displayName: `${list.length} Contact`, contacts: list }, ...opts }, { quoted })
+        dave.sendMessage(jid, { contacts: { displayName: `${list.length} Contact`, contacts: list }, ...opts }, { quoted })
     }
 
-    trashcore.public = true
+    dave.public = true
 
-    trashcore.serializeM = (m) => smsg(trashcore, m, store)
+    dave.serializeM = (m) => smsg(dave, m, store)
 
-    trashcore.sendText = (jid, text, quoted = '', options) => trashcore.sendMessage(jid, {
+    dave.sendText = (jid, text, quoted = '', options) => dave.sendMessage(jid, {
         text: text,
         ...options
     }, {
         quoted,
         ...options
     })
-    trashcore.sendImage = async (jid, path, caption = '', quoted = '', options) => {
+    dave.sendImage = async (jid, path, caption = '', quoted = '', options) => {
         let buffer = Buffer.isBuffer(path) ? path : /^data:.*?\/.*?;base64,/i.test(path) ? Buffer.from(path.split`,` [1], 'base64') : /^https?:\/\//.test(path) ? await (await getBuffer(path)) : fs.existsSync(path) ? fs.readFileSync(path) : Buffer.alloc(0)
-        return await trashcore.sendMessage(jid, {
+        return await dave.sendMessage(jid, {
             image: buffer,
             caption: caption,
             ...options
@@ -350,14 +350,14 @@ trashcore.sendContact = async (jid, kon, quoted = '', opts = {}) => {
             quoted
         })
     }
-    trashcore.sendTextWithMentions = async (jid, text, quoted, options = {}) => trashcore.sendMessage(jid, {
+    dave.sendTextWithMentions = async (jid, text, quoted, options = {}) => dave.sendMessage(jid, {
         text: text,
         mentions: [...text.matchAll(/@(\d{0,16})/g)].map(v => v[1] + '@s.whatsapp.net'),
         ...options
     }, {
         quoted
     })
-    trashcore.sendImageAsSticker = async (jid, path, quoted, options = {}) => {
+    dave.sendImageAsSticker = async (jid, path, quoted, options = {}) => {
 let buff = Buffer.isBuffer(path) ? path : /^data:.*?\/.*?;base64,/i.test(path) ? Buffer.from(path.split`,`[1], 'base64') : /^https?:\/\//.test(path) ? await (await getBuffer(path)) : fs.existsSync(path) ? fs.readFileSync(path) : Buffer.alloc(0)
 let buffer
 if (options && (options.packname || options.author)) {
@@ -365,14 +365,14 @@ buffer = await writeExifImg(buff, options)
 } else {
 buffer = await imageToWebp(buff)
 }
-await trashcore.sendMessage(jid, { sticker: { url: buffer }, ...options }, { quoted })
+await dave.sendMessage(jid, { sticker: { url: buffer }, ...options }, { quoted })
 .then( response => {
 fs.unlinkSync(buffer)
 return response
 })
 }
 
-trashcore.sendVideoAsSticker = async (jid, path, quoted, options = {}) => {
+dave.sendVideoAsSticker = async (jid, path, quoted, options = {}) => {
 let buff = Buffer.isBuffer(path) ? path : /^data:.*?\/.*?;base64,/i.test(path) ? Buffer.from(path.split`,`[1], 'base64') : /^https?:\/\//.test(path) ? await (await getBuffer(path)) : fs.existsSync(path) ? fs.readFileSync(path) : Buffer.alloc(0)
 let buffer
 if (options && (options.packname || options.author)) {
@@ -380,10 +380,10 @@ buffer = await writeExifVid(buff, options)
 } else {
 buffer = await videoToWebp(buff)
 }
-await trashcore.sendMessage(jid, { sticker: { url: buffer }, ...options }, { quoted })
+await dave.sendMessage(jid, { sticker: { url: buffer }, ...options }, { quoted })
 return buffer
 }
-    trashcore.downloadAndSaveMediaMessage = async (message, filename, attachExtension = true) => {
+    dave.downloadAndSaveMediaMessage = async (message, filename, attachExtension = true) => {
         let quoted = message.msg ? message.msg : message
         let mime = (message.msg || message).mimetype || ''
         let messageType = message.mtype ? message.mtype.replace(/Message/gi, '') : mime.split('/')[0]
@@ -474,7 +474,7 @@ function cleanupOldMessages() {
     console.log(`- Old messages removed: ${oldMessages}`);
     console.log(`- Remaining messages: ${keptMessages}`);
 }
-trashcore.ev.on("messages.upsert", async (chatUpdate) => {
+dave.ev.on("messages.upsert", async (chatUpdate) => {
     for (const msg of chatUpdate.messages) {
         if (!msg.message) return;
 
@@ -484,7 +484,7 @@ trashcore.ev.on("messages.upsert", async (chatUpdate) => {
         saveStoredMessages(chatId, messageId, msg);
     }
 });
-    trashcore.copyNForward = async (jid, message, forceForward = false, options = {}) => {
+    dave.copyNForward = async (jid, message, forceForward = false, options = {}) => {
 let vtype
 if (options.readViewOnce) {
 message.message = message.message && message.message.ephemeralMessage && message.message.ephemeralMessage.message ? message.message.ephemeralMessage.message : (message.message || undefined)
