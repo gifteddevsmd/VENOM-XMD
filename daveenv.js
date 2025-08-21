@@ -6,7 +6,7 @@ if (fs.existsSync('.env')) require('dotenv').config({ path: __dirname+'/.env' })
 global.SESSION_ID = process.env.SESSION_ID || '' 
 // Owner Setting
 global.xprefix = process.env.BOT_PREFIX ||'.'
-global.owner = ["254703726139",]
+global.owner = ["254104260236",]
 global.error = ["6666",]
 global.ownername = process.env.OWNER_NAME ||'dave'
 global.antidelete = process.env.ANTI_DELETE || true
@@ -15,7 +15,7 @@ global.antidelete = process.env.ANTI_DELETE || true
 global.botname = "dave"
 global.botversion = "1.8.0"
 global.typebot = "Plugin"
-global.session = "trashsession"
+global.session = "davsession"
 global.connect = true
 global.statusview = process.env.AUTO_STATUS || true
 global.antilinkgc = process.env.ANTILINK_GROUP || true
@@ -26,8 +26,8 @@ global.wagc = "https://chat.whatsapp.com/BPyIptm3ZH68y4pSPrLMyq?mode=r_t"
 global.caption = "dave media"
 //━━━━━━━━━━━━━━━━━━━━━━━━//
 // Sticker Marker
-global.packname = process.env.PACK_NAME ||'𝐓𝐑𝐀𝐒𝐇𝐂𝐎𝐑𝐄'
-global.packname = process.env.AUTHOR||'🩸⃟‣𝐓𝐑𝐀𝐒𝐇𝐂𝐎𝐑𝐄-𝐏𝐀𝐂𝐊𝐒‣—'
+global.packname = process.env.PACK_NAME ||'RACHEL-XMD'
+global.packname = process.env.AUTHOR||'🩸⃟‣RACHEL-XMD-𝐏𝐀𝐂𝐊𝐒‣—'
 //━━━━━━━━━━━━━━━━━━━━━━━━//
 // Respon Message
 global.mess = {
