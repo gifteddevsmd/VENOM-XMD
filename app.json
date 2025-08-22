@@ -12,17 +12,12 @@
       "value": "Dave",
       "required": true
     },
-    "API_KEY": {
-      "description": "Enter your Heroku API key here (keep this secret)",
-      "value": "",
-      "required": true
-    },
     "APP_NAME": {
       "description": "Your Heroku app name",
       "value": "VENOM-XMD",
       "required": true
     },
-    "HEROKU_API": {
+    "HEROKU_API_KEY": {
       "description": "Heroku API key",
       "value": "",
       "required": true
