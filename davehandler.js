@@ -2128,7 +2128,7 @@ case 'listblock': {
     reply(
         'List Block :\n\n' +
         `Total : ${block == undefined ? '*0* BLOCKED NUMBERS' : '*' + block.length + '* Blocked Contacts'}\n` +
-        block.map(v => '🔸 ' + v.replace(/@.+/, '')).join`\n`
+        block.map(v => '💠 ' + v.replace(/@.+/, '')).join`\n`
     )
 }
 break
@@ -2364,76 +2364,73 @@ case "restart": {
     if (!isCreator) return newReply(mess.owner);
     await newReply("Bot is restarting... Please wait");
     console.log("Bot restarting...");
-    setTimeout(() => process.exit(), 500);
-    break;
+    await new Promise(r => setTimeout(r, 1000));
+    process.exit(0);
 }
-
+break
+//==================================================//
 case "kill": {
     if (!isCreator) return newReply(mess.owner);
     await newReply("Bot is being force stopped...");
     console.log("Bot killed by owner!");
-    setTimeout(() => process.exit(1), 500);
-    break;
+    await new Promise(r => setTimeout(r, 1000));
+    process.exit(1);
 }
-
+break
+//==================================================//
 case "shutdown": {
     if (!isCreator) return newReply(mess.owner);
-    await newReply("Bot is shutting down and the application will close...");
+    await newReply("Bot is shutting down...");
     console.log("Bot shutting down...");
-    setTimeout(() => process.exit(0), 500);
-    break;
+    await new Promise(r => setTimeout(r, 1000));
+    process.exit(0);
 }
-
+break
+//==================================================//
 case 'autoread': {
     if (!isCreator) return newReply(mess.owner);
     if (!q) return newReply(`Send command: ${global.xprefix + command} true/false`);
 
     const value = q.toLowerCase();
-    if (value === 'true') {
-        db.data.settings[botNumber].autoread = true;
-        newReply("Auto-read has been enabled");
-    } else if (value === 'false') {
-        db.data.settings[botNumber].autoread = false;
-        newReply("Auto-read has been disabled");
+    if (value === 'true' || value === 'false') {
+        db.data.settings[botNumber].autoread = value === 'true';
+        fs.writeFileSync('./library/database/database.json', JSON.stringify(db.data, null, 2));
+        newReply(`Auto-read has been ${value === 'true' ? 'enabled' : 'disabled'}`);
     } else {
         newReply("Invalid value! Send true or false");
     }
 }
-break;
-
+break
+//==================================================//
 case 'unavailable': {
     if (!isCreator) return newReply(mess.owner);
     if (!q) return newReply(`Send command: ${global.xprefix + command} true/false`);
 
     const value = q.toLowerCase();
-    if (value === 'true') {
-        db.data.settings[botNumber].online = true;
-        newReply("Bot is now online and available");
-    } else if (value === 'false') {
-        db.data.settings[botNumber].online = false;
-        newReply("Bot is now offline and unavailable");
+    if (value === 'true' || value === 'false') {
+        db.data.settings[botNumber].online = value === 'true';
+        fs.writeFileSync('./library/database/database.json', JSON.stringify(db.data, null, 2));
+        newReply(`Bot is now ${value === 'true' ? 'online' : 'offline'}`);
     } else {
         newReply("Invalid value! Send true or false");
     }
 }
-break;
-
+break
+//==================================================//
 case 'autorecordtype': {
     if (!isCreator) return newReply(mess.owner);
     if (!q) return newReply(`Send command: ${global.xprefix + command} true/false`);
 
     const value = q.toLowerCase();
-    if (value === 'true') {
-        db.data.settings[botNumber].autorecordtype = true;
-        newReply("Auto-record typing has been enabled");
-    } else if (value === 'false') {
-        db.data.settings[botNumber].autorecordtype = false;
-        newReply("Auto-record typing has been disabled");
+    if (value === 'true' || value === 'false') {
+        db.data.settings[botNumber].autorecordtype = value === 'true';
+        fs.writeFileSync('./library/database/database.json', JSON.stringify(db.data, null, 2));
+        newReply(`Auto-record typing has been ${value === 'true' ? 'enabled' : 'disabled'}`);
     } else {
         newReply("Invalid value! Send true or false");
     }
 }
-break;
+break
 //==================================================//
 //==================================================//
 case 'enc':
