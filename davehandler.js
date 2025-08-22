@@ -2236,29 +2236,25 @@ case 'groupinfo':
 case 'getgroupinfo':
 case 'getinfogc': {
     if (!isPremium) return newReply(mess.premium);
+    if (!text) return newReply(`Send command ${global.xprefix + command} _grouplink_`);
 
-    if (!text) {
-        return newReply(`Send command ${global.xprefix + command} _grouplink_`);
-    }
-
-    // URL validation function
-    function isUrl(url) {
-        return /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/.test(url);
-    }
-
-    if (!isUrl(args[0]) && !args[0].includes('chat.whatsapp.com')) {
-        return newReply(`Invalid group link!`);
+    let link = text.trim();
+    
+    // Better URL validation
+    if (!link.includes('chat.whatsapp.com')) {
+        return newReply('Invalid group link! Must be a WhatsApp group link.');
     }
 
     try {
-        // Extract invite code
-        let inviteCode = args[0].split('https://chat.whatsapp.com/')[1];
-        if (!inviteCode) return newReply(`Cannot find invitation code.`);
+        // Extract invite code more reliably (handle query parameters)
+        let urlParts = link.split('https://chat.whatsapp.com/');
+        if (urlParts.length < 2) return newReply('Cannot extract invitation code from link.');
+        
+        let inviteCode = urlParts[1].split('?')[0]; // Remove query parameters
+        if (!inviteCode) return newReply('Cannot find valid invitation code.');
 
-        // Fetch group metadata
         let data = await dave.groupGetInviteInfo(inviteCode);
 
-        // Build message text
         let teks = `「 GROUP METADATA 」\n\n`;
         teks += `- ID            : ${data.id}\n`;
         teks += `- Name          : ${data.subject}\n`;
@@ -2268,27 +2264,40 @@ case 'getinfogc': {
         teks += `- Member Add Mode : ${data.memberAddMode ? 'Yes' : 'No'}\n`;
         teks += `- Description   :\n${data.desc || 'No description'}\n\n`;
         teks += `- Total Members : ${data.participants.length}\n\n`;
-        teks += `- Top Members :\n`;        
+        teks += `- Top Members :\n`;
 
-        // Limit participants to avoid message being too long
         const topParticipants = data.participants.slice(0, 15);
+        const mentionIds = [data.owner];
+        
         for (let participant of topParticipants) {
             teks += `- @${participant.id.split('@')[0]}\n`;
+            mentionIds.push(participant.id);
         }
 
         if (data.participants.length > 15) {
             teks += `- ...and ${data.participants.length - 15} more members\n`;
         }
 
-        // Send simple text message without buttons
-        await dave.sendMessage(m.chat, { text: teks }, { quoted: m });
+        // Send message with mentions (limit mentions to avoid issues)
+        await dave.sendMessage(m.chat, {
+            text: teks,
+            mentions: mentionIds.slice(0, 50) // WhatsApp limit
+        }, { quoted: m });
 
     } catch (error) {
         console.error("GroupInfo Error:", error);
-        newReply(`Failed to get group info. Make sure the group link is valid.`);
+        
+        // More specific error messages
+        if (error.message.includes('invite') || error.message.includes('invalid')) {
+            newReply('Invalid group link or expired invitation.');
+        } else if (error.message.includes('access') || error.message.includes('permission')) {
+            newReply('Cannot access group info. The group may be private or the link expired.');
+        } else {
+            newReply('Failed to get group info. Please try again.');
+        }
     }
 }
-break;
+break
 //==================================================//
 case 'tiktok': {
 if (!text) return reply(`Use : ${prefix + command} link`)
