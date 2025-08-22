@@ -1,12 +1,12 @@
 {
-    "name": "Rachel-xmd",
-    "description": "A whatsApp bot based on Baileysjs linrary (Ts+Js) with Multi Device support",
-    "repository": "https://github.com/anonphoenix007/CH13",
-    "logo": "https://telegra.ph/file/7aa528767ed96ddc17bc2.jpg",
-    "keywords": ["nodejs", "bot", "whatsapp bot", "whatsapp automation", "multi device"],
-    "env": {
+  "name": "Rachel-xmd",
+  "description": "A WhatsApp bot based on Baileysjs library (Ts+Js) with Multi Device support",
+  "repository": "https://github.com/giftdee/RACHEL-XMD",
+  "logo": "https://telegra.ph/file/7aa528767ed96ddc17bc2.jpg",
+  "keywords": ["nodejs", "bot", "whatsapp bot", "whatsapp automation", "multi device"],
+  "env": {
     "OWNER_NAME": {
-      "description": "enter your owner name here",
+      "description": "Enter your owner name here",
       "value": "Gifted Dave",
       "required": true
     },
@@ -15,51 +15,58 @@
       "value": ".",
       "required": false
     },
-   "ANTIDELETE": {
-      "description": "type true if you want your bot to detect deleted messages in your dm if else type false",
+    "ANTIDELETE": {
+      "description": "Type true if you want your bot to detect deleted messages in your DM, else false",
       "value": "true",
       "required": false
     },
- "AUTO_TYPE": {
-      "description": "type true if you want your bot to show fake typing in your chats  if else type false",
+    "AUTO_TYPE": {
+      "description": "Type true if you want your bot to show fake typing in your chats, else false",
       "value": "true",
       "required": false
     },
-"AUTO_RECORD": {
-      "description": "type true if you want your bot to show fake recording in your chat if else type false",
+    "AUTO_RECORD": {
+      "description": "Type true if you want your bot to show fake recording in your chat, else false",
       "value": "false",
       "required": false
     },
-   "AUTO_STATUS": {
-      "description": "type true if you want bot to view status if else type false",
+    "AUTO_STATUS": {
+      "description": "Type true if you want bot to view status, else false",
       "value": "true",
       "required": false
     },
     "PACK_NAME": {
-      "description": "type your sticker pack name here",
+      "description": "Type your sticker pack name here",
       "value": "RACHEL-XMD pack",
       "required": false
     },
     "AUTHOR": {
-      "description": "type your author sticker name here",
+      "description": "Type your author sticker name here",
       "value": "dave",
       "required": false
     },
     "SESSION_ID": {
-      "description": "put your session ID here",
+      "description": "Put your session ID here",
       "value": "DAVE-XMD-WHATSAPP-BOT;;;=>",
       "required": true
+    },
+    "DATABASE_URL": {
+      "description": "Heroku Postgres database URL for persistent storage",
+      "required": false
     }
-    },
-    "buildpacks": [
-      {
-        "url": "heroku/nodejs"
-    },
-    {
-      "url": "https://github.com/jonathanong/heroku-buildpack-ffmpeg-latest"
-    },
-    {
-      "url": "https://github.com/clhuang/heroku-buildpack-webp-binaries.git"
-          }
-     ]
-} 
+  },
+  "buildpacks": [
+    { "url": "heroku/nodejs" },
+    { "url": "https://github.com/jonathanong/heroku-buildpack-ffmpeg-latest" },
+    { "url": "https://github.com/clhuang/heroku-buildpack-webp-binaries.git" }
+  ],
+  "formation": {
+    "worker": {
+      "quantity": 1,
+      "size": "standard-2x"
+    }
+  },
+  "addons": [
+    { "plan": "heroku-postgresql:mini" }
+  ]
+}
