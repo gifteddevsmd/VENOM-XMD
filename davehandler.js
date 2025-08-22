@@ -906,7 +906,9 @@ let regex1 = /(?:https|git)(?::\/\/|@)github\.com[\/:]([^\/:]+)\/(.+)/i
     await dave.sendMessage(m.chat, { document: { url: url }, fileName: filename+'.zip', mimetype: 'application/zip' }, { quoted: m }).catch((err) => reply("error"))
 
 		    }
-		      break; //==================================================//     
+		      break;
+
+ //==================================================//     
         case 'uptime':
   const uptime = process.uptime();
   const days = Math.floor(uptime / (24 * 3600));
@@ -915,14 +917,29 @@ let regex1 = /(?:https|git)(?::\/\/|@)github\.com[\/:]([^\/:]+)\/(.+)/i
   const seconds = Math.floor(uptime % 60);
   dave.sendMessage(m.chat, { text: `Uptime: ${days}d ${hours}h ${minutes}m ${seconds}s` });
   break;
+
 //==================================================//           
-      case 'ping':
-  const start = Date.now();
-  const msg = await m.reply('Pinging...');
-  const end = Date.now();
-  const latency = end - start;
-  m.reply(`Pong! Latency: ${latency}ms`);
-  break; //==================================================//      
+      case 'ping': {
+    const start = Date.now();
+    const stylishName = 'ʀᴀᴄʜᴇʟ-xᴍᴅ';
+
+    // Send initial message
+    const msg = await newReply('Pinging...');
+    
+    const latency = Date.now() - start;
+
+    // Edit using Baileys method
+    await dave.sendMessage(m.chat, {
+        text: `${stylishName}\nLatency: ${latency}ms`,
+        edit: {
+            remoteJid: msg.key.remoteJid,
+            id: msg.key.id,
+            fromMe: true
+        }
+    });
+}
+break
+ //==================================================//      
     case 'yts': case 'ytsearch': {
                 if (!text) return reply(`Example : ${prefix + command} faded`)
                 let yts = require("yt-search")
