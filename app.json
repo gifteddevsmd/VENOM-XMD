@@ -1,9 +1,8 @@
 {
   "name": "VENOM-XMD",
   "description": "A WhatsApp bot based on Baileysjs library (Ts+Js) with Multi Device support",
-  "logo": "https://files.catbox.moe/lidsgj.jpg",
   "repository": "https://github.com/giftdee/VENOM-XMD",
-  "success_url": "/",
+  "logo": "https://files.catbox.moe/lidsgj.jpg",
   "keywords": ["nodejs", "bot", "whatsapp bot", "whatsapp automation", "multi device"],
   "env": {
     "OWNER_NAME": {
@@ -17,7 +16,7 @@
       "required": true
     },
     "HEROKU_API_KEY": {
-      "description": "Heroku API key",
+      "description": "Your Heroku API key",
       "value": "",
       "required": true
     },
@@ -27,52 +26,41 @@
       "required": false
     },
     "ANTIDELETE": {
-      "description": "Enable anti-delete feature (true/false)",
+      "description": "Type true if you want your bot to detect deleted messages in your DM; else type false",
       "value": "true",
       "required": false
     },
     "AUTO_TYPE": {
-      "description": "Show fake typing in chats (true/false)",
+      "description": "Type true if you want your bot to show fake typing in your chats; else type false",
       "value": "true",
       "required": false
     },
     "AUTO_RECORD": {
-      "description": "Show fake recording in chats (true/false)",
+      "description": "Type true if you want your bot to show fake recording in your chat; else type false",
       "value": "false",
       "required": false
     },
     "AUTO_STATUS": {
-      "description": "Bot will view status automatically (true/false)",
+      "description": "Type true if you want bot to view status; else type false",
       "value": "true",
       "required": false
     },
     "PACK_NAME": {
-      "description": "Sticker pack name",
+      "description": "Type your sticker pack name here",
       "value": "VENOM-XMD pack",
       "required": false
     },
     "AUTHOR": {
-      "description": "Sticker author name",
+      "description": "Type your author sticker name here",
       "value": "Dave",
       "required": false
     },
     "SESSION_ID": {
-      "description": "Your WhatsApp session ID",
-      "value": "",
+      "description": "Put your session ID here",
+      "value": "DAVE-XMD-WHATSAPP-BOT;;;=>",
       "required": true
     }
   },
-  "formation": {
-    "worker": {
-      "quantity": 1,
-      "size": "standard-2x"
-    }
-  },
-  "addons": [
-    {
-      "plan": "heroku-postgresql:essential-0"
-    }
-  ],
   "buildpacks": [
     {
       "url": "heroku/nodejs"
