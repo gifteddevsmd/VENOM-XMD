@@ -2077,76 +2077,20 @@ case 'setantiforeign': {
 }
 break
 //==================================================//
-case 'pushkontak': {
-    if (!isCreator) return newReply(mess.owner);
-    if (!m.isGroup) return newReply(mess.private);
-    
-    const [name, messageText] = text.split('/');
-    if (!name || !messageText) return newReply(`Send command: ${global.xprefix + command} <name>/<message>`);
-    
-    const groupInfo = await dave.groupMetadata(m.chat);
-    
-    // Safety confirmation for large groups
-    if (groupInfo.participants.length > 50) {
-        return newReply(`This group has ${groupInfo.participants.length} members. Are you sure you want to send to all? Use ${global.xprefix + command}confirm to proceed.`);
-    }
-    
-    if (groupInfo.participants.length > 901) return newReply('Maximum group members limit: 900');
-    
-    const kontak = {
-        displayName: "Contact",
-        contacts: [{
-            displayName: name,
-            vcard: `BEGIN:VCARD\nVERSION:3.0\nN:;${name};;;\nFN:${name}\nitem1.TEL;waid=${m.sender.split('@')[0]}:${m.sender.split('@')[0]}\nitem1.X-ABLabel:Phone\nEND:VCARD`
-        }]
-    };
-    
-    let successCount = 0;
-    let failCount = 0;
-    
-    for (let participant of groupInfo.participants) {
-        try {
-            const sentContact = await dave.sendMessage(participant.id, { contacts: kontak });
-            await dave.sendMessage(participant.id, { text: messageText }, { quoted: sentContact });
-            await sleep(1000);
-            successCount++;
-        } catch (error) {
-            console.error(`Failed to send to ${participant.id}:`, error);
-            failCount++;
-        }
-    }
-    
-    await newReply(`Done! Contacts pushed successfully to ${successCount} members. Failed: ${failCount}`);
-}
-break
 
-// Add confirmation handler for large groups
-case 'pushkontakconfirm': {
-    if (!isCreator) return newReply(mess.owner);
-    // Implementation for confirmation would go here
-    newReply("Confirmation handler for pushkontak");
-}
-break
 //==================================================//
   case 'block': 
 case 'ban': {
     if (!isCreator) return newReply(mess.owner);
-    
-    const users = m.mentionedJid?.[0] 
-        ? m.mentionedJid[0] 
-        : m.quoted?.sender 
-        ? m.quoted.sender 
-        : text.replace(/[^0-9]/g, '') + '@s.whatsapp.net';
-    
-    if (!users) return newReply("Please mention a user or reply to their message to block.");
-    
-    // Validate if it's a proper WhatsApp ID
-    if (!users.endsWith('@s.whatsapp.net')) {
-        return newReply("Invalid user format. Please provide a valid phone number or mention.");
-    }
+
+    const userJid = m.mentionedJid?.[0] 
+        || m.quoted?.sender 
+        || text.replace(/[^0-9]/g, '') + '@s.whatsapp.net';
+
+    if (!userJid) return newReply("Please mention a user or reply to their message to block.");
 
     try {
-        await dave.updateBlockStatus(users, 'block');
+        await dave.updateBlockStatus([userJid], 'block'); // <-- note the array
         newReply("User has been blocked successfully.");
     } catch (error) {
         console.error("Block error:", error);
@@ -2154,26 +2098,19 @@ case 'ban': {
     }
 }
 break
-//==================================================//
+
 case 'unblock': 
 case 'unban': {
     if (!isCreator) return newReply(mess.owner);
-    
-    const users = m.mentionedJid?.[0] 
-        ? m.mentionedJid[0] 
-        : m.quoted?.sender 
-        ? m.quoted.sender 
-        : text.replace(/[^0-9]/g, '') + '@s.whatsapp.net';
-    
-    if (!users) return newReply("Please mention a user or reply to their message to unblock.");
-    
-    // Validate if it's a proper WhatsApp ID
-    if (!users.endsWith('@s.whatsapp.net')) {
-        return newReply("Invalid user format. Please provide a valid phone number or mention.");
-    }
+
+    const userJid = m.mentionedJid?.[0] 
+        || m.quoted?.sender 
+        || text.replace(/[^0-9]/g, '') + '@s.whatsapp.net';
+
+    if (!userJid) return newReply("Please mention a user or reply to their message to unblock.");
 
     try {
-        await dave.updateBlockStatus(users, 'unblock');
+        await dave.updateBlockStatus([userJid], 'unblock'); // <-- note the array
         newReply("User has been unblocked successfully.");
     } catch (error) {
         console.error("Unblock error:", error);
@@ -2185,35 +2122,70 @@ break
 case "tohd":
 case "hd":
 case "remini": {
-    if (!/image/.test(mime)) 
-        return dave.sendMessage(m.chat, { text: `Example: send or reply to a photo` }, { quoted: m });
+    let foto;
+    try {
+        if (!qmsg || !/image/.test(mime)) {
+            return dave.sendMessage(m.chat, { 
+                text: `Please send or reply to an image with this command.\nExample: ${prefix + command}` 
+            }, { quoted: m });
+        }
 
-    let foto = await dave.downloadAndSaveMediaMessage(qmsg);
-    let result = await remini(await fs.readFileSync(foto), "enhance");
+        const processingMsg = await m.reply("🔄 Processing your image... This may take a moment");
+        foto = await dave.downloadAndSaveMediaMessage(qmsg);
+        await processingMsg.edit("📡 Enhancing image quality...");
 
-    await dave.sendMessage(m.chat, {
-        image: result,
-        caption: "Image enhanced successfully."
-    }, { quoted: m });
+        const fileBuffer = await fs.promises.readFile(foto);
+        const result = await remini(fileBuffer, "enhance");
 
-    fs.unlinkSync(foto);
+        if (!result || result.length === 0) {
+            throw new Error("Enhancement failed - no result returned");
+        }
+
+        await processingMsg.edit("✅ Sending enhanced image...");
+        await dave.sendMessage(m.chat, {
+            image: result,
+            caption: "🖼️ Image enhanced successfully"
+        }, { quoted: m });
+
+        if (fs.existsSync(foto)) await fs.promises.unlink(foto);
+        await processingMsg.delete();
+
+    } catch (err) {
+        console.error("Remini Error:", err);
+        if (foto && fs.existsSync(foto)) await fs.promises.unlink(foto).catch(() => {});
+        
+        let errorMessage = "Failed to enhance image";
+        if (err.message.includes("timeout")) errorMessage = "⏰ Processing timed out. Try a smaller image";
+        else if (err.message.includes("size") || err.message.includes("large")) errorMessage = "📏 Image too large. Try a smaller image";
+        else if (err.message.includes("network")) errorMessage = "🌐 Network error. Try again later";
+        else if (err.message.includes("API") || err.message.includes("service")) errorMessage = "🔧 Enhancement service temporarily unavailable";
+
+        dave.sendMessage(m.chat, { text: `${errorMessage}\n\nError: ${err.message}` }, { quoted: m });
+    }
 }
 break
 //==================================================//
    case "capcut": {
     if (!text) return dave.sendMessage(m.chat, { text: `Example: ${prefix + command} <link>` }, { quoted: m });
-    if (!text.startsWith('https://')) return dave.sendMessage(m.chat, { text: "Invalid link." }, { quoted: m });
+
+    // Relaxed link validation
+    if (!text.includes("capcut.com")) return dave.sendMessage(m.chat, { text: "Invalid CapCut link." }, { quoted: m });
 
     try {
-        let res = await fetchJson(`${global.webapi}/api/download/capcut?url=${text}&apikey=${global.restapi}`);
-        if (!res.status) return dave.sendMessage(m.chat, { text: "Error! No result found." }, { quoted: m });
+        const apiUrl = `${global.webapi}/api/download/capcut?url=${encodeURIComponent(text)}&apikey=${global.restapi}`;
+        const res = await fetchJson(apiUrl);
+
+        if (!res?.status || !res?.result?.videoUrl) {
+            return dave.sendMessage(m.chat, { text: "Error! No result found or link not supported." }, { quoted: m });
+        }
 
         await dave.sendMessage(m.chat, {
             video: { url: res.result.videoUrl },
             mimetype: "video/mp4",
-            caption: "Capcut Downloader"
+            caption: "CapCut Downloader ✅"
         }, { quoted: m });
-    } catch (e) {
+    } catch (err) {
+        console.error("CapCut Download Error:", err);
         dave.sendMessage(m.chat, { text: "An error occurred while processing your request." }, { quoted: m });
     }
 }
@@ -2298,236 +2270,246 @@ case "tourl2": {
 break;
 //==================================================//
 case "terabox": {
-    if (!text) return m.reply(example("link"));
-    if (!text.startsWith('https://')) return m.reply("Invalid link.");
+    if (!text) return m.reply(example("Provide a Terabox link"));
+
+    // Relaxed link validation
+    if (!text.includes("terabox.com")) return m.reply("Invalid Terabox link format");
 
     try {
-        let res = await fetchJson(`https://restapi-v2.simplebot.my.id/download/terabox?url=${text}`);
-        if (!res.status) return m.reply("Error! Result not found.");
+        const apiUrl = `https://restapi-v2.simplebot.my.id/download/terabox?url=${encodeURIComponent(text)}`;
+        const res = await fetchJson(apiUrl);
+
+        if (!res?.status || !res?.result) {
+            return m.reply("Error! File not found or link is restricted.");
+        }
 
         await dave.sendMessage(
-            m.chat, 
+            m.chat,
             {
                 document: { url: res.result },
                 mimetype: "application/zip",
                 fileName: "Terabox.zip",
                 caption: "Terabox Downloader ✅"
-            }, 
+            },
             { quoted: m }
         );
-    } catch (e) {
-        return m.reply("Error! The provided link is not supported.");
+    } catch (err) {
+        console.error("Terabox Download Error:", err);
+        return m.reply("Error fetching the file. The link may not be supported or the server is down.");
     }
 }
 break
 //==================================================//
-case "googledrive": 
+case "googledrive":
 case "gdrive": {
-    if (!text) return m.reply(example("link"));
-    if (!text.startsWith("https://")) return m.reply("Invalid link.");
+    if (!text) return m.reply(example("Provide a Google Drive link"));
+    
+    // Basic validation
+    if (!text.includes("drive.google.com")) return m.reply("Invalid link format");
 
     try {
-        const res = await fetchJson(`${global.webapi}/api/download/gdrive?url=${text}&apikey=${global.restapi}`);
-        if (!res.status || !res.result) return m.reply("Error! Result not found.");
+        const apiUrl = `${global.webapi}/api/download/gdrive?url=${encodeURIComponent(text)}&apikey=${global.restapi}`;
+        const res = await fetchJson(apiUrl);
+
+        if (!res?.status || !res?.result?.downloadUrl) {
+            return m.reply("Error! File not found or link is restricted.");
+        }
 
         await dave.sendMessage(
-            m.chat, 
-            { 
-                document: { url: res.result.downloadUrl }, 
-                mimetype: res.result.mimetype, 
-                fileName: res.result.fileName 
-            }, 
+            m.chat,
+            {
+                document: { url: res.result.downloadUrl },
+                mimetype: res.result.mimetype || "application/octet-stream",
+                fileName: res.result.fileName || "file"
+            },
             { quoted: m }
         );
-    } catch (e) {
-        return m.reply("Error! Result not found.");
+    } catch (err) {
+        console.error("GDrive Download Error:", err);
+        return m.reply("Error fetching the file. Please check the link or try later.");
     }
 }
 break
 //==================================================//
   case "savecontact": {
     if (!isOwner) return m.reply(mess.owner);
-    if (!text) return m.reply(example("Group ID is required"));
-
-    let groupMeta = await dave.groupMetadata(text);
-    let participants = groupMeta.participants
-        .filter(v => v.id.endsWith('.net'))
-        .map(v => v.id);
-
-    for (let member of participants) {
-        if (member !== botNumber && member.split("@")[0] !== global.owner) {
-            contacts.push(member);
-            fs.writeFileSync('./library/database/contacts.json', JSON.stringify(contacts));
-        }
-    }
+    if (!text) return m.reply("Please provide a group ID\nExample: .savecontact 1234567890@g.us");
 
     try {
-        const uniqueContacts = [...new Set(contacts)];
+        // Send initial response to show the bot is working
+        const processingMsg = await m.reply("🔄 Processing group contacts... Please wait");
+
+        const groupMeta = await dave.groupMetadata(text);
+        const participants = groupMeta.participants
+            .filter(v => v.id.endsWith('.net') && v.id !== botNumber && v.id.split("@")[0] !== global.owner)
+            .map(v => v.id);
+
+        if (!participants.length) {
+            await processingMsg.edit("❌ No contacts found in this group.");
+            return;
+        }
+
+        // Update status
+        await processingMsg.edit(`📊 Found ${participants.length} contacts. Creating VCF file...`);
+
+        // Collect unique contacts
+        const uniqueContacts = [...new Set(participants)];
+        
+        // Build VCF content
         const vcardContent = uniqueContacts.map(contact => {
+            const number = contact.split("@")[0];
             return [
                 "BEGIN:VCARD",
                 "VERSION:3.0",
-                `FN:Buyer - ${contact.split("@")[0]}`,
-                `TEL;type=CELL;type=VOICE;waid=${contact.split("@")[0]}:+${contact.split("@")[0]}`,
+                `FN:Contact - ${number}`,
+                `TEL;type=CELL;type=VOICE;waid=${number}:+${number}`,
                 "END:VCARD",
                 ""
             ].join("\n");
         }).join("");
 
+        // Write files
         fs.writeFileSync("./library/database/contacts.vcf", vcardContent, "utf8");
-    } catch (err) {
-        m.reply(err.toString());
-    } finally {
-        if (m.chat !== m.sender) {
-            await m.reply(`Contacts file created successfully.\nTotal: ${participants.length} contacts`);
-        }
+        fs.writeFileSync('./library/database/contacts.json', JSON.stringify(uniqueContacts, null, 2));
 
+        // Send the VCF file to the user
         await dave.sendMessage(m.sender, {
             document: fs.readFileSync("./library/database/contacts.vcf"),
-            fileName: "contacts.vcf",
-            caption: `Contacts file created successfully.\nTotal: ${participants.length} contacts`,
+            fileName: `contacts_${groupMeta.subject || 'group'}.vcf`,
+            caption: `✅ Contacts exported successfully\n📋 Total: ${uniqueContacts.length} contacts\n👥 Group: ${groupMeta.subject || 'Unknown'}`,
             mimetype: "text/vcard",
         }, { quoted: m });
 
-        contacts.splice(0, contacts.length);
-        fs.writeFileSync("./library/database/contacts.json", JSON.stringify(contacts));
-        fs.writeFileSync("./library/database/contacts.vcf", "");
-    }
-}
-break
-//==================================================//
-case "delcase": {
-    if (!isCreator) return m.reply(mess.owner);
-    if (!text) return dave.sendMessage(m.chat, { text: `Example: ${prefix}delcase menu` });
+        // Clear files after sending
+        fs.unlinkSync("./library/database/contacts.vcf");
+        fs.writeFileSync("./library/database/contacts.json", "[]");
 
-    const fs = require('fs').promises;
-    const path = './tangssss.js';
+        await processingMsg.edit("✅ Contacts file sent to your private chat!");
 
-    async function delCase(filePath, caseName) {
-        try {
-            let data = await fs.readFile(filePath, 'utf8');
-
-            const regex = new RegExp(`case\\s+"${caseName}"\\s*:\\s*\\{[\\s\\S]*?break\\s*;\\s*\\}`, 'g');
-
-            if (!regex.test(data)) {
-                return dave.sendMessage(m.chat, { text: `Case "${caseName}" not found in the file. Format must use { and break;` });
-            }
-
-            const newData = data.replace(regex, `// Case "${caseName}" has been removed via delcase`);
-
-            await fs.writeFile(filePath, newData, 'utf8');
-            return dave.sendMessage(m.chat, { text: `Case "${caseName}" successfully removed!` });
-        } catch (e) {
-            return dave.sendMessage(m.chat, { text: `Error occurred: ${e.message}` });
+    } catch (err) {
+        console.error("SaveContact Error:", err);
+        
+        // Specific error messages
+        if (err.message.includes("not found") || err.message.includes("404")) {
+            m.reply("❌ Group not found. Please check the group ID.");
+        } else if (err.message.includes("timeout") || err.message.includes("network")) {
+            m.reply("⏰ Operation timed out. The group might be too large.");
+        } else if (err.message.includes("access") || err.message.includes("permission")) {
+            m.reply("🔒 Cannot access group. Make sure the bot is in that group.");
+        } else {
+            m.reply("❌ Error creating contacts: " + err.message);
         }
     }
-
-    delCase(path, text.trim());
 }
 break
 //==================================================//
+
+//==================================================//
 case "emojimix": {
-    if (!text) return m.reply(example('😀*😍'));
-    if (!text.includes("*")) return m.reply(example('😀*😍'));
+    if (!text) return m.reply("Please provide emojis to mix\nExample: .emojimix 😀*😍");
+    if (!text.includes("*")) return m.reply("Invalid format! Use * to separate emojis\nExample: .emojimix 😀*😍");
 
     let [e1, e2] = text.split("*");
+    
+    // Validate that both emojis are provided
+    if (!e1 || !e2) return m.reply("Please provide two emojis separated by *\nExample: .emojimix 😀*😍");
+    
+    // Validate that inputs are actually emojis (basic check)
+    const emojiRegex = /[\p{Emoji}]/gu;
+    if (!emojiRegex.test(e1) || !emojiRegex.test(e2)) {
+        return m.reply("Please provide valid emojis only\nExample: .emojimix 😀*😍");
+    }
+
     let apiUrl = `https://restapi-v2.simplebot.my.id/tools/emojimix?emoji1=${encodeURIComponent(e1)}&emoji2=${encodeURIComponent(e2)}`;
 
     try {
         let stickerBuffer = await getBuffer(apiUrl);
-        await dave.sendAsSticker(m.chat, stickerBuffer, m, { packname: global.packname });
+        
+        // Check if the API returned a valid image
+        if (!stickerBuffer || stickerBuffer.length === 0) {
+            return m.reply("These emojis cannot be mixed together. Try different combinations!");
+        }
+        
+        await dave.sendAsSticker(m.chat, stickerBuffer, m, { 
+            packname: global.packname || "RACHEL-XMD",
+            author: "Emoji Mix"
+        });
+        
     } catch (err) {
-        console.error(err);
-        m.reply("Failed to create the emoji sticker.");
+        console.error("Emojimix Error:", err);
+        
+        // More specific error messages
+        if (err.message.includes("404") || err.message.includes("Not Found")) {
+            m.reply("These emojis cannot be combined. Try different emoji pairs!");
+        } else if (err.message.includes("timeout") || err.message.includes("network")) {
+            m.reply("Service temporarily unavailable. Please try again in a moment.");
+        } else {
+            m.reply("Failed to create emoji mix. The combination might not be supported.");
+        }
     }
 }
 break
 //==================================================//
 
   case "xnxx": {
-    if (!text) return m.reply(example('e.g., step sister'));
+    if (!text) return m.reply("Example: .xnxx step sister");
 
     await dave.sendMessage(m.chat, { react: { text: '🔎', key: m.key } });
 
-    let searchResult = await fetchJson(`https://restapi-v2.simplebot.my.id/search/xnxx?q=${encodeURIComponent(text)}`);
-    const results = searchResult.result;
-    let output = "\n";
+    try {
+        let searchResult = await fetchJson(`https://restapi-v2.simplebot.my.id/search/xnxx?q=${encodeURIComponent(text)}`);
+        let results = searchResult.result || searchResult.data; // fallback if API changed
 
-    for (let res of results) {
-        output += `Title: ${res.title}
-Info: ${res.info}
-Link: ${res.link}\n\n`;
+        if (!results || results.length === 0) {
+            return m.reply("No results found or invalid format from API.");
+        }
+
+        let output = "";
+        for (let res of results) {
+            output += `Title: ${res.title || "N/A"}\nInfo: ${res.info || "N/A"}\nLink: ${res.link || "N/A"}\n\n`;
+        }
+
+        await m.reply(output);
+    } catch (err) {
+        console.error(err);
+        m.reply("Failed to fetch results. API might be down or query is invalid.");
     }
-
-    await m.reply(output);
 }
 break
 //==================================================//
-
-
 case "xnxxdl": {
-    if (!text) return m.reply(example("Provide a valid link"));
+    if (!text) return m.reply("Provide a valid link");
+    if (!/^https?:\/\//.test(text)) return m.reply("Invalid link format");
 
-    if (!text.startsWith('https://')) return m.reply("Invalid link format");
+    try {
+        let res = await fetchJson(`https://restapi-v2.simplebot.my.id/download/xnxx?url=${encodeURIComponent(text)}`);
+        if (!res.status || !res.result) return m.reply("Error: Result not found");
 
-    await fetchJson(`https://restapi-v2.simplebot.my.id/download/xnxx?url=${encodeURIComponent(text)}`)
-        .then(async (res) => {
-            if (!res.status) return m.reply("Error: Result not found");
-            let videoUrl = res.result.files.hight || res.result.files.low;
-            await dave.sendMessage(m.chat, {
+        // safer fallback for file URLs
+        let videoUrl = res.result.files.high || res.result.files.hight || res.result.files.low;
+        if (!videoUrl) return m.reply("No downloadable video found");
+
+        await dave.sendMessage(
+            m.chat,
+            {
                 video: { url: videoUrl },
                 mimetype: "video/mp4",
                 caption: "XNXX Downloader"
-            }, { quoted: m });
-        })
-        .catch((e) => m.reply("Error occurred: " + e.message));
-}
-break
-//==================================================//
- case "add": {
-    if (!m.isGroup) return m.reply("This command can only be used in groups.");
-    if (!isCreator && !m.isAdmin) return m.reply("You must be an admin to use this command.");
-    if (!m.isBotAdmin) return m.reply("I need admin privileges to add members.");
-
-    if (text) {
-        const input = text.replace(/[^0-9]/g, "") + "@s.whatsapp.net";
-        const onWa = await dave.onWhatsApp(input.split("@")[0]);
-
-        if (onWa.length < 1) return m.reply("The number is not registered on WhatsApp.");
-
-        const res = await dave.groupParticipantsUpdate(m.chat, [input], 'add');
-
-        if (Object.keys(res).length === 0) {
-            return m.reply(`Successfully added ${input.split("@")[0]} to this group.`);
-        } else {
-            return m.reply(JSON.stringify(res, null, 2));
-        }
-    } else {
-        return m.reply(example("62838###"));
+            },
+            { quoted: m }
+        );
+    } catch (err) {
+        console.error(err);
+        m.reply("Error occurred: " + err.message);
     }
 }
-break
+break;
+
+
 //==================================================//
-case 'poll': {
-    if (!isBot) return m.reply(mess.owner)
-    let [poll, opt] = text.split("|")
-    if (text.split("|") < 2)
-        return await reply(
-            `Mention question and atleast 2 options\nExample: ${prefix}poll Who is best admin?|Xeon,Cheems,Doge...`
-        )
-    let options = []
-    for (let i of opt.split(',')) {
-        options.push(i)
-    }
-    await dave.sendMessage(m.chat, {
-        poll: {
-            name: poll,
-            values: options
-        }
-    })
-}
-break
-//==================================================// 
+ 
+//==================================================//
+
 case 'listblock': {
     if (!isBot) return m.reply(mess.owner)
     let block = await dave.fetchBlocklist()
@@ -2766,150 +2748,7 @@ await dave.relayMessage( msg.key.remoteJid,msg.message,{ messageId: msg.key.id }
 }
 break
 //==================================================//
-case "restart": {
-    if (!isCreator) return newReply(mess.owner);
-    await newReply("Bot is restarting... Please wait");
-    console.log("Bot restarting...");
-    await new Promise(r => setTimeout(r, 1000));
-    process.exit(0);
-}
-break
-//==================================================//
-case "kill": {
-    if (!isCreator) return newReply(mess.owner);
-    await newReply("Bot is being force stopped...");
-    console.log("Bot killed by owner!");
-    await new Promise(r => setTimeout(r, 1000));
-    process.exit(1);
-}
-break
-//==================================================//
-case "shutdown": {
-    if (!isCreator) return newReply(mess.owner);
-    await newReply("Bot is shutting down...");
-    console.log("Bot shutting down...");
-    await new Promise(r => setTimeout(r, 1000));
-    process.exit(0);
-}
-break
-//==================================================//
-case 'autoread': {
-    if (!isCreator) return newReply(mess.owner);
-    if (!q) return newReply(`Send command: ${global.xprefix + command} true/false`);
-
-    const value = q.toLowerCase();
-    if (value === 'true' || value === 'false') {
-        db.data.settings[botNumber].autoread = value === 'true';
-        fs.writeFileSync('./library/database/database.json', JSON.stringify(db.data, null, 2));
-        newReply(`Auto-read has been ${value === 'true' ? 'enabled' : 'disabled'}`);
-    } else {
-        newReply("Invalid value! Send true or false");
-    }
-}
-break
-//==================================================//
-case 'unavailable': {
-    if (!isCreator) return newReply(mess.owner);
-    if (!q) return newReply(`Send command: ${global.xprefix + command} true/false`);
-
-    const value = q.toLowerCase();
-    if (value === 'true' || value === 'false') {
-        db.data.settings[botNumber].online = value === 'true';
-        fs.writeFileSync('./library/database/database.json', JSON.stringify(db.data, null, 2));
-        newReply(`Bot is now ${value === 'true' ? 'online' : 'offline'}`);
-    } else {
-        newReply("Invalid value! Send true or false");
-    }
-}
-break
-//==================================================//
-case 'autorecordtype': {
-    if (!isCreator) return newReply(mess.owner);
-    if (!q) return newReply(`Send command: ${global.xprefix + command} true/false`);
-
-    const value = q.toLowerCase();
-    if (value === 'true' || value === 'false') {
-        db.data.settings[botNumber].autorecordtype = value === 'true';
-        fs.writeFileSync('./library/database/database.json', JSON.stringify(db.data, null, 2));
-        newReply(`Auto-record typing has been ${value === 'true' ? 'enabled' : 'disabled'}`);
-    } else {
-        newReply("Invalid value! Send true or false");
-    }
-}
-break
-//==================================================//
-case 'antiaudio':
-case 'antiforeign':
-case 'antisticker':
-case 'antiimage':
-case 'antivideo':
-case 'antiviewonce':
-case 'antibot':
-case 'antispam':
-case 'antimedia':
-case 'antidocument':
-case 'anticontact':
-case 'antilocation':
-case 'antilink':
-case 'antilinkgc':
-case 'autoaigc':
-case 'autoaipc':
-case 'autoaijapri':
-case 'antibadword':
-case 'antitoxic': {
-    const featureMap = {
-        antiaudio: 'antiaudio',
-        antiforeign: 'antiforeignnum',
-        antisticker: 'antisticker',
-        antiimage: 'antiimage',
-        antivideo: 'antivideo',
-        antiviewonce: 'antiviewonce',
-        antibot: 'antibot',
-        antispam: 'antispam',
-        antimedia: 'antimedia',
-        antidocument: 'antidocument',
-        anticontact: 'anticontact',
-        antilocation: 'antilocation',
-        antilink: 'antilink',
-        antilinkgc: 'antilinkgc',
-        autoaigc: 'autoaigc',
-        autoaipc: 'autoaipc',
-        autoaijapri: 'autoaijapri',
-        antibadword: 'badword',
-        antitoxic: 'badword'
-    };
-
-    const key = featureMap[command];
-    if (!key) return;
-
-    // Permission checks
-    if (!m.isGroup && !['autoaipc', 'autoaijapri'].includes(command)) 
-        return newReply("This command can only be used in groups!");
-
-    if (m.isGroup && !isBotAdmins && !['autoaipc', 'autoaijapri'].includes(command)) 
-        return newReply("I need to be an admin to configure this feature!");
-
-    if (m.isGroup && !isAdmins && !isCreator && !['autoaipc', 'autoaijapri'].includes(command)) 
-        return newReply("Only admins can enable/disable this feature!");
-
-    if (['autoaipc', 'autoaijapri'].includes(command) && !isCreator) 
-        return newReply("Only the bot owner can enable or disable this feature!");
-
-    // Input validation
-    if (!args[0]) return newReply(`Wrong format! Use: ${global.xprefix + command} true/false`);
-
-    const value = args[0].toLowerCase();
-    if (value === 'true') {
-        db.data.chats[m.chat][key] = true;
-        newReply(`✅ Feature "${command}" has been enabled.`);
-    } else if (value === 'false') {
-        db.data.chats[m.chat][key] = false;
-        newReply(`❌ Feature "${command}" has been disabled.`);
-    } else {
-        newReply(`Invalid value! Use: ${global.xprefix + command} true/false`);
-    }
-}
-break
+//================================================//
 //==================================================//
 case 'enc':
 case 'encrypt': {
@@ -3065,7 +2904,7 @@ break;
   }
 }
 break
-
+//==================================================//
         case 'glitchtext':
 case 'writetext':
 case 'advancedglow':
