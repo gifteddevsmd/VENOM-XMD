@@ -1226,8 +1226,8 @@ case "dev":
 case "devoloper":
 case "owner":
 case "xowner": {
-  let namaown = `TRASHCoreϟ`
-  let NoOwn = `254788460896`
+  let namaown = `Dave`
+  let NoOwn = `254104260236`
   var contact = generateWAMessageFromContent(m.chat, proto.Message.fromObject({
     contactMessage: {
       displayName: namaown,
