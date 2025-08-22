@@ -931,13 +931,14 @@ let regex1 = /(?:https|git)(?::\/\/|@)github\.com[\/:]([^\/:]+)\/(.+)/i
 
         // Calculate latency
         const ping = Date.now() - start;
-        const response = `${stylishName}\nSpeed: ${ping} ms 💠`;
+        const response = `${stylishName}\nSpeed: ${ping} ms ⚡`;
 
-        // Edit original message
-        await dave.sendMessage(m.chat, { text: response, edit: msg.key });
+        // Edit the original message
+        await dave.updateMessage(m.chat, msg.key, response);
+        // Note: updateMessage is the correct method for Baileys to edit text
     } catch (error) {
         console.error('Ping error:', error);
-        await dave.sendMessage(m.chat, { text: 'Failed to measure speed.' });
+        await dave.sendMessage(m.chat, { text: 'Failed to measure speed.' }, { quoted: m });
     }
 }
 break
