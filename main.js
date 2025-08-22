@@ -183,20 +183,18 @@ try{
 image: {
 url: 'https://files.catbox.moe/eh7hlm.jpg'
 }, 
-caption: ` [ ༑💠 Created by Gifted Dave ༑]]
-┏─•⛩️ ${global.botname} ⛩️•─⬣[⿻
+caption: `『 Created by Gifted Dave 』
+┏─• ${global.botname} •─⬣
 
-👋 Hii, I Am ${global.botname}
- [⿻] 💠 Version      : 1.3.0
- [⿻] 💠 Owner  	     : ${global.owner}
- [⿻] 💠 Library      : WBaileys MD
- [⿻] 💠 Status       : Online
- [⿻] 💠 Session     :  ${global.session}
- 
- [⿻] 💠 Base By    : Gifted Dave 
+👋 Hi, I am ${global.botname}
+[•] Version    : 1.3.0
+[•] Owner      : ${global.owner}
+[•] Library    : WBaileys MD
+[•] Status     : Online
+[•] Session    : ${global.session}
+[•] Base By    : Gifted Dave
 
-┗─•${global.botname}•─⬣[⿻
-[[ Gifted Dave]]`
+┗─• ${global.botname} •─⬣`
 })
 
 
