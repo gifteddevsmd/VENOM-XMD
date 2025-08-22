@@ -26,8 +26,8 @@ global.wagc = "https://chat.whatsapp.com/LfTFxkUQ1H7Eg2D0vR3n6g?mode=ac_t"
 global.caption = "dave media"
 //━━━━━━━━━━━━━━━━━━━━━━━━//
 // Sticker Marker
-global.packname = "RACHEL-XMD"
-global.packname = "RACHEL-XMD"
+global.packname = "VENOM-XMD"
+global.packname = "VENOM-XMD"
 //━━━━━━━━━━━━━━━━━━━━━━━━//
 // Respon Message
 global.mess = {

@@ -2,7 +2,7 @@ const axios = require("axios");
 const os = require('os');
 
 let daveplug = async (m, { reply, dave }) => {
-  await m.reply(`💠 Checking RACHEL-XMD system performance, please wait...`);
+  await m.reply(`💠 Checking VENOM-XMD system performance, please wait...`);
 
   const memoryUsage = process.memoryUsage();
   const cpuInfo = os.cpus().map(cpu => ({
@@ -26,7 +26,7 @@ let daveplug = async (m, { reply, dave }) => {
 
   const startTime = performance.now();
   const latency = performance.now() - startTime;
-  const finalStatus = `💠 RACHEL-XMD system latency: ${latency.toFixed(4)} ms`;
+  const finalStatus = `💠 VENOM-XMD system latency: ${latency.toFixed(4)} ms`;
 
   m.reply(finalStatus);
 };  

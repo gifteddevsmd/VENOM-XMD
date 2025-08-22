@@ -69,7 +69,7 @@ const isAdmins = m.isGroup ? groupAdmins.includes(m.sender) : false
 /////////////Setting Console//////////////////
 console.log(chalk.black(chalk.bgWhite(!command ? '[ MESSAGE ]' : '[ COMMAND ]')), chalk.black(chalk.bgGreen(new Date)), chalk.black(chalk.bgBlue(budy || m.mtype)) + '\n' + chalk.magenta('=> From'), chalk.green(pushname), chalk.yellow(m.sender) + '\n' + chalk.blueBright('=> In'), chalk.green(m.isGroup ? pushname : 'Private Chat', m.chat))
 /////////quoted functions//////////////////
-const fkontak = { key: {fromMe: false,participant: `0@s.whatsapp.net`, ...(from ? { remoteJid: "status@broadcast" } : {}) }, message: { 'contactMessage': { 'displayName': `RACHEL-XMD`, 'vcard': `BEGIN:VCARD\nVERSION:3.0\nN:XL;Vinzx,;;;\nFN:${pushname},\nitem1.TEL;waid=${sender.split('@')[0]}:${sender.split('@')[0]}\nitem1.X-ABLabel:Ponsel\nEND:VCARD`, 'jpegThumbnail': { url: 'https://files.catbox.moe/yqbio5.jpg' }}}}
+const fkontak = { key: {fromMe: false,participant: `0@s.whatsapp.net`, ...(from ? { remoteJid: "status@broadcast" } : {}) }, message: { 'contactMessage': { 'displayName': `VENOM-XMD`, 'vcard': `BEGIN:VCARD\nVERSION:3.0\nN:XL;Vinzx,;;;\nFN:${pushname},\nitem1.TEL;waid=${sender.split('@')[0]}:${sender.split('@')[0]}\nitem1.X-ABLabel:Ponsel\nEND:VCARD`, 'jpegThumbnail': { url: 'https://files.catbox.moe/yqbio5.jpg' }}}}
 let chats = global.db.data.chats[from]
                if (typeof chats !== 'object') global.db.data.chats[from] = {}
                if (chats) {
@@ -189,7 +189,7 @@ if (db.data.settings[botNumber].autobio) {
 let setting = db.data.settings[botNumber]
 if (new Date() * 1 - setting.status > 1000) {
 let uptime = await runtime(process.uptime())
-await dave.updateProfileStatus(`✳️ RACHEL-XMD || 💠 Runtime : ${uptime}`)
+await dave.updateProfileStatus(`✳️ VENOM-XMD || 💠 Runtime : ${uptime}`)
 setting.status = new Date() * 1
 }
 }
@@ -276,7 +276,7 @@ amount1000: 999,
 requestFrom: '0@s.whatsapp.net',
 noteMessage: {
 extendedTextMessage: {
-text: `RACHEL-XMD`
+text: `VENOM-XMD`
 }
 },
 expiryTimestamp: 999999999,
@@ -303,7 +303,7 @@ forwardingScore: 9,
 isForwarded: true,
 forwardedNewsletterMessageInfo: {
 newsletterJid: "120363400480173280@newsletterr",
-newsletterName: "RACHEL-XMD" 
+newsletterName: "VENOM-XMD" 
 }
 }
 }, {
@@ -325,7 +325,7 @@ forwardingScore: 9,
 isForwarded: true,
 forwardedNewsletterMessageInfo: {
 newsletterJid: "120363400480173280@newsletter",
-newsletterName: "RACHEL-XMD"
+newsletterName: "VENOM-XMD"
 }
 }
 }, {
@@ -618,7 +618,7 @@ async function handleMessageRevocation(dave, revocationMessage) {
 
     if (deletedBy.includes(dave.user.id) || sentBy.includes(dave.user.id)) return;
 
-    let notificationText = `RACHEL-XMD ANTIDELETE💠\n\n` +
+    let notificationText = `VENOM-XMD ANTIDELETE💠\n\n` +
       ` 𝗗𝗲𝗹𝗲𝘁𝗲𝗱 𝗯𝘆 : ${deletedByFormatted}\n\n`;
 
     try {
@@ -805,7 +805,7 @@ case 'repo': {
 │ • Name    : ${botname}
 │ • Owner   : ${ownername}
 │ • Version  : ${botversion}
-│ • Repo : gitHub.com/giftdee/RACHEL-XMD/fork 
+│ • Repo : gitHub.com/giftdee/VENOM-XMD/fork 
 │ • Runtime  : ${runtime(process.uptime())}\n╰─────────────
 `
   reply(botInfo)
@@ -1015,7 +1015,7 @@ break;
     );
     
     // Confirm in chat
-    return m.reply(`✅  ${mediaType} Saved by RACHEL-XMD!`);
+    return m.reply(`✅  ${mediaType} Saved by VENOM-XMD!`);
     
   } catch (error) {
     console.error('Save error:', error);
@@ -1600,7 +1600,7 @@ case 'ig': case 'instagram': case 'igdl': {
  key: m.key,
  }
  });
- await dave.sendMessage(m.chat, { video: { url: res.media }, caption: "💠 *Downloaded by RACHEL-XMD!*" }, { quoted: m });
+ await dave.sendMessage(m.chat, { video: { url: res.media }, caption: "💠 *Downloaded by VENOM-XMD!*" }, { quoted: m });
  } else if (res.type === "image") {
  await dave.sendMessage(m.chat, {
  react: {
@@ -1608,7 +1608,7 @@ case 'ig': case 'instagram': case 'igdl': {
  key: m.key,
  }
  });
- await dave.sendMessage(m.chat, { image: { url: res.media }, caption: "💠 *Downloaded photo by RACHEL-XMD!*" }, { quoted: m });
+ await dave.sendMessage(m.chat, { image: { url: res.media }, caption: "💠 *Downloaded photo by VENOM-XMD!*" }, { quoted: m });
  }
  } catch (error) {
  console.error(error);

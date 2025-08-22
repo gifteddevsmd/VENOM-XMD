@@ -33,7 +33,7 @@ let handler = async (m, { dave, daveshown, reply }) => {
       const caption = mediaMessage.caption || '';
       await dave.sendMessage(m.chat, { 
         image: buffer, 
-        caption: `*Retrieved by RACHEL-XMD*\n\n*ViewOnce:* Image\n${caption ? `Caption: ${caption}` : ''}` 
+        caption: `*Retrieved by VENOM-XMD*\n\n*ViewOnce:* Image\n${caption ? `Caption: ${caption}` : ''}` 
       }, { quoted: m });
       return;
     }
@@ -52,7 +52,7 @@ let handler = async (m, { dave, daveshown, reply }) => {
       const caption = mediaMessage.caption || '';
       await dave.sendMessage(m.chat, { 
         video: fs.readFileSync(tempFile), 
-        caption: `*Retrieved by RACHEL-XMD*\n\n*ViewOnce:* Video\n${caption ? `Caption: ${caption}` : ''}` 
+        caption: `*Retrieved by VENOM-XMD*\n\n*ViewOnce:* Video\n${caption ? `Caption: ${caption}` : ''}` 
       }, { quoted: m });
 
       fs.unlinkSync(tempFile);

@@ -16,7 +16,7 @@ let daveplug = async (m, { reply, text, dave, participants, isAdmins }) => {
         );
     }
 
-    reply('💠 RACHEL-XMD has approved all pending requests');
+    reply('💠 VENOM-XMD has approved all pending requests');
 };
 
 daveplug.help = ['approve'];

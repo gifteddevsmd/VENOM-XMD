@@ -204,7 +204,7 @@ caption: ` [ ༑📚𝑪𝒓𝒆𝒂𝒕𝒆𝒅 𝒃𝒚 dave ⿻ ༑]]
 
 
 
-            console.log(color('>RACHEL-XMD is Connected< [ ! ]','red'))
+            console.log(color('>VENOM-XMD is Connected< [ ! ]','red'))
                 }
 
 } catch (err) {
@@ -469,7 +469,7 @@ function cleanupOldMessages() {
 
     fs.writeFileSync(storeFile, JSON.stringify(storedMessages, null, 2));
 
-    console.log("[RACHEL-XMD] 🧹 Cleaning up:");
+    console.log("[VENOM-XMD] 🧹 Cleaning up:");
     console.log(`- Total messages processed: ${totalMessages}`);
     console.log(`- Old messages removed: ${oldMessages}`);
     console.log(`- Remaining messages: ${keptMessages}`);
