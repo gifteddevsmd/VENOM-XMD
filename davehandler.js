@@ -920,21 +920,25 @@ let regex1 = /(?:https|git)(?::\/\/|@)github\.com[\/:]([^\/:]+)\/(.+)/i
 
 //==================================================//           
       case 'ping': {
-    const start = Date.now();
-    const stylishName = 'ʀᴀᴄʜᴇʟ-xᴍᴅ';
+    try {
+        const start = Date.now();
 
-    // Send initial message
-    const msg = await newReply('Pinging...');
+        // Stylish bot name
+        const stylishName = 'ʀᴀᴄʜᴇʟ-xᴍᴅ';
 
-    const latency = Date.now() - start;
+        // Send initial message
+        const msg = await dave.sendMessage(m.chat, { text: 'Calculating speed... ⏱️' });
 
-    // Edit the same message
-    await dave.sendMessage(msg.key.remoteJid, {
-        text: `${stylishName}\nLatency: ${latency}ms`
-    }, {
-        quoted: msg,
-        messageId: msg.key.id
-    });
+        // Calculate latency
+        const ping = Date.now() - start;
+        const response = `${stylishName}\nSpeed: ${ping} ms 💠`;
+
+        // Edit original message
+        await dave.sendMessage(m.chat, { text: response, edit: msg.key });
+    } catch (error) {
+        console.error('Ping error:', error);
+        await dave.sendMessage(m.chat, { text: 'Failed to measure speed.' });
+    }
 }
 break
  //==================================================//      
