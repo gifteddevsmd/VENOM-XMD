@@ -2678,6 +2678,78 @@ case 'autorecordtype': {
 }
 break
 //==================================================//
+case 'antiaudio':
+case 'antiforeign':
+case 'antisticker':
+case 'antiimage':
+case 'antivideo':
+case 'antiviewonce':
+case 'antibot':
+case 'antispam':
+case 'antimedia':
+case 'antidocument':
+case 'anticontact':
+case 'antilocation':
+case 'antilink':
+case 'antilinkgc':
+case 'autoaigc':
+case 'autoaipc':
+case 'autoaijapri':
+case 'antibadword':
+case 'antitoxic': {
+    const featureMap = {
+        antiaudio: 'antiaudio',
+        antiforeign: 'antiforeignnum',
+        antisticker: 'antisticker',
+        antiimage: 'antiimage',
+        antivideo: 'antivideo',
+        antiviewonce: 'antiviewonce',
+        antibot: 'antibot',
+        antispam: 'antispam',
+        antimedia: 'antimedia',
+        antidocument: 'antidocument',
+        anticontact: 'anticontact',
+        antilocation: 'antilocation',
+        antilink: 'antilink',
+        antilinkgc: 'antilinkgc',
+        autoaigc: 'autoaigc',
+        autoaipc: 'autoaipc',
+        autoaijapri: 'autoaijapri',
+        antibadword: 'badword',
+        antitoxic: 'badword'
+    };
+
+    const key = featureMap[command];
+    if (!key) return;
+
+    // Permission checks
+    if (!m.isGroup && !['autoaipc', 'autoaijapri'].includes(command)) 
+        return newReply("This command can only be used in groups!");
+
+    if (m.isGroup && !isBotAdmins && !['autoaipc', 'autoaijapri'].includes(command)) 
+        return newReply("I need to be an admin to configure this feature!");
+
+    if (m.isGroup && !isAdmins && !isCreator && !['autoaipc', 'autoaijapri'].includes(command)) 
+        return newReply("Only admins can enable/disable this feature!");
+
+    if (['autoaipc', 'autoaijapri'].includes(command) && !isCreator) 
+        return newReply("Only the bot owner can enable or disable this feature!");
+
+    // Input validation
+    if (!args[0]) return newReply(`Wrong format! Use: ${global.xprefix + command} true/false`);
+
+    const value = args[0].toLowerCase();
+    if (value === 'true') {
+        db.data.chats[m.chat][key] = true;
+        newReply(`✅ Feature "${command}" has been enabled.`);
+    } else if (value === 'false') {
+        db.data.chats[m.chat][key] = false;
+        newReply(`❌ Feature "${command}" has been disabled.`);
+    } else {
+        newReply(`Invalid value! Use: ${global.xprefix + command} true/false`);
+    }
+}
+break
 //==================================================//
 case 'enc':
 case 'encrypt': {
