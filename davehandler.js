@@ -2232,6 +2232,64 @@ case 'ig': case 'instagram': case 'igdl': {
 }
 break
 //==================================================//
+case 'groupinfo':
+case 'getgroupinfo':
+case 'getinfogc': {
+    if (!isPremium) return newReply(mess.premium);
+
+    if (!text) {
+        return newReply(`Send command ${global.xprefix + command} _grouplink_`);
+    }
+
+    // URL validation function
+    function isUrl(url) {
+        return /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/.test(url);
+    }
+
+    if (!isUrl(args[0]) && !args[0].includes('chat.whatsapp.com')) {
+        return newReply(`Invalid group link!`);
+    }
+
+    try {
+        // Extract invite code
+        let inviteCode = args[0].split('https://chat.whatsapp.com/')[1];
+        if (!inviteCode) return newReply(`Cannot find invitation code.`);
+
+        // Fetch group metadata
+        let data = await dave.groupGetInviteInfo(inviteCode);
+
+        // Build message text
+        let teks = `「 GROUP METADATA 」\n\n`;
+        teks += `- ID            : ${data.id}\n`;
+        teks += `- Name          : ${data.subject}\n`;
+        teks += `- Owner         : @${data.owner.split('@')[0]}\n`;
+        teks += `- Send Messages : ${data.announce ? 'Admin Only' : 'Everyone'}\n`;
+        teks += `- Admin Approval: ${data.joinApprovalMode ? 'Yes' : 'No'}\n`;
+        teks += `- Member Add Mode : ${data.memberAddMode ? 'Yes' : 'No'}\n`;
+        teks += `- Description   :\n${data.desc || 'No description'}\n\n`;
+        teks += `- Total Members : ${data.participants.length}\n\n`;
+        teks += `- Top Members :\n`;        
+
+        // Limit participants to avoid message being too long
+        const topParticipants = data.participants.slice(0, 15);
+        for (let participant of topParticipants) {
+            teks += `- @${participant.id.split('@')[0]}\n`;
+        }
+
+        if (data.participants.length > 15) {
+            teks += `- ...and ${data.participants.length - 15} more members\n`;
+        }
+
+        // Send simple text message without buttons
+        await dave.sendMessage(m.chat, { text: teks }, { quoted: m });
+
+    } catch (error) {
+        console.error("GroupInfo Error:", error);
+        newReply(`Failed to get group info. Make sure the group link is valid.`);
+    }
+}
+break;
+//==================================================//
 case 'tiktok': {
 if (!text) return reply(`Use : ${prefix + command} link`)
 // wait message
@@ -2261,6 +2319,7 @@ dave.sendMessage(m.chat, { audio: { url: json.music }, mimetype: 'audio/mpeg' },
 }
 }
 break
+//==================================================//
 case 'idch': case 'cekidch': {
 if (!text) return reply("channel link?")
 if (!text.includes("https://whatsapp.com/channel/")) return reply("Link must be valid")
@@ -2291,6 +2350,82 @@ await dave.relayMessage( msg.key.remoteJid,msg.message,{ messageId: msg.key.id }
 );
 }
 break
+//==================================================//
+case "restart": {
+    if (!isCreator) return newReply(mess.owner);
+    await newReply("Bot is restarting... Please wait");
+    console.log("Bot restarting...");
+    setTimeout(() => process.exit(), 500);
+    break;
+}
+
+case "kill": {
+    if (!isCreator) return newReply(mess.owner);
+    await newReply("Bot is being force stopped...");
+    console.log("Bot killed by owner!");
+    setTimeout(() => process.exit(1), 500);
+    break;
+}
+
+case "shutdown": {
+    if (!isCreator) return newReply(mess.owner);
+    await newReply("Bot is shutting down and the application will close...");
+    console.log("Bot shutting down...");
+    setTimeout(() => process.exit(0), 500);
+    break;
+}
+
+case 'autoread': {
+    if (!isCreator) return newReply(mess.owner);
+    if (!q) return newReply(`Send command: ${global.xprefix + command} true/false`);
+
+    const value = q.toLowerCase();
+    if (value === 'true') {
+        db.data.settings[botNumber].autoread = true;
+        newReply("Auto-read has been enabled");
+    } else if (value === 'false') {
+        db.data.settings[botNumber].autoread = false;
+        newReply("Auto-read has been disabled");
+    } else {
+        newReply("Invalid value! Send true or false");
+    }
+}
+break;
+
+case 'unavailable': {
+    if (!isCreator) return newReply(mess.owner);
+    if (!q) return newReply(`Send command: ${global.xprefix + command} true/false`);
+
+    const value = q.toLowerCase();
+    if (value === 'true') {
+        db.data.settings[botNumber].online = true;
+        newReply("Bot is now online and available");
+    } else if (value === 'false') {
+        db.data.settings[botNumber].online = false;
+        newReply("Bot is now offline and unavailable");
+    } else {
+        newReply("Invalid value! Send true or false");
+    }
+}
+break;
+
+case 'autorecordtype': {
+    if (!isCreator) return newReply(mess.owner);
+    if (!q) return newReply(`Send command: ${global.xprefix + command} true/false`);
+
+    const value = q.toLowerCase();
+    if (value === 'true') {
+        db.data.settings[botNumber].autorecordtype = true;
+        newReply("Auto-record typing has been enabled");
+    } else if (value === 'false') {
+        db.data.settings[botNumber].autorecordtype = false;
+        newReply("Auto-record typing has been disabled");
+    } else {
+        newReply("Invalid value! Send true or false");
+    }
+}
+break;
+//==================================================//
 //==================================================//
 case 'enc':
 case 'encrypt': {
