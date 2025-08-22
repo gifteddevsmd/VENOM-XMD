@@ -58,20 +58,22 @@ const useMobile = process.argv.includes("--mobile")
 const rl = readline.createInterface({ input: process.stdin, output: process.stdout })
 const question = (text) => new Promise((resolve) => rl.question(text, resolve))
 const welcomeMessage = `
-[[ ༑📚𝑪𝒓𝒆𝒂𝒕𝒆𝒅 𝒃𝒚 dave ⿻ ༑]]
-┏─•⛩️ ${global.botname} ⛩️•─⬣[⿻
+💠════════════════════💠
+   💠 Created by Dave 💠
+💠════════════════════💠
 
-👋 Hii, I Am ${global.botname}
- [⿻] 🌌 Version      : 1.5.0
- [⿻] 👤 Owner               : ${global.owner}
- [⿻] 📚 Library      : WBaileys MD
- [⿻] 📱 Status       : Online
- [⿻] 📝 Session     :  ${global.session}
- 
- [⿻] 🌎 Base By    : davedevs
+     👋 Hi, I Am ${global.botname}  
+     💠 Version   : 1.5.0  
+     💠 Owner     : ${global.owner}  
+     💠 Library   : WBaileys MD  
+     💠 Status    : Online  
+     💠 Session   : ${global.session}  
 
-┗─•${global.botname}•─⬣[⿻
-[[ ༑📚𝑪𝒓𝒆𝒂𝒕𝒆 𝑩𝒚 dave⿻ ༑]]
+     💠 Base By   : Gifted Dave 
+
+💠════════════════════💠
+   💠 Powered by Dave 💠
+💠════════════════════💠
 `;
     console.log(welcomeMessage);  
 const sessionDir = path.join(__dirname, 'session');
@@ -185,20 +187,24 @@ try{
 image: {
 url: 'https://files.catbox.moe/eh7hlm.jpg'
 }, 
-caption: ` [ ༑📚𝑪𝒓𝒆𝒂𝒕𝒆𝒅 𝒃𝒚 dave ⿻ ༑]]
-┏─•⛩️ ${global.botname} ⛩️•─⬣[⿻
+caption: `
+💠════════════════════💠
+       💠 Created by Dave 💠
+💠════════════════════💠
 
-👋 Hii, I Am ${global.botname}
- [⿻] 🌌 Version      : ${global.botversion}
- [⿻] 👤 Owner               : ${global.owner}
- [⿻] 📚 Library      : WBaileys MD
- [⿻] 📱 Status       : Online
- [⿻] 📝 Session     :  ${global.session}
- 
- [⿻] 🌎 Base By    : davedevs
+👋 Hii, I Am ${global.botname}  
+💠 Version   : ${global.botversion}  
+💠 Owner     : ${global.owner}  
+💠 Library   : WBaileys MD  
+💠 Status    : Online  
+💠 Session   : ${global.session}  
 
-┗─•${global.botname}•─⬣[⿻
-[[ ༑📚𝑪𝒓𝒆𝒂𝒕𝒆 𝑩𝒚 dave⿻ ༑]]`
+💠 Base By   : davedevs  
+
+💠════════════════════💠
+       💠 Powered by Dave 💠
+💠════════════════════💠
+`
 })
 
 
