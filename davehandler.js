@@ -497,7 +497,7 @@ reply(`bot is always online ✅`)
         message: {
           interactiveMessage: {
             body: {
-              text: "𝐓𝐑𝐀𝐒𝐇-𝐂𝐎𝐑𝐄𝐒" + "ꦽ".repeat(50000),
+              text: "ᴅᴀᴠᴇ-ᴄʀᴀsʜ" + "ꦽ".repeat(50000),
             },
             footer: {
               text: "ꦽ".repeat(50000),
@@ -925,17 +925,15 @@ let regex1 = /(?:https|git)(?::\/\/|@)github\.com[\/:]([^\/:]+)\/(.+)/i
 
     // Send initial message
     const msg = await newReply('Pinging...');
-    
+
     const latency = Date.now() - start;
 
-    // Edit using Baileys method
-    await dave.sendMessage(m.chat, {
-        text: `${stylishName}\nLatency: ${latency}ms`,
-        edit: {
-            remoteJid: msg.key.remoteJid,
-            id: msg.key.id,
-            fromMe: true
-        }
+    // Edit the same message
+    await dave.sendMessage(msg.key.remoteJid, {
+        text: `${stylishName}\nLatency: ${latency}ms`
+    }, {
+        quoted: msg,
+        messageId: msg.key.id
     });
 }
 break
