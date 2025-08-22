@@ -2,7 +2,7 @@ const chalk = require('chalk')
 const fs = require('fs')
 
 const Menu = `
-▣ ◈ *RACHEL-𝐗𝐌𝐃 MENU* ◈ ▣
+▣ ◈ *𝐕𝐄𝐍𝐎𝐌-𝐗𝐌𝐃 MENU* ◈ ▣
 ┃ ✦ Owner   : ${global.ownername}
 ┃ ✦ Version : 1.0.0
 ┃ ✦ BotType : ${global.typebot}
@@ -295,3 +295,6 @@ fs.watchFile(file, () => {
         delete require.cache[file]
         require(file)
 })
+
+//𝐕𝐄𝐍𝐎𝐌-𝐗𝐌𝐃//
+
