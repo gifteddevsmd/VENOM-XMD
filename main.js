@@ -16,7 +16,7 @@ const moment = require('moment-timezone')
 const PhoneNumber = require('awesome-phonenumber')
 const { imageToWebp, videoToWebp, writeExifImg, writeExifVid } = require('./library/lib/exif')
 const { smsg, isUrl, generateMessageTag, getBuffer, getSizeMedia, fetch, await, sleep, reSize } = require('./library/lib/function')
-const { default: trashcoreConnect, getAggregateVotesInPollMessage, delay, PHONENUMBER_MCC, makeCacheableSignalKeyStore, useMultiFileAuthState, DisconnectReason, fetchLatestBaileysVersion, generateForwardMessageContent, prepareWAMessageMedia, generateWAMessageFromContent, generateMessageID, downloadContentFromMessage, makeInMemoryStore, jidDecode, proto } = require("@whiskeysockets/baileys")
+const { default: daveConnect, getAggregateVotesInPollMessage, delay, PHONENUMBER_MCC, makeCacheableSignalKeyStore, useMultiFileAuthState, DisconnectReason, fetchLatestBaileysVersion, generateForwardMessageContent, prepareWAMessageMedia, generateWAMessageFromContent, generateMessageID, downloadContentFromMessage, makeInMemoryStore, jidDecode, proto } = require("@whiskeysockets/baileys")
 const channelId = "120363400480173280@newsletter";
 const createToxxicStore = require('./library/database/basestore');
 const store = createToxxicStore('./store', {
@@ -76,7 +76,7 @@ async function downloadSessionData() {
       
         await fs.promises.writeFile(credsPath, sessionData);
       console.log(color(`Session successfully saved, please wait!!`, 'green'));
-      await starttrashcore();
+      await startdave();
     }
   } catch (error) {
     console.error('Error downloading session data:', error);
@@ -84,7 +84,7 @@ async function downloadSessionData() {
 }
 
 
-async function starttrashcore() {
+async function startdave() {
 let { version, isLatest } = await fetchLatestBaileysVersion()
 const {  state, saveCreds } =await useMultiFileAuthState(`./session`)
     const msgRetryCounterCache = new NodeCache() // for retry message, "waiting message"
@@ -156,25 +156,25 @@ try{
 			let reason = new Boom(lastDisconnect?.error)?.output.statusCode
 			if (reason === DisconnectReason.badSession) {
 				console.log(`Bad Session File, Please Delete Session and Scan Again`);
-				starttrashcore()
+				startdave()
 			} else if (reason === DisconnectReason.connectionClosed) {
 				console.log("Connection closed, reconnecting....");
-				starttrashcore();
+				startdave();
 			} else if (reason === DisconnectReason.connectionLost) {
 				console.log("Connection Lost from Server, reconnecting...");
-				starttrashcore();
+				startdave();
 			} else if (reason === DisconnectReason.connectionReplaced) {
 				console.log("Connection Replaced, Another New Session Opened, Please Close Current Session First");
-				starttrashcore()
+				startdave()
 			} else if (reason === DisconnectReason.loggedOut) {
 				console.log(`Device Logged Out, Please Delete Session and Scan Again.`);
-				starttrashcore();
+				startdave();
 			} else if (reason === DisconnectReason.restartRequired) {
 				console.log("Restart Required, Restarting...");
-				starttrashcore();
+				startdave();
 			} else if (reason === DisconnectReason.timedOut) {
 				console.log("Connection TimedOut, Reconnecting...");
-				starttrashcore();
+				startdave();
 			} else dave.end(`Unknown DisconnectReason: ${reason}|${connection}`)
 		}
 		if (update.connection == "connecting" || update.receivedPendingNotifications == "false") {
@@ -211,7 +211,7 @@ caption: `╔═════「 ${global.botname} 」═════╗
 	
 } catch (err) {
 	  console.log('Error in Connection.update '+err)
-	  starttrashcore();
+	  startdave();
 	}
 })
 dave.ev.on('creds.update', saveCreds)
@@ -535,17 +535,17 @@ return [...text.matchAll(/@([0-9]{5,16}|0)/g)].map(v => v[1] + '@s.whatsapp.net'
 async function tylor() {
     if (fs.existsSync(credsPath)) {
         console.log(color("Session file found, starting bot...", 'yellow'));
-await starttrashcore();
+await startdave();
 } else {
          const sessionDownloaded = await downloadSessionData();
         if (sessionDownloaded) {
             console.log("Session downloaded, starting bot.");
-await starttrashcore();
+await startdave();
     } else {
      if (!fs.existsSync(credsPath)) {
     if(!global.SESSION_ID) {
             console.log(color("Please wait for a few seconds to enter your number!", 'red'));
-await starttrashcore();
+await startdave();
         }
     }
   }
