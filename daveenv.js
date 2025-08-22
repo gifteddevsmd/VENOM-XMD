@@ -12,7 +12,7 @@ global.ownername = process.env.OWNER_NAME ||'dave'
 global.antidelete = process.env.ANTI_DELETE || true
 //━━━━━━━━━━━━━━━━━━━━━━━━//
 // Bot Setting
-global.botname = "dave"
+global.botname = "𝐕𝐄𝐍𝐎𝐌-𝐗𝐌𝐃"
 global.botversion = "1.8.0"
 global.typebot = "Plugin"
 global.session = "davsession"
