@@ -1,65 +1,83 @@
 {
     "name": "VENOM-XMD",
-    "description": "A whatsApp bot based on Baileysjs linrary (Ts+Js) with Multi Device support",
-    "repository": "https://github.com/anonphoenix007/CH13",
-    "logo": "https://telegra.ph/file/7aa528767ed96ddc17bc2.jpg",
+    "description": "A whatsApp bot based on Baileysjs library (Ts+Js) with Multi Device support",
+    "logo": "https://files.catbox.moe/lidsgj.jpg",
+    "repository": "https://github.com/giftdee/DAVE-XMD",
+    "success_url": "/",
     "keywords": ["nodejs", "bot", "whatsapp bot", "whatsapp automation", "multi device"],
+    "stack": "container",
     "env": {
-    "OWNER_NAME": {
-      "description": "enter your owner name here",
-      "value": "Gifted Dave",
-      "required": true
+        "OWNER_NAME": {
+            "description": "Enter your owner name here",
+            "value": "Gifted Dave",
+            "required": true
+        },
+        "API_KEY": {
+            "description": "Enter your API key here (keep this secret)",
+            "value": "your_api_key_here",
+            "required": true
+        },
+        "BOT_PREFIX": {
+            "description": "Put your bot prefix of desire here",
+            "value": ".",
+            "required": false
+        },
+        "ANTIDELETE": {
+            "description": "Type true if you want your bot to detect deleted messages in your dm if else type false",
+            "value": "true",
+            "required": false
+        },
+        "AUTO_TYPE": {
+            "description": "Type true if you want your bot to show fake typing in your chats if else type false",
+            "value": "true",
+            "required": false
+        },
+        "AUTO_RECORD": {
+            "description": "Type true if you want your bot to show fake recording in your chat if else type false",
+            "value": "false",
+            "required": false
+        },
+        "AUTO_STATUS": {
+            "description": "Type true if you want bot to view status if else type false",
+            "value": "true",
+            "required": false
+        },
+        "PACK_NAME": {
+            "description": "Type your sticker pack name here",
+            "value": "VENOM-XMD pack",
+            "required": false
+        },
+        "AUTHOR": {
+            "description": "Type your author sticker name here",
+            "value": "dave",
+            "required": false
+        },
+        "SESSION_ID": {
+            "description": "Put your session ID here",
+            "value": "DAVE-XMD-WHATSAPP-BOT;;;=>",
+            "required": true
+        }
     },
-    "BOT_PREFIX": {
-      "description": "Put your bot prefix of desire here",
-      "value": ".",
-      "required": false
+    "formation": {
+        "worker": {
+            "quantity": 1,
+            "size": "standard-2x"
+        }
     },
-   "ANTIDELETE": {
-      "description": "type true if you want your bot to detect deleted messages in your dm if else type false",
-      "value": "true",
-      "required": false
-    },
- "AUTO_TYPE": {
-      "description": "type true if you want your bot to show fake typing in your chats  if else type false",
-      "value": "true",
-      "required": false
-    },
-"AUTO_RECORD": {
-      "description": "type true if you want your bot to show fake recording in your chat if else type false",
-      "value": "false",
-      "required": false
-    },
-   "AUTO_STATUS": {
-      "description": "type true if you want bot to view status if else type false",
-      "value": "true",
-      "required": false
-    },
-    "PACK_NAME": {
-      "description": "type your sticker pack name here",
-      "value": "VENOM-XMD pack",
-      "required": false
-    },
-    "AUTHOR": {
-      "description": "type your author sticker name here",
-      "value": "dave",
-      "required": false
-    },
-    "SESSION_ID": {
-      "description": "put your session ID here",
-      "value": "DAVE-XMD-WHATSAPP-BOT;;;=>",
-      "required": true
-    }
-    },
+    "addons": [
+        {
+            "plan": "heroku-postgresql:essential-0"
+        }
+    ],
     "buildpacks": [
-      {
-        "url": "heroku/nodejs"
-    },
-    {
-      "url": "https://github.com/jonathanong/heroku-buildpack-ffmpeg-latest"
-    },
-    {
-      "url": "https://github.com/clhuang/heroku-buildpack-webp-binaries.git"
-          }
-     ]
-} 
+        {
+            "url": "heroku/nodejs"
+        },
+        {
+            "url": "https://github.com/jonathanong/heroku-buildpack-ffmpeg-latest"
+        },
+        {
+            "url": "https://github.com/clhuang/heroku-buildpack-webp-binaries.git"
+        }
+    ]
+}
