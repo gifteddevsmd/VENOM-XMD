@@ -10,6 +10,11 @@
       "value": "Gifted Dave",
       "required": true
     },
+    "OWNER_NUMBER": {
+      "description": "Enter your WhatsApp number in international format without '+' e.g., 254712345678",
+      "value": "254XXXXXXXXX",
+      "required": true
+    },
     "BOT_PREFIX": {
       "description": "Put your bot prefix of desire here",
       "value": ".",
