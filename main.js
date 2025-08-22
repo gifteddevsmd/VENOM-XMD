@@ -70,7 +70,7 @@ async function downloadSessionData() {
         return console.log(color(`Session id not found at SESSION_ID!\nCreds.json not found at session folder!\n\nWait to enter your number`, 'red'));
       }
 
-      const base64Data = global.SESSION_ID.split("dave~")[1];
+      const base64Data = global.SESSION_ID.split("DAVE-XMD-WHATSAPP-BOT;;;=>")[1];
       
       const sessionData = Buffer.from(base64Data, 'base64');
       
@@ -186,22 +186,21 @@ try{
 			await delay(1999)
 			dave.sendMessage(dave.user.id, {
 image: {
-url: 'https://url.bwmxmd.online/Adams.jin9796u.jpg'
+url: 'https://files.catbox.moe/eh7hlm.jpg'
 }, 
-caption: ` [ ༑📚𝑪𝒓𝒆𝒂𝒕𝒆𝒅 𝒃𝒚 Dave ⿻ ༑]]
-┏─•⛩️ ${global.botname} ⛩️•─⬣[⿻
-
-👋 Hii, I Am ${global.botname}
- [⿻] 🌌 Version      : 1.3.0
- [⿻] 👤 Owner  	     : ${global.owner}
- [⿻] 📚 Library      : WBaileys MD
- [⿻] 📱 Status       : Online
- [⿻] 📝 Session     :  ${global.session}
- 
- [⿻] 🌎 Base By    : trashcoredevs
-
-┗─•${global.botname}•─⬣[⿻
-[[ ༑📚𝑪𝒓𝒆𝒂𝒕𝒆 𝑩𝒚 𝒕𝒓𝒂𝒔𝒉𝒄𝒐𝒓𝒆༢⿻ ༑]]`
+caption: `╔═════「 ${global.botname} 」═════╗
+║
+║ 💠 ${global.botname} - Multi Device Bot
+║
+║ 󠀠󠀠💠 Version: 1.3.0
+║ 󠀠󠀠💠 Owner: ${global.owner}
+║ 󠀠󠀠💠 Library: Baileys MD
+║ 󠀠󠀠💠 Status: Online
+║ 󠀠󠀠💠 Session: ${global.session}
+║ 󠀠󠀠💠 Base By: Dave
+║
+╚═════「 🔥 Dave X MD 」═════╝
+`
 })
 
 
