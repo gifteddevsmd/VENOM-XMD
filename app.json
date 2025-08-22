@@ -17,6 +17,16 @@
       "value": "",
       "required": true
     },
+    "APP_NAME": {
+      "description": "Your Heroku app name",
+      "value": "VENOM-XMD",
+      "required": true
+    },
+    "HEROKU_API": {
+      "description": "Heroku API key",
+      "value": "",
+      "required": true
+    },
     "BOT_PREFIX": {
       "description": "Bot command prefix",
       "value": ".",
