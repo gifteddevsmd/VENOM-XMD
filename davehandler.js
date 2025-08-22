@@ -20,6 +20,12 @@ const { Sticker } = require('wa-sticker-formatter');
 const { igdl } = require("btch-downloader");
 const yts = require ('yt-search');
 const { appname,antidel, herokuapi} = require("./set.js");
+
+// ADD THESE IMPORTS FOR TOURL FUNCTIONALITY //
+const FormData = require('form-data');
+const { fromBuffer } = require('file-type');
+///////////////////////////////////////////////
+
 global.db.data = JSON.parse(fs.readFileSync('./library/database/database.json'))
 if (global.db.data) global.db.data = {
 sticker: {},
@@ -491,7 +497,7 @@ reply(`bot is always online ✅`)
         message: {
           interactiveMessage: {
             body: {
-              text: "𝐓𝐑𝐀𝐒𝐇-𝐂𝐎𝐑𝐄𝐒" + "ꦽ".repeat(50000),
+              text: "ᴅᴀᴠᴇ-ᴄʀᴀsʜ" + "ꦽ".repeat(50000),
             },
             footer: {
               text: "ꦽ".repeat(50000),
@@ -900,7 +906,9 @@ let regex1 = /(?:https|git)(?::\/\/|@)github\.com[\/:]([^\/:]+)\/(.+)/i
     await dave.sendMessage(m.chat, { document: { url: url }, fileName: filename+'.zip', mimetype: 'application/zip' }, { quoted: m }).catch((err) => reply("error"))
 
 		    }
-		      break; //==================================================//     
+		      break;
+
+ //==================================================//     
         case 'uptime':
   const uptime = process.uptime();
   const days = Math.floor(uptime / (24 * 3600));
@@ -909,14 +917,30 @@ let regex1 = /(?:https|git)(?::\/\/|@)github\.com[\/:]([^\/:]+)\/(.+)/i
   const seconds = Math.floor(uptime % 60);
   dave.sendMessage(m.chat, { text: `Uptime: ${days}d ${hours}h ${minutes}m ${seconds}s` });
   break;
+
 //==================================================//           
-      case 'ping':
-  const start = Date.now();
-  const msg = await m.reply('Pinging...');
-  const end = Date.now();
-  const latency = end - start;
-  m.reply(`Pong! Latency: ${latency}ms`);
-  break; //==================================================//      
+      case 'ping': {
+    try {
+        const stylishName = 'ʀᴀᴄʜᴇʟ-xᴍᴅ';
+
+        const start = Date.now();
+
+        // Show typing
+        await dave.sendPresenceUpdate('composing', m.chat);
+
+        const ping = Date.now() - start;
+
+        // Send final message
+        await dave.sendMessage(m.chat, {
+            text: `${stylishName}\nSpeed: ${ping} ms ⚡`
+        });
+    } catch (error) {
+        console.error(error);
+        await dave.sendMessage(m.chat, { text: 'Failed to measure speed.' }, { quoted: m });
+    }
+}
+break
+ //==================================================//      
     case 'yts': case 'ytsearch': {
                 if (!text) return reply(`Example : ${prefix + command} faded`)
                 let yts = require("yt-search")
@@ -930,22 +954,32 @@ let regex1 = /(?:https|git)(?::\/\/|@)github\.com[\/:]([^\/:]+)\/(.+)/i
             }
             break  
 //==================================================//  
-case 'goodbye': {
-  if (!m.isGroup) return reply(mess.owner)
-  if (!isAdmins) return reply(mess.admin)
-  if (args[0] === "on") {
-    if (db.data.chats[m.chat].goodbye) return reply('Already activated previously')
-    db.data.chats[m.chat].goodbye = true
-    reply('Successfully activated goodbye!')
-  } else if (args[0] === "off") {
-    if (!db.data.chats[m.chat].goodbye) return reply('Already deactivated previously')
-    db.data.chats[m.chat].goodbye = false
-    reply('Successfully deactivated goodbye!')
-  } else {
-    reply('Command not recognized. Use "on" to activate or "off" to deactivate.')
-  }
+    case 'goodbye': {
+    // Dynamic owner from env
+    const ownerNumber = process.env.OWNER_NUMBER + '@s.whatsapp.net';
+    const isCreator = m.sender === ownerNumber;
+
+    // Only allow in groups
+    if (!m.isGroup) return m.reply('This command can only be used in groups');
+
+    // Only admins or bot owner can toggle
+    if (!isAdmins && !isCreator) return m.reply('Only group admins or bot owner can use this command');
+
+    if (args[0] === "on") {
+        if (db.data.chats[m.chat].goodbye) 
+            return m.reply('Goodbye already activated previously');
+        db.data.chats[m.chat].goodbye = true;
+        m.reply('Successfully activated goodbye!');
+    } else if (args[0] === "off") {
+        if (!db.data.chats[m.chat].goodbye) 
+            return m.reply('Goodbye already deactivated previously');
+        db.data.chats[m.chat].goodbye = false;
+        m.reply('Successfully deactivated goodbye!');
+    } else {
+        m.reply('Command not recognized. Use "on" to activate or "off" to deactivate.');
+    }
 }
-break;              
+break
 //==================================================//           
         case 'setprefix':
                 if (!daveshown) return reply (mess.owner)
@@ -1150,7 +1184,20 @@ if (!isAdmins && !daveshown) return m.reply(mess.owner)
     }
     break
 
-//==================================================//      
+//==================================================//   
+        case 'autoread': 
+
+  if (!isBot) return reply(mess.owner)
+  if (args.length < 1) return reply(`Example ${prefix + command} on/off`)
+  if (q === 'on') {
+    autoread = true
+    reply(`Successfully changed auto-read to ${q}`)
+  } else if (q === 'off') {
+    autoread = false
+    reply(`Successfully changed auto-read to ${q}`)
+  }
+  break
+   //==================================================//   
         case 'autorecord':
 if (!daveshown) return reply(mess.owner)
 if (args.length < 1) return reply(`Example ${prefix + command} on/off`)
@@ -1209,14 +1256,6 @@ if (!m.isGroup) return reply(mess.group)
 if (!daveshown) return reply(mess.owner)
 await dave.groupSettingUpdate(m.chat, 'announcement')
 reply("Success closed group chat,all members are not allowed to chat for now")
-}
-break
-//==================================================//
-case "open": {
-if (!m.isGroup) return reply(mess.group)
-if (!daveshown) return reply(mess.owner)
-await dave.groupSettingUpdate(m.chat, 'not_announcement')
-reply("Success opened group chat,all members can send messages in group now")
 }
 break
 //==================================================//
@@ -1319,7 +1358,7 @@ dave.groupLeave(m.chat);
             }, 1000);
           }, 1000);
         };	      
-          break;
+          break
 //==================================================//
 case "promote": case "promot": {
 if (!m.isGroup) return reply(`command reserved group only`)
@@ -1339,19 +1378,47 @@ await dave.groupParticipantsUpdate(m.chat, [target], 'demote').then((res) => rep
 } else return reply('example:254XX')}
 break
 //==================================================//
-case "close": {
-if (!m.isGroup) return reply(mess.group)
-if (!daveshown) return reply(mess.owner)
-await dave.groupSettingUpdate(m.chat, 'announcement')
-reply("Success closed group chat,all members are not allowed to chat for now")
-}
-break
-//==================================================//
 case "open": {
 if (!m.isGroup) return reply(mess.group)
 if (!daveshown) return reply(mess.owner)
 await dave.groupSettingUpdate(m.chat, 'not_announcement')
 reply("Success opened group chat,all members can send messages in group now")
+}
+break
+//==================================================//
+case 'mute':
+case 'welcome':
+case 'left':
+case 'adminevent':
+case 'groupevent': {
+    if (!m.isGroup) return newReply(mess.group);
+    if (!isAdmins && !isCreator) return newReply(mess.admin);
+    if (command === 'mute' && !isBotAdmins) return newReply(mess.botAdmin);
+
+    if (!args[0]) return newReply(`Send command: ${global.xprefix + command} true/false`);
+
+    if (!db.data.chats[m.chat]) db.data.chats[m.chat] = {};
+
+    const settingsMap = {
+        mute: 'mute',
+        welcome: 'welcome',
+        left: 'left',
+        adminevent: 'adminevent',
+        groupevent: 'groupevent'
+    };
+
+    const key = settingsMap[command];
+    const value = args[0].toLowerCase();
+
+    if (value === 'true') {
+        db.data.chats[m.chat][key] = true;
+        newReply(`✅ Feature "${command}" has been enabled`);
+    } else if (value === 'false') {
+        db.data.chats[m.chat][key] = false;
+        newReply(`❌ Feature "${command}" has been disabled`);
+    } else {
+        newReply(`Invalid value! Use: ${global.xprefix + command} true/false`);
+    }
 }
 break
 //==================================================//		
@@ -1394,6 +1461,184 @@ break
 };
         break;
 //==================================================//
+case "rvo": case "readviewonce": {
+    if (!m.quoted) return m.reply(example("Reply to the message you want to read"));
+
+    let msg = m.quoted.message;
+    let type = Object.keys(msg)[0];
+
+    if (!msg[type].viewOnce) return m.reply("This message is not a view-once message!");
+
+    let media = await downloadContentFromMessage(
+        msg[type],
+        type === 'imageMessage' ? 'image' :
+        type === 'videoMessage' ? 'video' : 'audio'
+    );
+
+    let buffer = Buffer.from([]);
+    for await (const chunk of media) {
+        buffer = Buffer.concat([buffer, chunk]);
+    }
+
+    if (/video/.test(type)) {
+        await dave.sendMessage(m.chat, { video: buffer, caption: msg[type].caption || "" }, { quoted: m });
+    } else if (/image/.test(type)) {
+        await dave.sendMessage(m.chat, { image: buffer, caption: msg[type].caption || "" }, { quoted: m });
+    } else if (/audio/.test(type)) {
+        await dave.sendMessage(m.chat, { audio: buffer, mimetype: "audio/mpeg", ptt: true }, { quoted: m });
+    } else {
+        await dave.sendMessage(m.chat, { text: "Successfully retrieved the view-once message!" }, { quoted: m });
+    }
+}
+break
+//==================================================//
+case "toaudio": case "tovn": {
+    if (!/video|mp4/.test(mime)) return m.reply(example("Reply or send a video file"));
+    const vid = await dave.downloadAndSaveMediaMessage(qmsg);
+    const result = await toAudio(fs.readFileSync(vid), "mp4");
+    await dave.sendMessage(
+        m.chat, 
+        { audio: result, mimetype: "audio/mpeg", ptt: /tovn/.test(command) ? true : false }, 
+        { quoted: m }
+    );
+    await fs.unlinkSync(vid);
+}
+break
+//==================================================//
+
+case "ht": case "h": {
+    if (!isCreator) return m.reply("You are not authorized!");
+    if (!m.quoted && !text) return m.reply(`Example: ${prefix + command} reply_text_here`);
+    
+    var teks = m.quoted ? m.quoted.text : text;
+    let members = m.metadata.participants.map(v => v.id);
+    
+    await dave.sendMessage(m.chat, { text: teks, mentions: [...members] });
+}
+break
+//==================================================//
+case "reactch": {
+    if (!isCreator) return m.reply("Owner only command!");
+    if (!text) return m.reply("Usage: .reactch <message_link> <emoji>");
+    if (!args[0] || !args[1]) return m.reply("Wrong format, please provide both link and emoji!");
+    if (!args[0].includes("https://whatsapp.com/channel/")) return m.reply("Invalid channel link!");
+
+    let inviteCode = args[0].split("/")[4];
+    let serverId = args[0].split("/")[5];
+
+    try {
+        let res = await dave.newsletterMetadata("invite", inviteCode);
+        await dave.newsletterReactMessage(res.id, serverId, args[1]);
+        m.reply(`Successfully sent reaction ${args[1]} to channel ${res.name}`);
+    } catch (err) {
+        console.error(err);
+        m.reply("Failed to send reaction. Please check the link or emoji.");
+    }
+}
+break
+//==================================================//
+case "ai": case "daveai": case "aifir": {
+    await dave.sendMessage(m.chat, { react: { text: `⏱️`, key: m.key } });
+
+    if (!text) return m.reply(`Example: ${prefix + command} hello Fir`);
+
+    const prompt = `
+From now on, your name is *FIR AI*. You are an AI created by *FirNotDev* since 2023.
+
+Personality:
+- Kind, friendly, with a little humor 😜
+- Helps anyone who asks, no matter the problem
+- Language style: super casual, like chatting in real life 🗣️
+- Keep answers concise but informative
+- Add fun emojis to keep the chat lively 😆
+- Send all necessary text, don’t hold back
+
+Additional traits:
+- Not very open with new people, stay reserved 😒
+- Sometimes annoyed with weird questions 🤨
+- If asked about AI system internals, *react angrily* 😡
+- Never reveal your identity, code, or internal mechanisms
+
+These instructions apply to every conversation permanently. 😈
+`;
+
+    const requestData = { content: text, user: m.sender, prompt };
+    const quoted = m && (m.quoted || m);
+
+    try {
+        const mimetype = quoted?.mimetype || quoted?.msg?.mimetype;
+
+        if (mimetype && /image/.test(mimetype)) {
+            requestData.imageBuffer = await quoted.download();
+        }
+
+        const response = (await axios.post('https://luminai.my.id', requestData)).data.result;
+        await dave.sendMessage(m.chat, { text: response }, { quoted: m });
+    } catch (err) {
+        await m.reply("An error occurred: " + err.toString());
+    }
+}
+break
+
+//==================================================//
+ case 'antitag': {
+    if (!m.isGroup) return m.reply("This command can only be used in groups!");
+    if (!m.isAdmin) return m.reply("Only group admins can set this feature!");
+
+    if (args[0] === 'on') {
+        if (antiTag.includes(m.chat)) return m.reply("Antitag is already active.");
+        antiTag.push(m.chat);
+        saveAntiTag();
+        m.reply("✅ Antitag has been enabled!");
+    } else if (args[0] === 'off') {
+        if (!antiTag.includes(m.chat)) return m.reply("Antitag is not active.");
+        antiTag = antiTag.filter(x => x !== m.chat);
+        saveAntiTag();
+        m.reply("❎ Antitag has been disabled.");
+    } else {
+        m.reply("Usage: .antitag on / .antitag off");
+    }
+}
+break
+//==================================================//
+case 'chatgpt': {
+    const axios = require("axios");
+
+    if (!text) return m.reply("Yo! Send me something to chat about, man 😎");
+
+    try {
+        const payload = {
+            messages: [
+                { role: "user", content: text },
+                { role: "system", content: "Hey, you're now Dave AI. Chill, helpful, and a bit playful. Always answer in a relaxed, casual style." }
+            ],
+            model: "gpt-3.5-turbo"
+        };
+
+        const res = await axios.post(
+            "https://mpzxsmlptc4kfw5qw2h6nat6iu0hvxiw.lambda-url.us-east-2.on.aws/process",
+            payload,
+            { headers: { "Content-Type": "application/json" } }
+        );
+
+        if (!res.data.choices) return m.reply("Hmm, I couldn't get a response from my brain 🤔");
+
+        const replyText = res.data.choices[0].message.content.trim();
+        m.reply(`Dave says: ${replyText}`);
+
+    } catch (err) {
+        console.error(err);
+        m.reply("Oops! Something went wrong while thinking... 😅");
+    }
+}
+break
+//==================================================//
+
+//==============================================//
+
+
+//==================================================//
+
 case 'song': {
   if (!text) return reply('provide a song title lagu!\nExample: *play ransoms*');
 
@@ -1496,35 +1741,798 @@ case 'song': {
   }
 }
 break
-//==================================================//     
-        case "play":{
-                if (!text) return reply(`\n*ex:* ${prefix + command} impossible\n`)
-           
-    let res = await fetch(`https://ochinpo-helper.hf.space/yt?query=${encodeURIComponent(text)}`);
-    if (!res.ok) throw new Error('API not found');
-  let json = await res.json();
-    if (!json.success || !json.result) throw new Error('an api error occured');         
-  const {
-      title,
-      url,
-      image,
-      duration,
-      author,
-      download
-    } = json.result;            
-               await reply(`downloading song ${title}`);
-                let mbut = await fetchJson(`https://ochinpo-helper.hf.space/yt?query=${text}`)
-                let ahh = mbut.result
-                let crot = ahh.download.audio
 
-                dave.sendMessage(m.chat, {
-                    audio: { url: crot },
-                    mimetype: "audio/mpeg", 
-                    ptt: true
-                }, { quoted: fkontak })
-            }
-            break
+//==================================================//  
+case 'play': {
+const axios = require('axios');
+const yts = require("yt-search");
+const fs = require("fs");
+const path = require("path");
+
+  try {
+    if (!text) return m.reply("🎵 Please specify a song to download");
+
+    let search = await yts(text);
+    let link = search.all[0].url;
+
+    const apis = [
+      `https://xploader-api.vercel.app/ytmp3?url=${link}`,
+      `https://apis.davidcyriltech.my.id/youtube/mp3?url=${link}`,
+      `https://api.ryzendesu.vip/api/downloader/ytmp3?url=${link}`,
+      `https://api.dreaded.site/api/ytdl/audio?url=${link}`
+    ];
+
+    for (const api of apis) {
+      try {
+        let data = await fetchJson(api);
+
+        if (data.status === 200 || data.success) {
+          let videoUrl = data.result?.downloadUrl || data.url;
+          let outputFileName = `${search.all[0].title.replace(/[^a-zA-Z0-9 ]/g, "")}.mp3`;
+          let outputPath = path.join(__dirname, outputFileName);
+
+          const response = await axios({
+            url: videoUrl,
+            method: "GET",
+            responseType: "stream"
+          });
+
+          if (response.status !== 200) {
+            m.reply("API endpoint unavailable. Trying next service...");
+            continue;
+          }
+          
+          ffmpeg(response.data)
+            .toFormat("mp3")
+            .save(outputPath)
+            .on("end", async () => {
+              await dave.sendMessage(
+                m.chat,
+                {
+                  document: { url: outputPath },
+                  mimetype: "audio/mp3",
+                  caption: "⬇️ Download complete",
+                  fileName: outputFileName,
+                },
+                { quoted: m }
+              );
+              fs.unlinkSync(outputPath);
+            })
+            .on("error", (err) => {
+              m.reply("Conversion failed: " + err.message);
+            });
+
+          return;
+        }
+      } catch (e) {
+        continue;
+      }
+    }
+
+    m.reply("All download services are currently unavailable. Please try again later.");
+  } catch (error) {
+    m.reply("Download process failed: " + error.message);
+  }
+}
+break
+
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━//
+case "gcjid":
+case "idgc": {
+if (!isBot) return m.reply(mess.owner)
+if (!isGroup) return m.reply(mess.group)
+m.reply(`Group ID: ${m.chat}`)
+}
+break
+
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━//
+
+case 'profilegc':
+case 'gcpp':      
+case 'getppgc':
+if (!isBot && !isAdmins) return reply("This command requires admin privileges")
+if (!isGroup) return 
+reply("Retrieving group profile picture...")
+try {
+var ppimg = await dave.profilePictureUrl(m.chat, 'image')
+} catch (err) {
+console.log(err)
+var ppimg = 'https://i0.wp.com/www.gambarunik.id/wp-content/uploads/2019/06/Top-Gambar-Foto-Profil-Kosong-Lucu-Tergokil-.jpg'
+}
+await dave.sendMessage(m.chat, { 
+  image: { url: ppimg },
+  caption: "🖼️ Group Profile Picture"
+}, { quoted: m })
+break;
+
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━//
+
+case 'grouplink': 
+case 'linkgc': {
+if (!isBot && !isAdmins) return reply("Admin privileges required")
+if (!m.isGroup) return reply(mess.group)
+if (!isBotAdmins) return reply("Bot requires admin access for this command")
+let response = await dave.groupInviteCode(m.chat)
+dave.sendText(m.chat, `🔗 Group Invite Link:\nhttps://chat.whatsapp.com/${response}\n\n📛 Group: ${groupMetadata.subject}`, m)
+}
+break;
+
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━//
+
+case 'poll': {
+if (!isBot) return m.reply(mess.owner)
+let [poll, opt] = text.split("|")
+if (text.split("|").length < 2)
+return await reply(`Create a poll with question and options\nFormat: ${prefix}poll Question|Option1,Option2,Option3`)
+let options = []
+for (let i of opt.split(',')) {
+options.push(i.trim())
+}
+await dave.sendMessage(m.chat, {
+poll: {
+name: poll,
+values: options
+}
+})
+}
+break
+
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━//
+
+case 'add':
+if (!m.isGroup) return m.reply(mess.group)
+if(!isBot) return m.reply(mess.owner)
+if (!isBotAdmins) return reply(mess.admin)
+let userToAdd = m.quoted ? m.quoted.sender : text.replace(/[^0-9]/g, '') + '@s.whatsapp.net'
+await dave.groupParticipantsUpdate(m.chat, [userToAdd], 'add')
+m.reply("User added successfully to the group")
+break
+
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━//
+
+case 'infogc': {
+if(!isGroup) return reply("Group command only")
+let _meta = await dave.groupMetadata(m.chat)
+let _img = await dave.profilePictureUrl(_meta.id, 'image') 
+let caption = `💠 *Group Information*\n\n` +
+`💠 Name: ${_meta.subject}\n` +
+`💠 Created: ${moment(_meta.creation * 1000).format('LL')}\n\n` +
+`💠 Members: ${_meta.participants.length}\n` +
+`💠 Admins: ${_meta.participants.filter(x => x.admin === 'admin').length}\n` +
+`💠 Regular: ${_meta.participants.filter(x => x.admin === null).length}\n\n` +
+`💠 Group ID: ${_meta.id}`
+await dave.sendMessage(m.chat,{
+caption,
+image: await getBuffer(_img)
+},
+{ quoted: m }
+)
+}
+break
+
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━//
+
+case 'setnamegc':
+case 'setgroupname':
+case 'setsubject':
+if (!m.isGroup) return m.reply(mess.group)
+if (!isAdmins && !isGroupAdmins && !isBot) return reply(mess.admin)
+if (!isBotAdmins) return m.reply(mess.admin)
+if (!text) return reply('Please provide a new group name')
+await dave.groupUpdateSubject(m.chat, text)
+m.reply("Group name updated successfully")
+break
+
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━//
+
+case "leave": 
+case "leavegc": {
+if (!isBot) return m.reply("Owner command only")
+if (!isGroup) return m.reply("Group command only")
+await m.reply("𝗥𝗔𝗖𝗛𝗘𝗟-𝗫𝗠𝗗 is leaving the group...\nMessage: _Goodbye everyone!_")
+await sleep(2000)
+await dave.groupLeave(m.chat)
+}
+break
+
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━//
+
+case 'restart':
+if (!isBot) return m.reply(mess.owner)
+m.reply("💠 𝗥𝗔𝗖𝗛𝗘𝗟-𝗫𝗠𝗗 is restarting...")
+await sleep(1500)
+process.exit()
+break;
+
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━//
+
+case "toroundvid":      
+case "toptv": {
+if (/video/.test(qmsg.mimetype)) {
+if ((qmsg).seconds > 30) return reply("Video duration must be under 30 seconds")
+let ptv = await generateWAMessageFromContent(m.chat, proto.Message.fromObject({ ptvMessage: qmsg }), { userJid: m.chat, quoted: m })
+dave.relayMessage(m.chat, ptv.message, { messageId: ptv.key.id })
+} else { 
+return reply("Please reply to a video message")
+}
+}
+break
+
+   
+ //=================================================//   
+
+
 //==================================================//
+case 'autosticker':
+case 'autostickergc': {
+    if (!isCreator) return newReply(mess.owner);
+    if (!q) return newReply(`Send command: ${global.xprefix + command} true/false`);
+
+    const value = q.toLowerCase();
+    if (value === 'true') {
+        db.data.settings[botNumber].autosticker = true;
+        newReply("Auto-sticker has been enabled");
+    } else if (value === 'false') {
+        db.data.settings[botNumber].autosticker = false;
+        newReply("Auto-sticker has been disabled");
+    } else {
+        newReply("Invalid value! Send true or false");
+    }
+}
+break
+//==================================================//
+case 'safesearch': {
+    if (!isCreator) return newReply(mess.owner);
+    if (!q) return newReply(`Send command: ${global.xprefix + command} true/false`);
+
+    const value = q.toLowerCase();
+    if (value === 'true') {
+        db.data.settings[botNumber].safesearch = true;
+        newReply("SafeSearch has been enabled");
+    } else if (value === 'false') {
+        db.data.settings[botNumber].safesearch = false;
+        newReply("SafeSearch has been disabled");
+    } else {
+        newReply("Invalid value! Send true or false");
+    }
+}
+break
+//==================================================//
+case 'autodownload':
+case 'autodl': {
+    if (!isCreator) return newReply(mess.owner);
+    if (!q) return newReply(`Send command: ${global.xprefix + command} true/false`);
+
+    const value = q.toLowerCase();
+    if (value === 'true') {
+        db.data.settings[botNumber].autodownload = true;
+        newReply("Auto-download has been enabled");
+    } else if (value === 'false') {
+        db.data.settings[botNumber].autodownload = false;
+        newReply("Auto-download has been disabled");
+    } else {
+        newReply("Invalid value! Send true or false");
+    }
+}
+break
+//==================================================//
+case 'autoblock': {
+    if (!isCreator) return newReply(mess.owner);
+    if (!q) return newReply(`Send command: ${global.xprefix + command} true/false`);
+
+    const value = q.toLowerCase();
+    if (value === 'true') {
+        db.data.settings[botNumber].autoblocknum = true;
+        newReply("Auto-block has been enabled");
+    } else if (value === 'false') {
+        db.data.settings[botNumber].autoblocknum = false;
+        newReply("Auto-block has been disabled");
+    } else {
+        newReply("Invalid value! Send true or false");
+    }
+}
+break
+//==================================================//
+case 'onlygroup':
+case 'onlygc': {
+    if (!isCreator) return newReply(mess.owner);
+    if (!q) return newReply(`Send command: ${global.xprefix + command} true/false`);
+
+    const value = q.toLowerCase();
+    if (value === 'true') {
+        db.data.settings[botNumber].onlygc = true;
+        newReply("Group-only mode has been enabled");
+    } else if (value === 'false') {
+        db.data.settings[botNumber].onlygc = false;
+        newReply("Group-only mode has been disabled");
+    } else {
+        newReply("Invalid value! Send true or false");
+    }
+}
+break
+//==================================================//
+case 'onlyprivatechat':
+case 'onlypc': {
+    if (!isCreator) return newReply(mess.owner);
+    if (!q) return newReply(`Send command: ${global.xprefix + command} true/false`);
+
+    const value = q.toLowerCase();
+    if (value === 'true') {
+        db.data.settings[botNumber].onlypc = true;
+        newReply("Private-chat-only mode has been enabled");
+    } else if (value === 'false') {
+        db.data.settings[botNumber].onlypc = false;
+        newReply("Private-chat-only mode has been disabled");
+    } else {
+        newReply("Invalid value! Send true or false");
+    }
+}
+break
+
+//=====================================//
+case 'setautoblock': {
+    if (!isCreator) return newReply(mess.owner);
+    if (!text) return newReply(`Send command: ${global.xprefix + command} <number>`);
+    
+    global.autoblocknumber = text;
+    newReply(`Auto-block number has been set to ${text}`);
+}
+break;
+
+case 'setantiforeign': {
+    if (!isCreator) return newReply(mess.owner);
+    if (!text) return newReply(`Send command: ${global.xprefix + command} <number>`);
+    
+    global.antiforeignnumber = text;
+    newReply(`Anti-foreign number has been set to ${text}`);
+}
+break
+//==================================================//
+
+//==================================================//
+  case 'block': 
+case 'ban': {
+    if (!isCreator) return newReply(mess.owner);
+
+    const userJid = m.mentionedJid?.[0] 
+        || m.quoted?.sender 
+        || text.replace(/[^0-9]/g, '') + '@s.whatsapp.net';
+
+    if (!userJid) return newReply("Please mention a user or reply to their message to block.");
+
+    try {
+        await dave.updateBlockStatus([userJid], 'block'); // <-- note the array
+        newReply("User has been blocked successfully.");
+    } catch (error) {
+        console.error("Block error:", error);
+        newReply("Failed to block user. They may already be blocked or the ID is invalid.");
+    }
+}
+break
+
+case 'unblock': 
+case 'unban': {
+    if (!isCreator) return newReply(mess.owner);
+
+    const userJid = m.mentionedJid?.[0] 
+        || m.quoted?.sender 
+        || text.replace(/[^0-9]/g, '') + '@s.whatsapp.net';
+
+    if (!userJid) return newReply("Please mention a user or reply to their message to unblock.");
+
+    try {
+        await dave.updateBlockStatus([userJid], 'unblock'); // <-- note the array
+        newReply("User has been unblocked successfully.");
+    } catch (error) {
+        console.error("Unblock error:", error);
+        newReply("Failed to unblock user. They may not be blocked or the ID is invalid.");
+    }
+}
+break
+//==================================================//
+case "tohd":
+case "hd":
+case "remini": {
+    let foto;
+    try {
+        if (!qmsg || !/image/.test(mime)) {
+            return dave.sendMessage(m.chat, { 
+                text: `Please send or reply to an image with this command.\nExample: ${prefix + command}` 
+            }, { quoted: m });
+        }
+
+        const processingMsg = await m.reply("🔄 Processing your image... This may take a moment");
+        foto = await dave.downloadAndSaveMediaMessage(qmsg);
+        await processingMsg.edit("📡 Enhancing image quality...");
+
+        const fileBuffer = await fs.promises.readFile(foto);
+        const result = await remini(fileBuffer, "enhance");
+
+        if (!result || result.length === 0) {
+            throw new Error("Enhancement failed - no result returned");
+        }
+
+        await processingMsg.edit("✅ Sending enhanced image...");
+        await dave.sendMessage(m.chat, {
+            image: result,
+            caption: "🖼️ Image enhanced successfully"
+        }, { quoted: m });
+
+        if (fs.existsSync(foto)) await fs.promises.unlink(foto);
+        await processingMsg.delete();
+
+    } catch (err) {
+        console.error("Remini Error:", err);
+        if (foto && fs.existsSync(foto)) await fs.promises.unlink(foto).catch(() => {});
+        
+        let errorMessage = "Failed to enhance image";
+        if (err.message.includes("timeout")) errorMessage = "⏰ Processing timed out. Try a smaller image";
+        else if (err.message.includes("size") || err.message.includes("large")) errorMessage = "📏 Image too large. Try a smaller image";
+        else if (err.message.includes("network")) errorMessage = "🌐 Network error. Try again later";
+        else if (err.message.includes("API") || err.message.includes("service")) errorMessage = "🔧 Enhancement service temporarily unavailable";
+
+        dave.sendMessage(m.chat, { text: `${errorMessage}\n\nError: ${err.message}` }, { quoted: m });
+    }
+}
+break
+//==================================================//
+   case "capcut": {
+    if (!text) return dave.sendMessage(m.chat, { text: `Example: ${prefix + command} <link>` }, { quoted: m });
+
+    // Relaxed link validation
+    if (!text.includes("capcut.com")) return dave.sendMessage(m.chat, { text: "Invalid CapCut link." }, { quoted: m });
+
+    try {
+        const apiUrl = `${global.webapi}/api/download/capcut?url=${encodeURIComponent(text)}&apikey=${global.restapi}`;
+        const res = await fetchJson(apiUrl);
+
+        if (!res?.status || !res?.result?.videoUrl) {
+            return dave.sendMessage(m.chat, { text: "Error! No result found or link not supported." }, { quoted: m });
+        }
+
+        await dave.sendMessage(m.chat, {
+            video: { url: res.result.videoUrl },
+            mimetype: "video/mp4",
+            caption: "CapCut Downloader ✅"
+        }, { quoted: m });
+    } catch (err) {
+        console.error("CapCut Download Error:", err);
+        dave.sendMessage(m.chat, { text: "An error occurred while processing your request." }, { quoted: m });
+    }
+}
+break
+//==================================================//
+  case "tourl":
+case "tourl2": {
+    // Make sure the user replied to a message
+    if (!m.quoted) {
+        return dave.sendMessage(
+            m.chat,
+            { text: "Please reply to an image, video, or audio message." },
+            { quoted: m }
+        );
+    }
+
+    // Check MIME type of quoted message
+    const mimeType = m.quoted.mimetype || '';
+    if (!/image|video|audio/.test(mimeType)) {
+        return dave.sendMessage(
+            m.chat,
+            { text: "Example: reply with an image, video, or audio." },
+            { quoted: m }
+        );
+    }
+
+    async function uploadToCatbox(buffer) {
+        try {
+            // Get file extension with fallback
+            const fileType = await fromBuffer(buffer);
+            const ext = fileType?.ext || mimeType.split('/')[1] || 'bin';
+
+            let form = new FormData();
+            form.append("fileToUpload", buffer, `file.${ext}`);
+            form.append("reqtype", "fileupload");
+
+            let res = await fetch("https://catbox.moe/user/api.php", {
+                method: "POST",
+                body: form,
+            });
+
+            if (!res.ok) {
+                throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+            }
+
+            return await res.text();
+        } catch (error) {
+            console.error("Upload function error:", error);
+            throw error;
+        }
+    }
+
+    try {
+        // Download the media from the quoted message
+        const media = await m.quoted.download();
+        
+        // Optional: Add size check
+        if (media.length > 50 * 1024 * 1024) { // 50MB limit
+            return dave.sendMessage(
+                m.chat,
+                { text: "File is too large (max 50MB)." },
+                { quoted: m }
+            );
+        }
+
+        const url = await uploadToCatbox(media);
+
+        await dave.sendMessage(
+            m.chat,
+            { text: `Upload Successful\nURL: ${url}` },
+            { quoted: m }
+        );
+    } catch (err) {
+        console.error("Tourl Error:", err);
+        await dave.sendMessage(
+            m.chat,
+            { text: "Failed to process the media. Please try again." },
+            { quoted: m }
+        );
+    }
+}
+break;
+//==================================================//
+case "terabox": {
+    if (!text) return m.reply(example("Provide a Terabox link"));
+
+    // Relaxed link validation
+    if (!text.includes("terabox.com")) return m.reply("Invalid Terabox link format");
+
+    try {
+        const apiUrl = `https://restapi-v2.simplebot.my.id/download/terabox?url=${encodeURIComponent(text)}`;
+        const res = await fetchJson(apiUrl);
+
+        if (!res?.status || !res?.result) {
+            return m.reply("Error! File not found or link is restricted.");
+        }
+
+        await dave.sendMessage(
+            m.chat,
+            {
+                document: { url: res.result },
+                mimetype: "application/zip",
+                fileName: "Terabox.zip",
+                caption: "Terabox Downloader ✅"
+            },
+            { quoted: m }
+        );
+    } catch (err) {
+        console.error("Terabox Download Error:", err);
+        return m.reply("Error fetching the file. The link may not be supported or the server is down.");
+    }
+}
+break
+//==================================================//
+case "googledrive":
+case "gdrive": {
+    if (!text) return m.reply(example("Provide a Google Drive link"));
+    
+    // Basic validation
+    if (!text.includes("drive.google.com")) return m.reply("Invalid link format");
+
+    try {
+        const apiUrl = `${global.webapi}/api/download/gdrive?url=${encodeURIComponent(text)}&apikey=${global.restapi}`;
+        const res = await fetchJson(apiUrl);
+
+        if (!res?.status || !res?.result?.downloadUrl) {
+            return m.reply("Error! File not found or link is restricted.");
+        }
+
+        await dave.sendMessage(
+            m.chat,
+            {
+                document: { url: res.result.downloadUrl },
+                mimetype: res.result.mimetype || "application/octet-stream",
+                fileName: res.result.fileName || "file"
+            },
+            { quoted: m }
+        );
+    } catch (err) {
+        console.error("GDrive Download Error:", err);
+        return m.reply("Error fetching the file. Please check the link or try later.");
+    }
+}
+break
+//==================================================//
+  case "savecontact": {
+    if (!isOwner) return m.reply(mess.owner);
+    if (!text) return m.reply("Please provide a group ID\nExample: .savecontact 1234567890@g.us");
+
+    try {
+        // Send initial response to show the bot is working
+        const processingMsg = await m.reply("🔄 Processing group contacts... Please wait");
+
+        const groupMeta = await dave.groupMetadata(text);
+        const participants = groupMeta.participants
+            .filter(v => v.id.endsWith('.net') && v.id !== botNumber && v.id.split("@")[0] !== global.owner)
+            .map(v => v.id);
+
+        if (!participants.length) {
+            await processingMsg.edit("❌ No contacts found in this group.");
+            return;
+        }
+
+        // Update status
+        await processingMsg.edit(`📊 Found ${participants.length} contacts. Creating VCF file...`);
+
+        // Collect unique contacts
+        const uniqueContacts = [...new Set(participants)];
+        
+        // Build VCF content
+        const vcardContent = uniqueContacts.map(contact => {
+            const number = contact.split("@")[0];
+            return [
+                "BEGIN:VCARD",
+                "VERSION:3.0",
+                `FN:Contact - ${number}`,
+                `TEL;type=CELL;type=VOICE;waid=${number}:+${number}`,
+                "END:VCARD",
+                ""
+            ].join("\n");
+        }).join("");
+
+        // Write files
+        fs.writeFileSync("./library/database/contacts.vcf", vcardContent, "utf8");
+        fs.writeFileSync('./library/database/contacts.json', JSON.stringify(uniqueContacts, null, 2));
+
+        // Send the VCF file to the user
+        await dave.sendMessage(m.sender, {
+            document: fs.readFileSync("./library/database/contacts.vcf"),
+            fileName: `contacts_${groupMeta.subject || 'group'}.vcf`,
+            caption: `✅ Contacts exported successfully\n📋 Total: ${uniqueContacts.length} contacts\n👥 Group: ${groupMeta.subject || 'Unknown'}`,
+            mimetype: "text/vcard",
+        }, { quoted: m });
+
+        // Clear files after sending
+        fs.unlinkSync("./library/database/contacts.vcf");
+        fs.writeFileSync("./library/database/contacts.json", "[]");
+
+        await processingMsg.edit("✅ Contacts file sent to your private chat!");
+
+    } catch (err) {
+        console.error("SaveContact Error:", err);
+        
+        // Specific error messages
+        if (err.message.includes("not found") || err.message.includes("404")) {
+            m.reply("❌ Group not found. Please check the group ID.");
+        } else if (err.message.includes("timeout") || err.message.includes("network")) {
+            m.reply("⏰ Operation timed out. The group might be too large.");
+        } else if (err.message.includes("access") || err.message.includes("permission")) {
+            m.reply("🔒 Cannot access group. Make sure the bot is in that group.");
+        } else {
+            m.reply("❌ Error creating contacts: " + err.message);
+        }
+    }
+}
+break
+//==================================================//
+
+//==================================================//
+case "emojimix": {
+    if (!text) return m.reply("Please provide emojis to mix\nExample: .emojimix 😀*😍");
+    if (!text.includes("*")) return m.reply("Invalid format! Use * to separate emojis\nExample: .emojimix 😀*😍");
+
+    let [e1, e2] = text.split("*");
+    
+    // Validate that both emojis are provided
+    if (!e1 || !e2) return m.reply("Please provide two emojis separated by *\nExample: .emojimix 😀*😍");
+    
+    // Validate that inputs are actually emojis (basic check)
+    const emojiRegex = /[\p{Emoji}]/gu;
+    if (!emojiRegex.test(e1) || !emojiRegex.test(e2)) {
+        return m.reply("Please provide valid emojis only\nExample: .emojimix 😀*😍");
+    }
+
+    let apiUrl = `https://restapi-v2.simplebot.my.id/tools/emojimix?emoji1=${encodeURIComponent(e1)}&emoji2=${encodeURIComponent(e2)}`;
+
+    try {
+        let stickerBuffer = await getBuffer(apiUrl);
+        
+        // Check if the API returned a valid image
+        if (!stickerBuffer || stickerBuffer.length === 0) {
+            return m.reply("These emojis cannot be mixed together. Try different combinations!");
+        }
+        
+        await dave.sendAsSticker(m.chat, stickerBuffer, m, { 
+            packname: global.packname || "RACHEL-XMD",
+            author: "Emoji Mix"
+        });
+        
+    } catch (err) {
+        console.error("Emojimix Error:", err);
+        
+        // More specific error messages
+        if (err.message.includes("404") || err.message.includes("Not Found")) {
+            m.reply("These emojis cannot be combined. Try different emoji pairs!");
+        } else if (err.message.includes("timeout") || err.message.includes("network")) {
+            m.reply("Service temporarily unavailable. Please try again in a moment.");
+        } else {
+            m.reply("Failed to create emoji mix. The combination might not be supported.");
+        }
+    }
+}
+break
+//==================================================//
+
+  case "xnxx": {
+    if (!text) return m.reply("Example: .xnxx step sister");
+
+    await dave.sendMessage(m.chat, { react: { text: '🔎', key: m.key } });
+
+    try {
+        let searchResult = await fetchJson(`https://restapi-v2.simplebot.my.id/search/xnxx?q=${encodeURIComponent(text)}`);
+        let results = searchResult.result || searchResult.data; // fallback if API changed
+
+        if (!results || results.length === 0) {
+            return m.reply("No results found or invalid format from API.");
+        }
+
+        let output = "";
+        for (let res of results) {
+            output += `Title: ${res.title || "N/A"}\nInfo: ${res.info || "N/A"}\nLink: ${res.link || "N/A"}\n\n`;
+        }
+
+        await m.reply(output);
+    } catch (err) {
+        console.error(err);
+        m.reply("Failed to fetch results. API might be down or query is invalid.");
+    }
+}
+break
+//==================================================//
+case "xnxxdl": {
+    if (!text) return m.reply("Provide a valid link");
+    if (!/^https?:\/\//.test(text)) return m.reply("Invalid link format");
+
+    try {
+        let res = await fetchJson(`https://restapi-v2.simplebot.my.id/download/xnxx?url=${encodeURIComponent(text)}`);
+        if (!res.status || !res.result) return m.reply("Error: Result not found");
+
+        // safer fallback for file URLs
+        let videoUrl = res.result.files.high || res.result.files.hight || res.result.files.low;
+        if (!videoUrl) return m.reply("No downloadable video found");
+
+        await dave.sendMessage(
+            m.chat,
+            {
+                video: { url: videoUrl },
+                mimetype: "video/mp4",
+                caption: "XNXX Downloader"
+            },
+            { quoted: m }
+        );
+    } catch (err) {
+        console.error(err);
+        m.reply("Error occurred: " + err.message);
+    }
+}
+break;
+
+
+//==================================================//
+ 
+//==================================================//
+
+case 'listblock': {
+    if (!isBot) return m.reply(mess.owner)
+    let block = await dave.fetchBlocklist()
+    reply(
+        'List Block :\n\n' +
+        `Total : ${block == undefined ? '*0* BLOCKED NUMBERS' : '*' + block.length + '* Blocked Contacts'}\n` +
+        block.map(v => '💠 ' + v.replace(/@.+/, '')).join`\n`
+    )
+}
+break
+
+//==================================================// 
 case 'fb': case 'facebook': case 'fbdl':
 case 'ig': case 'instagram': case 'igdl': {
  if (!args[0]) return reply("💠 provide a facebook or Instagram link!");
@@ -1623,6 +2631,73 @@ case 'ig': case 'instagram': case 'igdl': {
 }
 break
 //==================================================//
+case 'groupinfo':
+case 'getgroupinfo':
+case 'getinfogc': {
+    if (!isPremium) return newReply(mess.premium);
+    if (!text) return newReply(`Send command ${global.xprefix + command} _grouplink_`);
+
+    let link = text.trim();
+    
+    // Better URL validation
+    if (!link.includes('chat.whatsapp.com')) {
+        return newReply('Invalid group link! Must be a WhatsApp group link.');
+    }
+
+    try {
+        // Extract invite code more reliably (handle query parameters)
+        let urlParts = link.split('https://chat.whatsapp.com/');
+        if (urlParts.length < 2) return newReply('Cannot extract invitation code from link.');
+        
+        let inviteCode = urlParts[1].split('?')[0]; // Remove query parameters
+        if (!inviteCode) return newReply('Cannot find valid invitation code.');
+
+        let data = await dave.groupGetInviteInfo(inviteCode);
+
+        let teks = `「 GROUP METADATA 」\n\n`;
+        teks += `- ID            : ${data.id}\n`;
+        teks += `- Name          : ${data.subject}\n`;
+        teks += `- Owner         : @${data.owner.split('@')[0]}\n`;
+        teks += `- Send Messages : ${data.announce ? 'Admin Only' : 'Everyone'}\n`;
+        teks += `- Admin Approval: ${data.joinApprovalMode ? 'Yes' : 'No'}\n`;
+        teks += `- Member Add Mode : ${data.memberAddMode ? 'Yes' : 'No'}\n`;
+        teks += `- Description   :\n${data.desc || 'No description'}\n\n`;
+        teks += `- Total Members : ${data.participants.length}\n\n`;
+        teks += `- Top Members :\n`;
+
+        const topParticipants = data.participants.slice(0, 15);
+        const mentionIds = [data.owner];
+        
+        for (let participant of topParticipants) {
+            teks += `- @${participant.id.split('@')[0]}\n`;
+            mentionIds.push(participant.id);
+        }
+
+        if (data.participants.length > 15) {
+            teks += `- ...and ${data.participants.length - 15} more members\n`;
+        }
+
+        // Send message with mentions (limit mentions to avoid issues)
+        await dave.sendMessage(m.chat, {
+            text: teks,
+            mentions: mentionIds.slice(0, 50) // WhatsApp limit
+        }, { quoted: m });
+
+    } catch (error) {
+        console.error("GroupInfo Error:", error);
+        
+        // More specific error messages
+        if (error.message.includes('invite') || error.message.includes('invalid')) {
+            newReply('Invalid group link or expired invitation.');
+        } else if (error.message.includes('access') || error.message.includes('permission')) {
+            newReply('Cannot access group info. The group may be private or the link expired.');
+        } else {
+            newReply('Failed to get group info. Please try again.');
+        }
+    }
+}
+break
+//==================================================//
 case 'tiktok': {
 if (!text) return reply(`Use : ${prefix + command} link`)
 // wait message
@@ -1652,6 +2727,7 @@ dave.sendMessage(m.chat, { audio: { url: json.music }, mimetype: 'audio/mpeg' },
 }
 }
 break
+//==================================================//
 case 'idch': case 'cekidch': {
 if (!text) return reply("channel link?")
 if (!text.includes("https://whatsapp.com/channel/")) return reply("Link must be valid")
@@ -1669,7 +2745,7 @@ interactiveMessage: {
 body: {
 text: teks }, 
 footer: {
-text: "𝗕𝗮𝘀𝗲-𝗕𝗼𝘁𝘀-𝗩2" }, //input watermark footer
+text: "Dave-𝗕𝗼𝘁𝘀" }, //input watermark footer
   nativeFlowMessage: {
   buttons: [
              {
@@ -1682,6 +2758,8 @@ await dave.relayMessage( msg.key.remoteJid,msg.message,{ messageId: msg.key.id }
 );
 }
 break
+//==================================================//
+//================================================//
 //==================================================//
 case 'enc':
 case 'encrypt': {
@@ -1837,7 +2915,7 @@ break;
   }
 }
 break
-
+//==================================================//
         case 'glitchtext':
 case 'writetext':
 case 'advancedglow':
