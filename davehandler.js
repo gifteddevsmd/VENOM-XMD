@@ -921,23 +921,21 @@ let regex1 = /(?:https|git)(?::\/\/|@)github\.com[\/:]([^\/:]+)\/(.+)/i
 //==================================================//           
       case 'ping': {
     try {
-        const start = Date.now();
-
-        // Stylish bot name
         const stylishName = 'ʀᴀᴄʜᴇʟ-xᴍᴅ';
 
-        // Send initial message
-        const msg = await dave.sendMessage(m.chat, { text: 'Calculating speed... ⏱️' });
+        const start = Date.now();
 
-        // Calculate latency
+        // Show typing
+        await dave.sendPresenceUpdate('composing', m.chat);
+
         const ping = Date.now() - start;
-        const response = `${stylishName}\nSpeed: ${ping} ms ⚡`;
 
-        // Edit the original message
-        await dave.updateMessage(m.chat, msg.key, response);
-        // Note: updateMessage is the correct method for Baileys to edit text
+        // Send final message
+        await dave.sendMessage(m.chat, {
+            text: `${stylishName}\nSpeed: ${ping} ms ⚡`
+        });
     } catch (error) {
-        console.error('Ping error:', error);
+        console.error(error);
         await dave.sendMessage(m.chat, { text: 'Failed to measure speed.' }, { quoted: m });
     }
 }
@@ -956,22 +954,32 @@ break
             }
             break  
 //==================================================//  
-case 'goodbye': {
-  if (!m.isGroup) return reply(mess.owner)
-  if (!isAdmins) return reply(mess.admin)
-  if (args[0] === "on") {
-    if (db.data.chats[m.chat].goodbye) return reply('Already activated previously')
-    db.data.chats[m.chat].goodbye = true
-    reply('Successfully activated goodbye!')
-  } else if (args[0] === "off") {
-    if (!db.data.chats[m.chat].goodbye) return reply('Already deactivated previously')
-    db.data.chats[m.chat].goodbye = false
-    reply('Successfully deactivated goodbye!')
-  } else {
-    reply('Command not recognized. Use "on" to activate or "off" to deactivate.')
-  }
+    case 'goodbye': {
+    // Dynamic owner from env
+    const ownerNumber = process.env.OWNER_NUMBER + '@s.whatsapp.net';
+    const isCreator = m.sender === ownerNumber;
+
+    // Only allow in groups
+    if (!m.isGroup) return m.reply('This command can only be used in groups');
+
+    // Only admins or bot owner can toggle
+    if (!isAdmins && !isCreator) return m.reply('Only group admins or bot owner can use this command');
+
+    if (args[0] === "on") {
+        if (db.data.chats[m.chat].goodbye) 
+            return m.reply('Goodbye already activated previously');
+        db.data.chats[m.chat].goodbye = true;
+        m.reply('Successfully activated goodbye!');
+    } else if (args[0] === "off") {
+        if (!db.data.chats[m.chat].goodbye) 
+            return m.reply('Goodbye already deactivated previously');
+        db.data.chats[m.chat].goodbye = false;
+        m.reply('Successfully deactivated goodbye!');
+    } else {
+        m.reply('Command not recognized. Use "on" to activate or "off" to deactivate.');
+    }
 }
-break;              
+break
 //==================================================//           
         case 'setprefix':
                 if (!daveshown) return reply (mess.owner)
