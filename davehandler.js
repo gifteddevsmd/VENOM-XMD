@@ -1218,14 +1218,6 @@ reply("Success closed group chat,all members are not allowed to chat for now")
 }
 break
 //==================================================//
-case "open": {
-if (!m.isGroup) return reply(mess.group)
-if (!daveshown) return reply(mess.owner)
-await dave.groupSettingUpdate(m.chat, 'not_announcement')
-reply("Success opened group chat,all members can send messages in group now")
-}
-break
-//==================================================//
 case 'tagall': {
       if (!m.isGroup) return (mess.group)
       if (!daveshown && !isAdmins) return reply(mess.owner)
@@ -1325,7 +1317,7 @@ dave.groupLeave(m.chat);
             }, 1000);
           }, 1000);
         };	      
-          break;
+          break
 //==================================================//
 case "promote": case "promot": {
 if (!m.isGroup) return reply(`command reserved group only`)
@@ -1345,19 +1337,47 @@ await dave.groupParticipantsUpdate(m.chat, [target], 'demote').then((res) => rep
 } else return reply('example:254XX')}
 break
 //==================================================//
-case "close": {
-if (!m.isGroup) return reply(mess.group)
-if (!daveshown) return reply(mess.owner)
-await dave.groupSettingUpdate(m.chat, 'announcement')
-reply("Success closed group chat,all members are not allowed to chat for now")
-}
-break
-//==================================================//
 case "open": {
 if (!m.isGroup) return reply(mess.group)
 if (!daveshown) return reply(mess.owner)
 await dave.groupSettingUpdate(m.chat, 'not_announcement')
 reply("Success opened group chat,all members can send messages in group now")
+}
+break
+//==================================================//
+case 'mute':
+case 'welcome':
+case 'left':
+case 'adminevent':
+case 'groupevent': {
+    if (!m.isGroup) return newReply(mess.group);
+    if (!isAdmins && !isCreator) return newReply(mess.admin);
+    if (command === 'mute' && !isBotAdmins) return newReply(mess.botAdmin);
+
+    if (!args[0]) return newReply(`Send command: ${global.xprefix + command} true/false`);
+
+    if (!db.data.chats[m.chat]) db.data.chats[m.chat] = {};
+
+    const settingsMap = {
+        mute: 'mute',
+        welcome: 'welcome',
+        left: 'left',
+        adminevent: 'adminevent',
+        groupevent: 'groupevent'
+    };
+
+    const key = settingsMap[command];
+    const value = args[0].toLowerCase();
+
+    if (value === 'true') {
+        db.data.chats[m.chat][key] = true;
+        newReply(`✅ Feature "${command}" has been enabled`);
+    } else if (value === 'false') {
+        db.data.chats[m.chat][key] = false;
+        newReply(`❌ Feature "${command}" has been disabled`);
+    } else {
+        newReply(`Invalid value! Use: ${global.xprefix + command} true/false`);
+    }
 }
 break
 //==================================================//		
