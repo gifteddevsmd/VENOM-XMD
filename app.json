@@ -50,29 +50,19 @@
       "value": "DAVE-XMD-WHATSAPP-BOT;;;=>",
       "required": true
     }
-},
-   
- buildpacks": [
-{
-"url": "heroku/nodejs"
-},
-{
-"url": "https://github.com/jonathanong/heroku-buildpack-ffmpeg-latest"
-},
-{
-"url": "https://github.com/clhuang/heroku-buildpack-webp-binaries.git"
+  },
+  "buildpacks": [
+    { "url": "heroku/nodejs" },
+    { "url": "https://github.com/jonathanong/heroku-buildpack-ffmpeg-latest" },
+    { "url": "https://github.com/clhuang/heroku-buildpack-webp-binaries.git" }
+  ],
+  "formation": {
+    "worker": {
+      "quantity": 1,
+      "size": "standard-2x"
+    }
+  },
+  "addons": [
+    { "plan": "heroku-postgresql:essential-0" }
+  ]
 }
-],
-"formation": {
-"worker": {
-"quantity": 1,
-"size": "standard-2x"
-}
-},
-"addons": [
-{
-"plan": "heroku-postgresql:essential-0"
-}
-]
-}
-
