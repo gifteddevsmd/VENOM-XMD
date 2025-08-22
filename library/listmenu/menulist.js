@@ -280,7 +280,7 @@ const Menu = `
 ║◦${xprefix}laggcbug 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
 ║◦${xprefix}bomgcbug 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
 ╰⟢
-> RACHEL-XMD VERSION 1
+> VENOM-XMD VERSION 1
 > GIFTED DAVE
 > ENJOY
 `;

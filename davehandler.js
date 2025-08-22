@@ -2442,7 +2442,7 @@ case "emojimix": {
         }
         
         await dave.sendAsSticker(m.chat, stickerBuffer, m, { 
-            packname: global.packname || "RACHEL-XMD",
+            packname: global.packname || "VENOM-XMD",
             author: "Emoji Mix"
         });
         
