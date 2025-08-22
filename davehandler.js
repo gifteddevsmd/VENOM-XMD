@@ -20,6 +20,12 @@ const { Sticker } = require('wa-sticker-formatter');
 const { igdl } = require("btch-downloader");
 const yts = require ('yt-search');
 const { appname,antidel, herokuapi} = require("./set.js");
+
+// ADD THESE IMPORTS FOR TOURL FUNCTIONALITY //
+const FormData = require('form-data');
+const { fromBuffer } = require('file-type');
+///////////////////////////////////////////////
+
 global.db.data = JSON.parse(fs.readFileSync('./library/database/database.json'))
 if (global.db.data) global.db.data = {
 sticker: {},
@@ -1566,16 +1572,42 @@ case 'chatgpt': {
 }
 break
 //==================================================//
-case "listidch":
-case "listch": {
-    if (listidch.length < 1) return m.reply("No channel IDs found in the database.");
+case 'ban':
+case 'banned': {
+    if (!isCreator) return newReply(mess.owner);
 
-    let text = "── List of all channel IDs:\n";
-    listidch.forEach((id, i) => {
-        text += `\n${i + 1}. ${id}`;
-    });
+    try {
+        let users;
 
-    Kyy.sendMessage(m.chat, { text: text }, { quoted: m });
+        if (m.mentionedJid && m.mentionedJid.length > 0) {
+            users = m.mentionedJid[0];
+        } else if (m.quoted) {
+            users = m.quoted.sender;
+        } else {
+            let number = text.replace(/[^0-9]/g, '');
+            if (number) users = number + '@s.whatsapp.net';
+        }
+
+        if (!users) {
+            return newReply('❌ Please send a number or tag someone you want to block!');
+        }
+
+        if (ownerNumber.includes(users)) {
+            return newReply('⚠️ Oops! That person is an owner. Cannot be blocked!');
+        }
+
+        if (banned.includes(users)) {
+            return newReply('⚠️ That number is already in the banned list!');
+        }
+
+        banned.push(users);
+        fs.writeFileSync('./library/database/banned.json', JSON.stringify(banned, null, 2));
+
+        newReply(`✅ Success! @${users.split('@')[0]} has been blocked!`);
+    } catch (err) {
+        console.log(err);
+        newReply('❌ Oops! Something went wrong. Make sure you send a valid number or tag someone.');
+    }
 }
 break
 //==================================================//
@@ -1593,41 +1625,10 @@ case "listch": {
 break
 //==================================================//
 
-case "addidch1":
-case "addch1": {
-    if (!isCreator) return m.reply(mess.owner);
-    if (!m.chat.endsWith("@newsletter")) return m.reply("This command can only be used inside a WhatsApp Channel.");
-    if (listidch.includes(m.chat)) return m.reply("This Channel ID is already in the database.");
 
-    listidch.push(m.chat);
-    await fs.writeFileSync("./library/database/listidch.json", JSON.stringify(listidch, null, 2));
-    m.reply(`Channel ID added successfully.\nID: ${m.chat}`);
-}
-break
 //==================================================//
 
-case "delidch":
-case "delch": {
-    if (!isCreator) return m.reply(mess.owner);
-    if (listidch.length < 1) return m.reply("No channel IDs in the database.");
-    if (!text) return m.reply("Use the command like:\n• delidch 2\n• delidch all");
 
-    if (text.toLowerCase() === "all") {
-        listidch.splice(0, listidch.length);
-        await fs.writeFileSync("./library/database/listidch.json", JSON.stringify(listidch, null, 2));
-        return m.reply("All channel IDs removed from the database.");
-    }
-
-    let index = parseInt(text);
-    if (isNaN(index) || index < 1 || index > listidch.length) {
-        return m.reply("Invalid number! Check the list using *.listidch*");
-    }
-
-    let removed = listidch.splice(index - 1, 1)[0];
-    await fs.writeFileSync("./library/database/listidch.json", JSON.stringify(listidch, null, 2));
-    return m.reply(`Removed channel ID:\n${removed}`);
-}
-break
 //==================================================//
 
 case 'song': {
@@ -1773,48 +1774,7 @@ break
 }
 break
 //==================================================//
-  case 'addcase': {
-    if (!isCreator) return dave.sendMessage(m.chat, { text: mess.owner }, { quoted: m });
-    if (!text) return dave.sendMessage(m.chat, { text: `Example: ${prefix + command} *your case here*` }, { quoted: m });
-
-    const namaFile = path.join(__dirname, 'tangssss.js');
-    const caseBaru = `${text}\n\n`;
-
-    const tambahCase = (data, caseBaru) => {
-        const posisiDefault = data.lastIndexOf("default:");
-        if (posisiDefault !== -1) {
-            const kodeBaruLengkap = data.slice(0, posisiDefault) + caseBaru + data.slice(posisiDefault);
-            return { success: true, kodeBaruLengkap };
-        } else {
-            return { success: false, message: "Could not find 'default:' in the file." };
-        }
-    };
-
-    fs.readFile(namaFile, 'utf8', (err, data) => {
-        if (err) {
-            console.error('Error reading file:', err);
-            return dave.sendMessage(m.chat, { text: `Error reading file: ${err.message}` }, { quoted: m });
-        }
-        const result = tambahCase(data, caseBaru);
-        if (result.success) {
-            fs.writeFile(namaFile, result.kodeBaruLengkap, 'utf8', (err) => {
-                if (err) {
-                    console.error('Error writing file:', err);
-                    return dave.sendMessage(m.chat, { text: `Error writing file: ${err.message}` }, { quoted: m });
-                } else {
-                    console.log('Successfully added new case:');
-                    console.log(caseBaru);
-                    return dave.sendMessage(m.chat, { text: 'New case added successfully.' }, { quoted: m });
-                }
-            });
-        } else {
-            console.error(result.message);
-            return dave.sendMessage(m.chat, { text: result.message }, { quoted: m });
-        }
-    });
-}
-break
-
+  
 //==================================================//
 case "tohd":
 case "hd":
@@ -1855,32 +1815,81 @@ break
 //==================================================//
   case "tourl":
 case "tourl2": {
-    if (!/image|video/.test(mime)) 
-        return dave.sendMessage(m.chat, { text: `Example: reply with an image or video.` }, { quoted: m });
-
-    async function uploadToCatbox(buffer) {
-        const fetchModule = await import("node-fetch");
-        const fetch = fetchModule.default;
-        let { ext } = await fromBuffer(buffer);
-
-        let bodyForm = new FormData();
-        bodyForm.append("fileToUpload", buffer, "file." + ext);
-        bodyForm.append("reqtype", "fileupload");
-
-        let res = await fetch("https://catbox.moe/user/api.php", {
-            method: "POST",
-            body: bodyForm,
-        });
-
-        return await res.text();
+    // Make sure the user replied to a message
+    if (!m.quoted) {
+        return dave.sendMessage(
+            m.chat,
+            { text: "Please reply to an image, video, or audio message." },
+            { quoted: m }
+        );
     }
 
-    let media = m.quoted ? await m.quoted.download() : await m.download();
-    let url = await uploadToCatbox(media);
+    // Check MIME type of quoted message
+    const mimeType = m.quoted.mimetype || '';
+    if (!/image|video|audio/.test(mimeType)) {
+        return dave.sendMessage(
+            m.chat,
+            { text: "Example: reply with an image, video, or audio." },
+            { quoted: m }
+        );
+    }
 
-    await dave.sendMessage(m.chat, { text: `Upload Successful\nURL: ${url}` }, { quoted: m });
+    async function uploadToCatbox(buffer) {
+        try {
+            // Get file extension with fallback
+            const fileType = await fromBuffer(buffer);
+            const ext = fileType?.ext || mimeType.split('/')[1] || 'bin';
+
+            let form = new FormData();
+            form.append("fileToUpload", buffer, `file.${ext}`);
+            form.append("reqtype", "fileupload");
+
+            let res = await fetch("https://catbox.moe/user/api.php", {
+                method: "POST",
+                body: form,
+            });
+
+            if (!res.ok) {
+                throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+            }
+
+            return await res.text();
+        } catch (error) {
+            console.error("Upload function error:", error);
+            throw error;
+        }
+    }
+
+    try {
+        // Download the media from the quoted message
+        const media = await m.quoted.download();
+        
+        // Optional: Add size check
+        if (media.length > 50 * 1024 * 1024) { // 50MB limit
+            return dave.sendMessage(
+                m.chat,
+                { text: "File is too large (max 50MB)." },
+                { quoted: m }
+            );
+        }
+
+        const url = await uploadToCatbox(media);
+
+        await dave.sendMessage(
+            m.chat,
+            { text: `Upload Successful\nURL: ${url}` },
+            { quoted: m }
+        );
+    } catch (err) {
+        console.error("Tourl Error:", err);
+        await dave.sendMessage(
+            m.chat,
+            { text: "Failed to process the media. Please try again." },
+            { quoted: m }
+        );
+    }
 }
-break
+break;
 //==================================================//
 case "terabox": {
     if (!text) return m.reply(example("link"));
