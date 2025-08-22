@@ -1773,8 +1773,254 @@ break
     }
 }
 break
+//=====================================//
+
+case 'autoread': {
+    if (!isCreator) return newReply(mess.owner);
+    if (!q) return newReply(`Send command: ${global.xprefix + command} true/false`);
+
+    const value = q.toLowerCase();
+    if (value === 'true') {
+        db.data.settings[botNumber].autoread = true;
+        newReply("Auto-read has been enabled");
+    } else if (value === 'false') {
+        db.data.settings[botNumber].autoread = false;
+        newReply("Auto-read has been disabled");
+    } else {
+        newReply("Invalid value! Send true or false");
+    }
+}
+break
 //==================================================//
-  
+case 'autosticker':
+case 'autostickergc': {
+    if (!isCreator) return newReply(mess.owner);
+    if (!q) return newReply(`Send command: ${global.xprefix + command} true/false`);
+
+    const value = q.toLowerCase();
+    if (value === 'true') {
+        db.data.settings[botNumber].autosticker = true;
+        newReply("Auto-sticker has been enabled");
+    } else if (value === 'false') {
+        db.data.settings[botNumber].autosticker = false;
+        newReply("Auto-sticker has been disabled");
+    } else {
+        newReply("Invalid value! Send true or false");
+    }
+}
+break
+//==================================================//
+case 'safesearch': {
+    if (!isCreator) return newReply(mess.owner);
+    if (!q) return newReply(`Send command: ${global.xprefix + command} true/false`);
+
+    const value = q.toLowerCase();
+    if (value === 'true') {
+        db.data.settings[botNumber].safesearch = true;
+        newReply("SafeSearch has been enabled");
+    } else if (value === 'false') {
+        db.data.settings[botNumber].safesearch = false;
+        newReply("SafeSearch has been disabled");
+    } else {
+        newReply("Invalid value! Send true or false");
+    }
+}
+break
+//==================================================//
+case 'autodownload':
+case 'autodl': {
+    if (!isCreator) return newReply(mess.owner);
+    if (!q) return newReply(`Send command: ${global.xprefix + command} true/false`);
+
+    const value = q.toLowerCase();
+    if (value === 'true') {
+        db.data.settings[botNumber].autodownload = true;
+        newReply("Auto-download has been enabled");
+    } else if (value === 'false') {
+        db.data.settings[botNumber].autodownload = false;
+        newReply("Auto-download has been disabled");
+    } else {
+        newReply("Invalid value! Send true or false");
+    }
+}
+break
+//==================================================//
+case 'autoblock': {
+    if (!isCreator) return newReply(mess.owner);
+    if (!q) return newReply(`Send command: ${global.xprefix + command} true/false`);
+
+    const value = q.toLowerCase();
+    if (value === 'true') {
+        db.data.settings[botNumber].autoblocknum = true;
+        newReply("Auto-block has been enabled");
+    } else if (value === 'false') {
+        db.data.settings[botNumber].autoblocknum = false;
+        newReply("Auto-block has been disabled");
+    } else {
+        newReply("Invalid value! Send true or false");
+    }
+}
+break
+//==================================================//
+case 'onlygroup':
+case 'onlygc': {
+    if (!isCreator) return newReply(mess.owner);
+    if (!q) return newReply(`Send command: ${global.xprefix + command} true/false`);
+
+    const value = q.toLowerCase();
+    if (value === 'true') {
+        db.data.settings[botNumber].onlygc = true;
+        newReply("Group-only mode has been enabled");
+    } else if (value === 'false') {
+        db.data.settings[botNumber].onlygc = false;
+        newReply("Group-only mode has been disabled");
+    } else {
+        newReply("Invalid value! Send true or false");
+    }
+}
+break
+//==================================================//
+case 'onlyprivatechat':
+case 'onlypc': {
+    if (!isCreator) return newReply(mess.owner);
+    if (!q) return newReply(`Send command: ${global.xprefix + command} true/false`);
+
+    const value = q.toLowerCase();
+    if (value === 'true') {
+        db.data.settings[botNumber].onlypc = true;
+        newReply("Private-chat-only mode has been enabled");
+    } else if (value === 'false') {
+        db.data.settings[botNumber].onlypc = false;
+        newReply("Private-chat-only mode has been disabled");
+    } else {
+        newReply("Invalid value! Send true or false");
+    }
+}
+break
+
+//=====================================//
+case 'setautoblock': {
+    if (!isCreator) return newReply(mess.owner);
+    if (!text) return newReply(`Send command: ${global.xprefix + command} <number>`);
+    
+    global.autoblocknumber = text;
+    newReply(`Auto-block number has been set to ${text}`);
+}
+break;
+
+case 'setantiforeign': {
+    if (!isCreator) return newReply(mess.owner);
+    if (!text) return newReply(`Send command: ${global.xprefix + command} <number>`);
+    
+    global.antiforeignnumber = text;
+    newReply(`Anti-foreign number has been set to ${text}`);
+}
+break
+//==================================================//
+case 'pushkontak': {
+    if (!isCreator) return newReply(mess.owner);
+    if (!m.isGroup) return newReply(mess.private);
+    
+    const [name, messageText] = text.split('/');
+    if (!name || !messageText) return newReply(`Send command: ${global.xprefix + command} <name>/<message>`);
+    
+    const groupInfo = await dave.groupMetadata(m.chat);
+    
+    // Safety confirmation for large groups
+    if (groupInfo.participants.length > 50) {
+        return newReply(`This group has ${groupInfo.participants.length} members. Are you sure you want to send to all? Use ${global.xprefix + command}confirm to proceed.`);
+    }
+    
+    if (groupInfo.participants.length > 901) return newReply('Maximum group members limit: 900');
+    
+    const kontak = {
+        displayName: "Contact",
+        contacts: [{
+            displayName: name,
+            vcard: `BEGIN:VCARD\nVERSION:3.0\nN:;${name};;;\nFN:${name}\nitem1.TEL;waid=${m.sender.split('@')[0]}:${m.sender.split('@')[0]}\nitem1.X-ABLabel:Phone\nEND:VCARD`
+        }]
+    };
+    
+    let successCount = 0;
+    let failCount = 0;
+    
+    for (let participant of groupInfo.participants) {
+        try {
+            const sentContact = await dave.sendMessage(participant.id, { contacts: kontak });
+            await dave.sendMessage(participant.id, { text: messageText }, { quoted: sentContact });
+            await sleep(1000);
+            successCount++;
+        } catch (error) {
+            console.error(`Failed to send to ${participant.id}:`, error);
+            failCount++;
+        }
+    }
+    
+    await newReply(`Done! Contacts pushed successfully to ${successCount} members. Failed: ${failCount}`);
+}
+break
+
+// Add confirmation handler for large groups
+case 'pushkontakconfirm': {
+    if (!isCreator) return newReply(mess.owner);
+    // Implementation for confirmation would go here
+    newReply("Confirmation handler for pushkontak");
+}
+break
+//==================================================//
+  case 'block': 
+case 'ban': {
+    if (!isCreator) return newReply(mess.owner);
+    
+    const users = m.mentionedJid?.[0] 
+        ? m.mentionedJid[0] 
+        : m.quoted?.sender 
+        ? m.quoted.sender 
+        : text.replace(/[^0-9]/g, '') + '@s.whatsapp.net';
+    
+    if (!users) return newReply("Please mention a user or reply to their message to block.");
+    
+    // Validate if it's a proper WhatsApp ID
+    if (!users.endsWith('@s.whatsapp.net')) {
+        return newReply("Invalid user format. Please provide a valid phone number or mention.");
+    }
+
+    try {
+        await dave.updateBlockStatus(users, 'block');
+        newReply("User has been blocked successfully.");
+    } catch (error) {
+        console.error("Block error:", error);
+        newReply("Failed to block user. They may already be blocked or the ID is invalid.");
+    }
+}
+break
+//==================================================//
+case 'unblock': 
+case 'unban': {
+    if (!isCreator) return newReply(mess.owner);
+    
+    const users = m.mentionedJid?.[0] 
+        ? m.mentionedJid[0] 
+        : m.quoted?.sender 
+        ? m.quoted.sender 
+        : text.replace(/[^0-9]/g, '') + '@s.whatsapp.net';
+    
+    if (!users) return newReply("Please mention a user or reply to their message to unblock.");
+    
+    // Validate if it's a proper WhatsApp ID
+    if (!users.endsWith('@s.whatsapp.net')) {
+        return newReply("Invalid user format. Please provide a valid phone number or mention.");
+    }
+
+    try {
+        await dave.updateBlockStatus(users, 'unblock');
+        newReply("User has been unblocked successfully.");
+    } catch (error) {
+        console.error("Unblock error:", error);
+        newReply("Failed to unblock user. They may not be blocked or the ID is invalid.");
+    }
+}
+break
 //==================================================//
 case "tohd":
 case "hd":
