@@ -1173,7 +1173,20 @@ if (!isAdmins && !daveshown) return m.reply(mess.owner)
     }
     break
 
-//==================================================//      
+//==================================================//   
+        case 'autoread': 
+
+  if (!isBot) return reply(mess.owner)
+  if (args.length < 1) return reply(`Example ${prefix + command} on/off`)
+  if (q === 'on') {
+    autoread = true
+    reply(`Successfully changed auto-read to ${q}`)
+  } else if (q === 'off') {
+    autoread = false
+    reply(`Successfully changed auto-read to ${q}`)
+  }
+  break
+   //==================================================//   
         case 'autorecord':
 if (!daveshown) return reply(mess.owner)
 if (args.length < 1) return reply(`Example ${prefix + command} on/off`)
@@ -1609,61 +1622,8 @@ case 'chatgpt': {
 }
 break
 //==================================================//
-case 'ban':
-case 'banned': {
-    if (!isCreator) return newReply(mess.owner);
 
-    try {
-        let users;
-
-        if (m.mentionedJid && m.mentionedJid.length > 0) {
-            users = m.mentionedJid[0];
-        } else if (m.quoted) {
-            users = m.quoted.sender;
-        } else {
-            let number = text.replace(/[^0-9]/g, '');
-            if (number) users = number + '@s.whatsapp.net';
-        }
-
-        if (!users) {
-            return newReply('❌ Please send a number or tag someone you want to block!');
-        }
-
-        if (ownerNumber.includes(users)) {
-            return newReply('⚠️ Oops! That person is an owner. Cannot be blocked!');
-        }
-
-        if (banned.includes(users)) {
-            return newReply('⚠️ That number is already in the banned list!');
-        }
-
-        banned.push(users);
-        fs.writeFileSync('./library/database/banned.json', JSON.stringify(banned, null, 2));
-
-        newReply(`✅ Success! @${users.split('@')[0]} has been blocked!`);
-    } catch (err) {
-        console.log(err);
-        newReply('❌ Oops! Something went wrong. Make sure you send a valid number or tag someone.');
-    }
-}
-break
-//==================================================//
-case "listidch":
-case "listch": {
-    if (listidch.length < 1) return m.reply("No channel IDs found in the database.");
-
-    let text = "List of all channel IDs:\n";
-    listidch.forEach((id, i) => {
-        text += `\n${i + 1}. ${id}`;
-    });
-
-    dave.sendMessage(m.chat, { text }, { quoted: m });
-}
-break
-//==================================================//
-
-
-//==================================================//
+//==============================================//
 
 
 //==================================================//
@@ -1770,64 +1730,227 @@ case 'song': {
   }
 }
 break
-//==================================================//     
-        case "play": {
-    if (!text) return m.reply('Which song do you want?\nExample: play Never Gonna Give You Up');
 
-    try {
-        const res = await fetch(`https://api.nekorinn.my.id/downloader/ytplay-savetube?q=${encodeURIComponent(text)}`);
-        if (!res.ok) return m.reply('Failed to fetch data from the server.');
-        const data = await res.json();
-        if (!data.status) return m.reply('Song not found!');
+//==================================================//  
+case 'play': {
+const axios = require('axios');
+const yts = require("yt-search");
+const fs = require("fs");
+const path = require("path");
 
-        const { title, channel, duration, imageUrl, link } = data.result.metadata;
-        const downloadUrl = data.result.downloadUrl;
+  try {
+    if (!text) return m.reply("🎵 Please specify a song to download");
 
-        await dave.sendMessage(
-            m.chat,
-            {
-                audio: { url: downloadUrl },
-                mimetype: 'audio/mpeg',
-                fileName: `${title}.mp3`,
-                ptt: true,
-                contextInfo: {
-                    externalAdReply: {
-                        title,
-                        body: `${channel} • ${duration}`,
-                        mediaType: 2,
-                        thumbnailUrl: imageUrl,
-                        renderLargerThumbnail: true,
-                        sourceUrl: link,
-                        showAdAttribution: true
-                    }
-                }
-            },
-            { quoted: m }
-        );
-    } catch (e) {
-        console.error(e);
-        m.reply('An error occurred while processing your request.');
+    let search = await yts(text);
+    let link = search.all[0].url;
+
+    const apis = [
+      `https://xploader-api.vercel.app/ytmp3?url=${link}`,
+      `https://apis.davidcyriltech.my.id/youtube/mp3?url=${link}`,
+      `https://api.ryzendesu.vip/api/downloader/ytmp3?url=${link}`,
+      `https://api.dreaded.site/api/ytdl/audio?url=${link}`
+    ];
+
+    for (const api of apis) {
+      try {
+        let data = await fetchJson(api);
+
+        if (data.status === 200 || data.success) {
+          let videoUrl = data.result?.downloadUrl || data.url;
+          let outputFileName = `${search.all[0].title.replace(/[^a-zA-Z0-9 ]/g, "")}.mp3`;
+          let outputPath = path.join(__dirname, outputFileName);
+
+          const response = await axios({
+            url: videoUrl,
+            method: "GET",
+            responseType: "stream"
+          });
+
+          if (response.status !== 200) {
+            m.reply("API endpoint unavailable. Trying next service...");
+            continue;
+          }
+          
+          ffmpeg(response.data)
+            .toFormat("mp3")
+            .save(outputPath)
+            .on("end", async () => {
+              await dave.sendMessage(
+                m.chat,
+                {
+                  document: { url: outputPath },
+                  mimetype: "audio/mp3",
+                  caption: "⬇️ Download complete",
+                  fileName: outputFileName,
+                },
+                { quoted: m }
+              );
+              fs.unlinkSync(outputPath);
+            })
+            .on("error", (err) => {
+              m.reply("Conversion failed: " + err.message);
+            });
+
+          return;
+        }
+      } catch (e) {
+        continue;
+      }
     }
+
+    m.reply("All download services are currently unavailable. Please try again later.");
+  } catch (error) {
+    m.reply("Download process failed: " + error.message);
+  }
 }
 break
-//=====================================//
 
-case 'autoread': {
-    if (!isCreator) return newReply(mess.owner);
-    if (!q) return newReply(`Send command: ${global.xprefix + command} true/false`);
-
-    const value = q.toLowerCase();
-    if (value === 'true') {
-        db.data.settings[botNumber].autoread = true;
-        newReply("Auto-read has been enabled");
-    } else if (value === 'false') {
-        db.data.settings[botNumber].autoread = false;
-        newReply("Auto-read has been disabled");
-    } else {
-        newReply("Invalid value! Send true or false");
-    }
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━//
+case "gcjid":
+case "idgc": {
+if (!isBot) return m.reply(mess.owner)
+if (!isGroup) return m.reply(mess.group)
+m.reply(`Group ID: ${m.chat}`)
 }
 break
+
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━//
+
+case 'profilegc':
+case 'gcpp':      
+case 'getppgc':
+if (!isBot && !isAdmins) return reply("This command requires admin privileges")
+if (!isGroup) return 
+reply("Retrieving group profile picture...")
+try {
+var ppimg = await dave.profilePictureUrl(m.chat, 'image')
+} catch (err) {
+console.log(err)
+var ppimg = 'https://i0.wp.com/www.gambarunik.id/wp-content/uploads/2019/06/Top-Gambar-Foto-Profil-Kosong-Lucu-Tergokil-.jpg'
+}
+await dave.sendMessage(m.chat, { 
+  image: { url: ppimg },
+  caption: "🖼️ Group Profile Picture"
+}, { quoted: m })
+break;
+
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━//
+
+case 'grouplink': 
+case 'linkgc': {
+if (!isBot && !isAdmins) return reply("Admin privileges required")
+if (!m.isGroup) return reply(mess.group)
+if (!isBotAdmins) return reply("Bot requires admin access for this command")
+let response = await dave.groupInviteCode(m.chat)
+dave.sendText(m.chat, `🔗 Group Invite Link:\nhttps://chat.whatsapp.com/${response}\n\n📛 Group: ${groupMetadata.subject}`, m)
+}
+break;
+
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━//
+
+case 'poll': {
+if (!isBot) return m.reply(mess.owner)
+let [poll, opt] = text.split("|")
+if (text.split("|").length < 2)
+return await reply(`Create a poll with question and options\nFormat: ${prefix}poll Question|Option1,Option2,Option3`)
+let options = []
+for (let i of opt.split(',')) {
+options.push(i.trim())
+}
+await dave.sendMessage(m.chat, {
+poll: {
+name: poll,
+values: options
+}
+})
+}
+break
+
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━//
+
+case 'add':
+if (!m.isGroup) return m.reply(mess.group)
+if(!isBot) return m.reply(mess.owner)
+if (!isBotAdmins) return reply(mess.admin)
+let userToAdd = m.quoted ? m.quoted.sender : text.replace(/[^0-9]/g, '') + '@s.whatsapp.net'
+await dave.groupParticipantsUpdate(m.chat, [userToAdd], 'add')
+m.reply("User added successfully to the group")
+break
+
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━//
+
+case 'infogc': {
+if(!isGroup) return reply("Group command only")
+let _meta = await dave.groupMetadata(m.chat)
+let _img = await dave.profilePictureUrl(_meta.id, 'image') 
+let caption = `💠 *Group Information*\n\n` +
+`💠 Name: ${_meta.subject}\n` +
+`💠 Created: ${moment(_meta.creation * 1000).format('LL')}\n\n` +
+`💠 Members: ${_meta.participants.length}\n` +
+`💠 Admins: ${_meta.participants.filter(x => x.admin === 'admin').length}\n` +
+`💠 Regular: ${_meta.participants.filter(x => x.admin === null).length}\n\n` +
+`💠 Group ID: ${_meta.id}`
+await dave.sendMessage(m.chat,{
+caption,
+image: await getBuffer(_img)
+},
+{ quoted: m }
+)
+}
+break
+
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━//
+
+case 'setnamegc':
+case 'setgroupname':
+case 'setsubject':
+if (!m.isGroup) return m.reply(mess.group)
+if (!isAdmins && !isGroupAdmins && !isBot) return reply(mess.admin)
+if (!isBotAdmins) return m.reply(mess.admin)
+if (!text) return reply('Please provide a new group name')
+await dave.groupUpdateSubject(m.chat, text)
+m.reply("Group name updated successfully")
+break
+
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━//
+
+case "leave": 
+case "leavegc": {
+if (!isBot) return m.reply("Owner command only")
+if (!isGroup) return m.reply("Group command only")
+await m.reply("𝗥𝗔𝗖𝗛𝗘𝗟-𝗫𝗠𝗗 is leaving the group...\nMessage: _Goodbye everyone!_")
+await sleep(2000)
+await dave.groupLeave(m.chat)
+}
+break
+
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━//
+
+case 'restart':
+if (!isBot) return m.reply(mess.owner)
+m.reply("💠 𝗥𝗔𝗖𝗛𝗘𝗟-𝗫𝗠𝗗 is restarting...")
+await sleep(1500)
+process.exit()
+break;
+
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━//
+
+case "toroundvid":      
+case "toptv": {
+if (/video/.test(qmsg.mimetype)) {
+if ((qmsg).seconds > 30) return reply("Video duration must be under 30 seconds")
+let ptv = await generateWAMessageFromContent(m.chat, proto.Message.fromObject({ ptvMessage: qmsg }), { userJid: m.chat, quoted: m })
+dave.relayMessage(m.chat, ptv.message, { messageId: ptv.key.id })
+} else { 
+return reply("Please reply to a video message")
+}
+}
+break
+
+   
+ //=================================================//   
+
+
 //==================================================//
 case 'autosticker':
 case 'autostickergc': {
