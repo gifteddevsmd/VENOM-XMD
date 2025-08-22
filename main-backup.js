@@ -269,7 +269,7 @@ dave.ev.on("messages.upsert",  () => { })
             if (mek.key.id.startsWith('Xeon') && mek.key.id.length === 16) return
             if (mek.key.id.startsWith('BAE5')) return
             m = smsg(dave, mek, store)
-            require("./davehandler")(dave, m, chatUpdate, store)
+            require("./trashhandler")(dave, m, chatUpdate, store)
         } catch (err) {
             console.log(err)
         }

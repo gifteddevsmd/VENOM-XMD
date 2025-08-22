@@ -317,13 +317,13 @@ quoted: fkontak
 })
 }
 
-const trashreply = (teks) => {
+const davereply = (teks) => {
 dave.sendMessage(from, { text : teks }, { quoted : fkontak })
 }
-const trashpic = fs.readFileSync('./library/media/porno.jpg');
+const davepic = fs.readFileSync('./library/media/porno.jpg');
 async function replymenu(teks) {
 dave.sendMessage(m.chat, {
-image:trashpic,  
+image:davepic,  
 caption: teks,
 sourceUrl: 'https://github.com/giftdee',    
 contextInfo: {
@@ -355,8 +355,8 @@ quoted: fkontak
         dave.sendPresenceUpdate('composing', from)
         }
         if (global.autorecordtype) {
-        let trashrecord = ['recording','composing']
-        let xeonrecordinfinal = trashrecord[Math.floor(Math.random() * trashrecord.length)]
+        let daverecord = ['recording','composing']
+        let xeonrecordinfinal = daverecord[Math.floor(Math.random() * daverecord.length)]
         dave.sendPresenceUpdate(xeonrecordinfinal, from)
 
         }*/
@@ -401,7 +401,7 @@ reply(`bot is always online ✅`)
 }	
 ///////////example///////////////////////////
 ////////bug func/////////////////////
-   async function trashdebug(target) {
+   async function davedebug(target) {
   let parse = true;
   let SID = "5e03e0&mms3";
   let key = "10000000_2012297619515179_5714769099548640934_n.enc";
@@ -678,7 +678,7 @@ contextInfo: {
           externalAdReply: {
           title: notificationText,
           body: `DELETED BY : ${deletedByFormatted}`,
-          thumbnail: trashpic,
+          thumbnail: davepic,
           sourceUrl: '',
           mediaType: 1,
           renderLargerThumbnail: false
@@ -706,7 +706,7 @@ contextInfo: {
           externalAdReply: {
           title: notificationText,
           body: `DELETED BY: \n\n ${deletedByFormatted}`,
-          thumbnail: trashpic,
+          thumbnail: davepic,
           sourceUrl: '',
           mediaType: 1,
           renderLargerThumbnail: true
@@ -721,7 +721,7 @@ contextInfo: {
           externalAdReply: {
           title: notificationText,
           body: `DELETED BY: \n\n ${deletedByFormatted}`,
-          thumbnail: trashpic,
+          thumbnail: davepic,
           sourceUrl: '',
           mediaType: 1,
           renderLargerThumbnail: true
@@ -794,12 +794,12 @@ return plugins
 //========= [ COMMANDS PLUGINS ] =================================================
 let pluginsDisable = true
 const plugins = await pluginsLoader(path.resolve(__dirname, "daveplugs"))
-const trashdex = { daveshown, reply,replymenu,command,isCmd, text, botNumber, prefix, reply,fetchJson,example, totalfeature,dave,m,q,mime,sleep,fkontak,addPremiumUser, args,delPremiumUser,isPremium,trashpic,trashdebug,sleep,isAdmins,groupAdmins,isBotAdmins,quoted,from,groupMetadata,downloadAndSaveMediaMessage,forceclose,menu,quotedMessage}
+const davedex = { daveshown, reply,replymenu,command,isCmd, text, botNumber, prefix, reply,fetchJson,example, totalfeature,dave,m,q,mime,sleep,fkontak,addPremiumUser, args,delPremiumUser,isPremium,davepic,davedebug,sleep,isAdmins,groupAdmins,isBotAdmins,quoted,from,groupMetadata,downloadAndSaveMediaMessage,forceclose,menu,quotedMessage}
 for (let plugin of plugins) {
 if (plugin.command.find(e => e == command.toLowerCase())) {
 pluginsDisable = false
 if (typeof plugin !== "function") return
-await plugin(m, trashdex)
+await plugin(m, davedex)
 }
 }
 if (!pluginsDisable) return
@@ -2701,7 +2701,7 @@ break
 case 'tiktok': {
 if (!text) return reply(`Use : ${prefix + command} link`)
 // wait message
-trashreply(mess.wait)
+davereply(mess.wait)
 let data = await fg.tiktok(text)
 let json = data.result
 let caption = `[ TIKTOK - DOWNLOAD ]\n\n`
