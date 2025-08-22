@@ -5,7 +5,6 @@
   "repository": "https://github.com/giftdee/VENOM-XMD",
   "success_url": "/",
   "keywords": ["nodejs", "bot", "whatsapp bot", "whatsapp automation", "multi device"],
-  "stack": "container",
   "env": {
     "OWNER_NAME": {
       "description": "Enter your owner name here",
