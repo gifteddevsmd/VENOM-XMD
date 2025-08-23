@@ -29,13 +29,6 @@
    - [![Bot Hosting Panel](https://img.shields.io/badge/Bot%20Hosting-Panel-green?style=for-the-badge)](https://bot-hosting.net/?aff=1370480585960587298)
    - [![KataBump Dashboard](https://img.shields.io/badge/KataBump-Dashboard-orange?style=for-the-badge)](https://dashboard.katabump.com/auth/login#ce51a9)
 
----
-
-## Heroku Buildpacks
-```bash
-heroku/nodejs
-https://github.com/jonathanong/heroku-buildpack-ffmpeg-latest
-https://github.com/clhuang/heroku-buildpack-webp-binaries.git
 
 ---
 
