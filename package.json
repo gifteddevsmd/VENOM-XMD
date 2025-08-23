@@ -1,7 +1,7 @@
 {
   "name": "VENOM-XMD",
   "version": 1.0.0",
-  "description": "x",
+  "version": "1.0.0",
   "main": "main.js",
   "scripts": {
    "code": "node main.js",
