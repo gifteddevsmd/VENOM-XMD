@@ -921,7 +921,7 @@ let regex1 = /(?:https|git)(?::\/\/|@)github\.com[\/:]([^\/:]+)\/(.+)/i
 //==================================================//           
       case 'ping': {
     try {
-        const stylishName = 'ʀᴀᴄʜᴇʟ-xᴍᴅ';
+         const stylishName = 'ᴠᴇɴᴏᴍ-xᴍᴅ';
 
         const start = Date.now();
 
@@ -932,7 +932,7 @@ let regex1 = /(?:https|git)(?::\/\/|@)github\.com[\/:]([^\/:]+)\/(.+)/i
 
         // Send final message
         await dave.sendMessage(m.chat, {
-            text: `${stylishName}\nSpeed: ${ping} ms ⚡`
+            text: `${stylishName}\nSpeed: ${ping} ms 💠`
         });
     } catch (error) {
         console.error(error);
