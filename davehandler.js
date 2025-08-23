@@ -1747,13 +1747,13 @@ break
 
 //==================================================//  
 case 'play': {
-const axios = require('axios');
-const yts = require("yt-search");
-const fs = require("fs");
-const path = require("path");
+  const axios = require('axios');
+  const yts = require("yt-search");
+  const fs = require("fs");
+  const path = require("path");
 
   try {
-    if (!text) return m.reply("🎵 Please specify a song to download");
+    if (!text) return m.reply("What song do you want to download?");
 
     let search = await yts(text);
     let link = search.all[0].url;
@@ -1769,6 +1769,7 @@ const path = require("path");
       try {
         let data = await fetchJson(api);
 
+        // Checking if the API response is successful
         if (data.status === 200 || data.success) {
           let videoUrl = data.result?.downloadUrl || data.url;
           let outputFileName = `${search.all[0].title.replace(/[^a-zA-Z0-9 ]/g, "")}.mp3`;
@@ -1781,10 +1782,10 @@ const path = require("path");
           });
 
           if (response.status !== 200) {
-            m.reply("API endpoint unavailable. Trying next service...");
+            m.reply("Sorry, but the API endpoint didn't respond correctly. Try again later.");
             continue;
           }
-          
+
           ffmpeg(response.data)
             .toFormat("mp3")
             .save(outputPath)
@@ -1794,7 +1795,7 @@ const path = require("path");
                 {
                   document: { url: outputPath },
                   mimetype: "audio/mp3",
-                  caption: "⬇️ Download complete",
+                  caption: "",
                   fileName: outputFileName,
                 },
                 { quoted: m }
@@ -1802,23 +1803,24 @@ const path = require("path");
               fs.unlinkSync(outputPath);
             })
             .on("error", (err) => {
-              m.reply("Conversion failed: " + err.message);
+              m.reply("Download failed\n" + err.message);
             });
 
           return;
         }
       } catch (e) {
+        // Continue to the next API if one fails
         continue;
       }
     }
 
-    m.reply("All download services are currently unavailable. Please try again later.");
+    // If no APIs succeeded
+    m.reply("An error occurred. All APIs might be down or unable to process the request.");
   } catch (error) {
-    m.reply("Download process failed: " + error.message);
+    m.reply("Download failed\n" + error.message);
   }
 }
 break
-
 //━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━//
 case "gcjid":
 case "idgc": {
