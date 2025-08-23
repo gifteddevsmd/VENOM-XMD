@@ -1747,80 +1747,102 @@ break
 
 //==================================================//  
 case 'play': {
-  const axios = require('axios');
-  const yts = require("yt-search");
-  const fs = require("fs");
-  const path = require("path");
+  if (!text) return reply('Provide a song title!\nExample: *play ransom*');
 
   try {
-    if (!text) return m.reply("What song do you want to download?");
+    let res = await fetch(`https://ochinpo-helper.hf.space/yt?query=${encodeURIComponent(text)}`);
+    if (!res.ok) throw new Error('API not found');
+    let json = await res.json();
+    if (!json.success || !json.result) throw new Error('API error occurred');
+    const { title, url, image, duration, author, download } = json.result;
+    const thumbnail = await (await fetch(image)).buffer();
 
-    let search = await yts(text);
-    let link = search.all[0].url;
-
-    const apis = [
-      `https://xploader-api.vercel.app/ytmp3?url=${link}`,
-      `https://apis.davidcyriltech.my.id/youtube/mp3?url=${link}`,
-      `https://api.ryzendesu.vip/api/downloader/ytmp3?url=${link}`,
-      `https://api.dreaded.site/api/ytdl/audio?url=${link}`
-    ];
-
-    for (const api of apis) {
-      try {
-        let data = await fetchJson(api);
-
-        // Checking if the API response is successful
-        if (data.status === 200 || data.success) {
-          let videoUrl = data.result?.downloadUrl || data.url;
-          let outputFileName = `${search.all[0].title.replace(/[^a-zA-Z0-9 ]/g, "")}.mp3`;
-          let outputPath = path.join(__dirname, outputFileName);
-
-          const response = await axios({
-            url: videoUrl,
-            method: "GET",
-            responseType: "stream"
-          });
-
-          if (response.status !== 200) {
-            m.reply("Sorry, but the API endpoint didn't respond correctly. Try again later.");
-            continue;
-          }
-
-          ffmpeg(response.data)
-            .toFormat("mp3")
-            .save(outputPath)
-            .on("end", async () => {
-              await dave.sendMessage(
-                m.chat,
-                {
-                  document: { url: outputPath },
-                  mimetype: "audio/mp3",
-                  caption: "",
-                  fileName: outputFileName,
-                },
-                { quoted: m }
-              );
-              fs.unlinkSync(outputPath);
-            })
-            .on("error", (err) => {
-              m.reply("Download failed\n" + err.message);
-            });
-
-          return;
+    await dave.sendMessage(m.chat, {
+      document: { url: download.audio },
+      mimetype: 'audio/mpeg',
+      fileName: `${title}.mp3`,
+      contextInfo: {
+        forwardingScore: 999,
+        isForwarded: true,
+        externalAdReply: {
+          title,
+          body: `${author.name} • ${duration.timestamp}`,
+          thumbnail,
+          mediaUrl: url,
+          mediaType: 2,
+          renderLargerThumbnail: true,
+          sourceUrl: url
         }
-      } catch (e) {
-        // Continue to the next API if one fails
-        continue;
+      }
+    }, { quoted: m });
+
+  } catch (e) {
+    console.warn('Fallback to Nekorinn API:', e.message);
+    try {
+      let res = await fetch(`https://api.nekorinn.my.id/downloader/ytplay-savetube?q=${encodeURIComponent(text)}`);
+      let data = await res.json();
+      if (!data.status || !data.result) throw new Error('Fallback 1 invalid');
+      const { title, channel, duration, imageUrl, link } = data.result.metadata;
+      const downloadUrl = data.result.downloadUrl;
+      const thumbnail = await (await fetch(imageUrl)).buffer();
+
+      await reply(`🎶 Downloading *${title}* by ${channel}...`);
+      await dave.sendMessage(m.chat, {
+        document: { url: downloadUrl },
+        mimetype: 'audio/mpeg',
+        fileName: `${title}.mp3`,
+        contextInfo: {
+          forwardingScore: 999,
+          isForwarded: true,
+          externalAdReply: {
+            title,
+            body: `${channel} • ${duration}`,
+            thumbnail,
+            mediaUrl: link,
+            mediaType: 2,
+            renderLargerThumbnail: true,
+            sourceUrl: link
+          }
+        }
+      }, { quoted: m });
+
+    } catch (err) {
+      console.warn('Fallback to Diioffc API:', err.message);
+      try {
+        const res2 = await fetch(`https://api.diioffc.web.id/api/search/ytplay?query=${encodeURIComponent(text)}`);
+        if (!res2.ok) return reply('Unable to get song data.');
+        const json = await res2.json();
+        if (!json.status || !json.result) return reply('Invalid title.');
+        const { title, author, duration, thumbnail: thumb, url, download } = json.result;
+        const thumbnail = await (await fetch(thumb)).buffer();
+
+        await dave.sendMessage(m.chat, {
+          document: { url: download.url },
+          mimetype: 'audio/mpeg',
+          fileName: download.filename || `${title}.mp3`,
+          contextInfo: {
+            forwardingScore: 999,
+            isForwarded: true,
+            externalAdReply: {
+              title,
+              body: `${author.name} • ${duration.timestamp}`,
+              thumbnail,
+              mediaUrl: url,
+              mediaType: 2,
+              renderLargerThumbnail: true,
+              sourceUrl: url
+            }
+          }
+        }, { quoted: m });
+
+      } catch (finalErr) {
+        console.error(finalErr);
+        reply('❌ An error occurred while processing your request.');
       }
     }
-
-    // If no APIs succeeded
-    m.reply("An error occurred. All APIs might be down or unable to process the request.");
-  } catch (error) {
-    m.reply("Download failed\n" + error.message);
   }
 }
-break
+break;
 //━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━//
 case "gcjid":
 case "idgc": {
