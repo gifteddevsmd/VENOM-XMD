@@ -6,7 +6,7 @@ const Menu = (pushname, runtime, ram) => `
 ┃ ✦ Owner    : *${global.ownername}*
 ┃ ✦ Bot Name : *${global.botname}*
 ┃ ✦ Name     : *${pushname}*
-┃ ✦ Version  : *1.0.0 / 3.0.0*
+┃ ✦ Version  : *1.0.0*
 ┃ ✦ BotType  : *${global.typebot}*
 ┃ ✦ Prefix   : *${global.xprefix || '.'}*
 ┃ ✦ Runtime  : *${runtime(process.uptime())}*
