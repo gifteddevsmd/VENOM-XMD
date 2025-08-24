@@ -2481,7 +2481,7 @@ case 'toaud':
     break
 //━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━//
 
-case 'play': {
+case 'play2': {
   try {
     let query = args.join(' ')
     if (!query) return reply('*Example :* .play Only We Know Speed Up')
@@ -2752,7 +2752,7 @@ case 'setantiforeign': {
 break
 //==================================================//
 
-   case 'play2': {
+   case 'play': {
     if (args.length === 0) return dave.sendMessage(m.chat, { text: `which song from YouTube do you want to download?, example:\nplay dj kane` }, { quoted: m });
 
     const query = args.join(' ');
