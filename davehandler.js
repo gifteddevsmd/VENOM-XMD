@@ -1612,6 +1612,7 @@ case "rvo": case "readviewonce": {
 }
 break
 //==================================================//
+
 case "toaudio": case "tovn": {
     if (!/video|mp4/.test(mime)) return m.reply(example("Reply or send a video file"));
     const vid = await dave.downloadAndSaveMediaMessage(qmsg);
@@ -1707,7 +1708,8 @@ case "soundmeme": {
  }
 }
 break
-  //========================================================\\              
+  //======================================================\\ 
+             
 case "ff":
 case "ffstalk":{
  try {
@@ -1810,7 +1812,8 @@ case "ffstalk":{
  }
 }
  break    
-  //========================================================\\            
+  //======================================================\\ 
+           
 case 'lyrics': {
   if (!q) return m.reply('Example: lyrics <keyword>,<amount>\n\nExample: lyrics duka,3')
   let [keyword, jumlah] = q.split(',').map(v => v.trim())
@@ -1834,6 +1837,7 @@ case 'lyrics': {
 }
   break
 //==================================================//
+
 case "reactionch": case "reactch": {
   if (!Owner) return m.reply(mess.owner)
   if (!text || !args[0] || !args[1]) 
@@ -1850,6 +1854,7 @@ case "reactionch": case "reactch": {
 }
 break
 //==================================================//
+
  case 'antitag': {
     if (!m.isGroup) return m.reply("This command can only be used in groups!");
     if (!m.isAdmin) return m.reply("Only group admins can set this feature!");
@@ -1870,6 +1875,7 @@ break
 }
 break
 //=================================================//
+
 case 'bible': {
   	const { translate } = require('@vitalets/google-translate-api')
   	const BASE_URL = 'https://bible-api.com'
@@ -1998,6 +2004,7 @@ case 'detiknews' : {
 }
 break
 //==================================================//
+
        case "xvideos": {
     if (!q) return m.reply(`Example: ${prefix + command} anime`);
     m.reply(mess.wait);
@@ -2037,6 +2044,7 @@ break
 }
 break
 //=========================================//
+
 case 'request-join': {
 	if (!m.isGroup) return m.reply(mess.group)
 	if (!isAdmins) return m.reply(mess.admin)
@@ -2333,7 +2341,8 @@ case 'block':
 			}
 			break;
         
-              //========================================================\\
+              //==================================================\\
+
 case "calculator": {
     try {
         // Replace math symbols with JavaScript operators
@@ -2356,6 +2365,7 @@ case "calculator": {
 break
 
 //━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━//
+
 case "song2":{
     if (!text) return reply(`\n*ex:* ${prefix + command} impossible\n`)
     
@@ -2372,6 +2382,7 @@ case "song2":{
 }
 break
 //━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━//
+
 case 'toimage':
     case 'photo': {
         if (!/webp/.test(mime)) return reply(`Reply sticker with caption *${prefix + command}*`)
@@ -2392,7 +2403,8 @@ case 'toimage':
 
     }
     break
-//========================================================\\          
+//========================================================\\ 
+         
 case 'tomp4':
     case 'tovideo': {
         if (!/webp/.test(mime)) return m.reply(`Reply sticker with caption *${prefix + command}*`)
@@ -2411,7 +2423,8 @@ case 'tomp4':
 
     }
     break
-//========================================================\\     
+//========================================================\\ 
+    
 case 'emojimix': {
         let [emoji1, emoji2] = text.split`+`
         if (!emoji1) return m.reply(`Example : ${prefix + command} 😅+🤔`)
@@ -2427,7 +2440,8 @@ case 'emojimix': {
         }
     }
     break
-//========================================================\\     
+//========================================================\\ 
+    
 case 'tovn':
     case 'toptt': {
         if (!/video/.test(mime) && !/audio/.test(mime)) return m.reply(`Send/Reply Video/Audio that you want to make into a VN with captions ${prefix + command}`)
@@ -2448,7 +2462,8 @@ case 'tovn':
     }
     break
     
-//========================================================\\          
+//========================================================\\ 
+         
 case 'toaud':
     case 'toaudio': {
         if (!/video/.test(mime) && !/audio/.test(mime)) return m.reply(`Send/Reply Video/Audio that you want to make into audio with captions ${prefix + command}`)
@@ -2465,6 +2480,7 @@ case 'toaud':
     }
     break
 //━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━//
+
 case 'play': {
   try {
     let query = args.join(' ')
@@ -2504,6 +2520,7 @@ break;
       
       
 //========================================================\\
+
 case "play3":{
   if (!text) return reply(`\n*ex:* ${prefix + command} impossible\n`)
                
@@ -2543,35 +2560,25 @@ case "play3":{
 }
 break
                     
-//========================================================\\  
+//========================================================\\ 
+ 
 case 'kickall': {
-  if (!m.isGroup) return m.reply('Command  only for Group!')
-  if (!isGroupOwner) return m.reply('Only Owner & Admin can use this command!')
-  if (!isAdmins) return m.reply('Bot must be Admin in grup!')
-  
-  const kickall = (args[0] === 'numBut')
-  ? text.replace(`${args[0]} `, '').split('|')
-  : (Number(args[0]))
-    ? groupMetadata.participants
-      .filter(item => item.id.startsWith(args[0].replace('+', '')) && item.id !== botNumber && item.id !== `${owner}@s.whatsapp.net`)
-      .map(item => item.id)
-    : groupMetadata.participants
-      .filter(item => item.id !== botNumber && item.id !== `${owner}@s.whatsapp.net`)
-      .map(item => item.id);
-  
-  if (global.welcome === true) {
-    welcome = false;
-  }
-  
-  for (let remove of kickall) {
-    await dave.groupParticipantsUpdate(m.chat, [(args[0] === "numBut") ? `${remove}@s.whatsapp.net` : remove], "remove");
+  if (!m.isGroup) return m.reply('Command only for groups!');
+  if (!isGroupOwner) return m.reply('Only Owner & Admin can use this command!');
+  if (!isAdmins) return m.reply('Bot must be Admin in group!');
+
+  let kickall = groupMetadata.participants
+    .filter(p => p.id !== botNumber && p.id !== `${owner}@s.whatsapp.net`)
+    .map(p => p.id);
+
+  for (let id of kickall) {
+    await dave.groupParticipantsUpdate(m.chat, [id], "remove");
     await sleep(3000);
   }
-  
-  m.reply(VENOM-XMD XMD HAS SUCCESSFULLY REMOVED ALL GROUP PARTICIPANTS`);
+
+  m.reply(`VENOM-XMD HAS SUCCESSFULLY REMOVED ALL GROUP PARTICIPANTS`);
 }
-break
-//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━//
+break;
 
 //━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━//
 //━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━//
@@ -2668,6 +2675,7 @@ case 'autostickergc': {
 }
 break
 //==================================================//
+
 case 'safesearch': {
     if (!isCreator) return newReply(mess.owner);
     if (!q) return newReply(`Send command: ${global.xprefix + command} true/false`);
@@ -2685,6 +2693,7 @@ case 'safesearch': {
 }
 break
 //==================================================//
+
 case 'autodownload':
 case 'autodl': {
     if (!isCreator) return newReply(mess.owner);
@@ -2703,6 +2712,7 @@ case 'autodl': {
 }
 break
 //==================================================//
+
 case 'autoblock': {
     if (!isCreator) return newReply(mess.owner);
     if (!q) return newReply(`Send command: ${global.xprefix + command} true/false`);
@@ -2838,6 +2848,7 @@ case 'mediafire': {
 }
 break
 //=================================================//
+
   case 'block': 
 case 'ban': {
     if (!isCreator) return newReply(mess.owner);
@@ -2858,6 +2869,7 @@ case 'ban': {
 }
 break
 //==================================================//
+
 
 case 'unblock': 
 case 'unban': {
@@ -2926,6 +2938,7 @@ case "remini": {
 }
 break
 //=================================================//
+
    case "capcut": {
     if (!text) return dave.sendMessage(m.chat, { text: `Example: ${prefix + command} <link>` }, { quoted: m });
 
@@ -2952,6 +2965,7 @@ break
 }
 break
 //==================================================//
+
   case "tourl":
 case "tourl2": {
     // Make sure the user replied to a message
@@ -3030,6 +3044,7 @@ case "tourl2": {
 }
 break;
 //==================================================//
+
 case "terabox": {
     if (!text) return m.reply(example("Provide a Terabox link"));
 
@@ -3061,6 +3076,7 @@ case "terabox": {
 }
 break
 //==================================================//
+
 case "googledrive":
 case "gdrive": {
     if (!text) return m.reply(example("Provide a Google Drive link"));
@@ -3092,6 +3108,7 @@ case "gdrive": {
 }
 break
 //==================================================//
+
   case 'mediafire': {
   if (!text) return m.reply('provide a mediafire link');
   
@@ -3123,6 +3140,7 @@ break
 }
 break
 //================================================//
+
     case 'setnamegc':
             case 'setsubject':
                 if (!m.isGroup) return m.reply(mess.group)
@@ -3135,6 +3153,7 @@ break
 //==================================================//
 
 //==================================================//
+
 case 'quiz': {
     if (!text) return m.reply(`whats your question ?`)
     
@@ -3850,7 +3869,7 @@ case "gpt":
  break
 //================================================//
 
-case 'ckalender': case 'createkalender': {
+case 'calender': case 'createkalender': {
     let args = text.split(' ');
     if (args.length < 2) return m.reply('wrong format! Use: ckalender month year');
     let month = args[0];
