@@ -33,8 +33,7 @@ global.anticall     = process.env.ANTI_CALL || 'false'
 global.autoswview   = process.env.AUTOSW_VIEW || 'true'
 global.adminevent   = true
 global.groupevent   = true
-global.autorecord   = process.env.AUTO_RECORD || 'false'
-global.autorecordtype = process.env.AUTO_RECORDTYPE || 'false'
+global.antidelete = process.env.ANTI_DELETE || true
 
 // ==================== MESSAGES ==================== //
 global.mess = {
@@ -49,6 +48,10 @@ global.mess = {
 global.thumb = "https://files.catbox.moe/4ryp6k.jpg"
 
 // ==================== AUTO FEATURES / TOGGLES ==================== //
+global.botversion = "1.0.0"
+global.typebot = "Plugin"
+global.session = "davesession"
+global.connect = true
 global.statusview   = process.env.AUTO_STATUS === 'false' ? false : true
 global.antilinkgc   = process.env.ANTILINK_GROUP === 'false' ? false : true
 global.autoTyping   = process.env.AUTO_TYPE === 'true' ? true : false
