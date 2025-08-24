@@ -1254,13 +1254,7 @@ case "invite": case "linkgc": {
              } 
           break;
 //==================================================//
-case "close": {
-if (!m.isGroup) return reply(mess.group)
-if (!daveshown) return reply(mess.owner)
-await dave.groupSettingUpdate(m.chat, 'announcement')
-reply("Success closed group chat,all members are not allowed to chat for now")
-}
-break
+
 //==================================================//
 case 'tagall': {
       if (!m.isGroup) return (mess.group)
@@ -1464,35 +1458,7 @@ reply(`Sukses kick @${users.split('@')[0]}`)
 }
 break
 //==================================================//
-case "kill": 
-case "kickall": {
-	  if (!m.isGroup) return reply(mess.group)          
- if (!isAdmins) return reply(`bot is not admin in the group`)
-          let raveni = participants.filter(_0x5202af => _0x5202af.id != dave.decodeJid(dave.user.id)).map(_0x3c0c18 => _0x3c0c18.id);
-		      
-          reply("Initializing Kill command💀...");
-      
-      await dave.removeProfilePicture(m.chat);
-      await dave.groupUpdateSubject(m.chat, "Xxx Videos Hub");
-      await dave.groupUpdateDescription(m.chat, "//This group is no longer available 🥹!");
-      
-	
-          setTimeout(() => {
-            dave.sendMessage(m.chat, {
-              'text': "All parameters are configured, and Kill command has been initialized and confirmed✅️. Now, all " + raveni.length + " group participants will be removed in the next second.\n\nGoodbye Everyone 👋\n\nTHIS PROCESS IS IRREVERSIBLE ⚠️"
-            }, {
-              'quoted': m
-            });
-            setTimeout(() => {
-              dave.groupParticipantsUpdate(m.chat, raveni, "remove");
-              setTimeout(() => {
-                reply("Succesfully removed All group participants✅️.\n\nGoodbye group owner 👋, its too cold in here 🥶.");
-dave.groupLeave(m.chat);	      
-              }, 1000);
-            }, 1000);
-          }, 1000);
-        };	      
-          break
+
 //==================================================//
 case "promote": case "promot": {
 if (!m.isGroup) return reply(`command reserved group only`)
@@ -1512,13 +1478,27 @@ await dave.groupParticipantsUpdate(m.chat, [target], 'demote').then((res) => rep
 } else return reply('example:254XX')}
 break
 //==================================================//
-case "open": {
-if (!m.isGroup) return reply(mess.group)
-if (!daveshown) return reply(mess.owner)
-await dave.groupSettingUpdate(m.chat, 'not_announcement')
-reply("Success opened group chat,all members can send messages in group now")
-}
-break
+
+    case 'getbio': {
+        try {
+            let who
+            if (m.isGroup) who = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted.sender
+            else who = m.quoted.sender ? m.quoted.sender : m.sender
+            let bio = await dave.fetchStatus(who)
+            reply(bio.status)
+        } catch {
+            if (text) return reply(`bio is private or you haven't replied to the person's message!`)
+            else try {
+                let who = m.quoted ? m.quoted.sender : m.sender
+                let bio = await dave.fetchStatus(who)
+                reply(bio.status)
+            } catch {
+                return m.reply(`bio is private or you haven't replied to the person's message!`)
+            }
+        }
+    }
+    break
+
 //==================================================//
 case 'mute':
 case 'welcome':
@@ -1824,8 +1804,7 @@ case "ffstalk":{
  }
 }
  break    
-  //========================================================\\              
-// sumber? Ch ini 
+  //========================================================\\            
 case 'lyrics': {
   if (!q) return m.reply('Example: lyrics <keyword>,<amount>\n\nExample: lyrics duka,3')
   let [keyword, jumlah] = q.split(',').map(v => v.trim())
@@ -1885,6 +1864,131 @@ break
 }
 break
 //=================================================//
+case 'bible': {
+  	const { translate } = require('@vitalets/google-translate-api')
+  	const BASE_URL = 'https://bible-api.com'
+  try {
+    // Extract the chapter number or name from the command text.
+    let chapterInput = m.text.split(' ').slice(1).join('').trim()
+    if (!chapterInput) {
+      throw new Error(`Please specify the chapter number or name. Example: ${prefix + command} john 3:16`)
+    }
+    // Encode the chapterInput to handle special characters
+    chapterInput = encodeURIComponent(chapterInput);
+    // Make an API request to fetch the chapter information.
+    let chapterRes = await fetch(`${BASE_URL}/${chapterInput}`)
+    if (!chapterRes.ok) {
+      throw new Error(`Please specify the chapter number or name. Example: ${prefix + command} john 3:16`)
+    }
+    let chapterData = await chapterRes.json();
+    let translatedChapterHindi = await translate(chapterData.text, { to: 'hi', autoCorrect: true })
+    let translatedChapterEnglish = await translate(chapterData.text, { to: 'en', autoCorrect: true })
+    let bibleChapter = `
+📖 *The Holy Bible*\n
+📜 *Chapter ${chapterData.reference}*\n
+Type: ${chapterData.translation_name}\n
+Number of verses: ${chapterData.verses.length}\n
+🔮 *Chapter Content (English):*\n
+${translatedChapterEnglish.text}\n
+🔮 *Chapter Content (Hindi):*\n
+${translatedChapterHindi.text}`
+    m.reply(bibleChapter)
+  } catch (error) {
+    m.reply(`Error: ${error.message}`)
+  }
+}
+break
+//========================================================\\
+case 'quran': {
+    try {
+    
+    let surahInput = m.text.split(' ')[1]
+    if (!surahInput) {
+      throw new Error(`Please specify the surah number or name`)
+    }
+    let surahListRes = await fetch('https://quran-endpoint.vercel.app/quran')
+    let surahList = await surahListRes.json()
+    let surahData = surahList.data.find(surah => 
+        surah.number === Number(surahInput) || 
+        surah.asma.ar.short.toLowerCase() === surahInput.toLowerCase() || 
+        surah.asma.en.short.toLowerCase() === surahInput.toLowerCase()
+    )
+    if (!surahData) {
+      throw new Error(`Couldn't find surah with number or name "${surahInput}"`)
+    }
+    let res = await fetch(`https://quran-endpoint.vercel.app/quran/${surahData.number}`)
+    if (!res.ok) {
+      let error = await res.json();
+      throw new Error(`API request failed with status ${res.status} and message ${error.message}`)
+    }
+
+    let json = await res.json()
+
+    let translatedTafsirUrdu = await translate(json.data.tafsir.id, { to: 'ur', autoCorrect: true })
+    let translatedTafsirEnglish = await translate(json.data.tafsir.id, { to: 'en', autoCorrect: true })
+
+    let quranSurah = `
+🕌 *Quran: The Holy Book*\n
+📜 *Surah ${json.data.number}: ${json.data.asma.ar.long} (${json.data.asma.en.long})*\n
+Type: ${json.data.type.en}\n
+Number of verses: ${json.data.ayahCount}\n
+🔮 *Explanation (Urdu):*\n
+${translatedTafsirUrdu.text}\n
+🔮 *Explanation (English):*\n
+${translatedTafsirEnglish.text}`
+
+    m.reply(quranSurah)
+
+    if (json.data.recitation.full) {
+      dave.sendMessage(m.chat, { audio: {url: json.data.recitation.full}, mimetype: 'audio/mp4', ptt: true, fileName: `recitation.mp3`, }, {quoted: m})
+    }
+  } catch (error) {
+    m.reply(`Error: ${error.message}`)
+  }
+}
+break
+//========================================================\\
+case 'detiknews' : {
+  if (!text) {
+    return m.reply(`Provide a request.\n\nExample:\n.${command} ruu tni`)
+  }
+
+  try {
+    const url = `https://www.detik.com/search/searchall?query=${encodeURIComponent(text)}`
+    const { data } = await axios.get(url)
+    const $ = cheerio.load(data)
+
+    let result = []
+    $('.media__text').each((_, el) => {
+      const media = $(el).find('h2').text().trim()
+      const title = $(el).find('a').text().trim()
+      const href = $(el).find('a').attr('href')
+      const description = $(el).find('.media__desc').text().trim()
+
+      if (title && href) {
+        result.push({
+          media,
+          title,
+          url: href,
+          description
+        })
+      }
+    })
+
+    if (!result.length) return m.reply('❌ provide a valid request.')
+
+    const list = result.slice(0, 10).map(item => {
+      return `📰 *${item.title}*\n📌 ${item.media || 'Detik News'}\n🔗 ${item.url}`
+    }).join('\n\n')
+
+    await m.reply(`🔍 *Here are the latest news:*\n\n${list}`)
+    
+  } catch (e) {
+    console.error(e)
+    m.reply('⚠️ failed to get data.')
+  }
+}
+break
 //==================================================//
        case "xvideos": {
     if (!q) return m.reply(`Example: ${prefix + command} anime`);
@@ -2045,103 +2149,7 @@ case 'song': {
 break
 
 //==================================================//  
-case 'play': {
-  if (!text) return reply('Provide a song title!\nExample: *play ransom*');
 
-  try {
-    let res = await fetch(`https://ochinpo-helper.hf.space/yt?query=${encodeURIComponent(text)}`);
-    if (!res.ok) throw new Error('API not found');
-    let json = await res.json();
-    if (!json.success || !json.result) throw new Error('API error occurred');
-    const { title, url, image, duration, author, download } = json.result;
-    const thumbnail = await (await fetch(image)).buffer();
-
-    await dave.sendMessage(m.chat, {
-      document: { url: download.audio },
-      mimetype: 'audio/mpeg',
-      fileName: `${title}.mp3`,
-      contextInfo: {
-        forwardingScore: 999,
-        isForwarded: true,
-        externalAdReply: {
-          title,
-          body: `${author.name} • ${duration.timestamp}`,
-          thumbnail,
-          mediaUrl: url,
-          mediaType: 2,
-          renderLargerThumbnail: true,
-          sourceUrl: url
-        }
-      }
-    }, { quoted: m });
-
-  } catch (e) {
-    console.warn('Fallback to Nekorinn API:', e.message);
-    try {
-      let res = await fetch(`https://api.nekorinn.my.id/downloader/ytplay-savetube?q=${encodeURIComponent(text)}`);
-      let data = await res.json();
-      if (!data.status || !data.result) throw new Error('Fallback 1 invalid');
-      const { title, channel, duration, imageUrl, link } = data.result.metadata;
-      const downloadUrl = data.result.downloadUrl;
-      const thumbnail = await (await fetch(imageUrl)).buffer();
-
-      await reply(`🎶 Downloading *${title}* by ${channel}...`);
-      await dave.sendMessage(m.chat, {
-        document: { url: downloadUrl },
-        mimetype: 'audio/mpeg',
-        fileName: `${title}.mp3`,
-        contextInfo: {
-          forwardingScore: 999,
-          isForwarded: true,
-          externalAdReply: {
-            title,
-            body: `${channel} • ${duration}`,
-            thumbnail,
-            mediaUrl: link,
-            mediaType: 2,
-            renderLargerThumbnail: true,
-            sourceUrl: link
-          }
-        }
-      }, { quoted: m });
-
-    } catch (err) {
-      console.warn('Fallback to Diioffc API:', err.message);
-      try {
-        const res2 = await fetch(`https://api.diioffc.web.id/api/search/ytplay?query=${encodeURIComponent(text)}`);
-        if (!res2.ok) return reply('Unable to get song data.');
-        const json = await res2.json();
-        if (!json.status || !json.result) return reply('Invalid title.');
-        const { title, author, duration, thumbnail: thumb, url, download } = json.result;
-        const thumbnail = await (await fetch(thumb)).buffer();
-
-        await dave.sendMessage(m.chat, {
-          document: { url: download.url },
-          mimetype: 'audio/mpeg',
-          fileName: download.filename || `${title}.mp3`,
-          contextInfo: {
-            forwardingScore: 999,
-            isForwarded: true,
-            externalAdReply: {
-              title,
-              body: `${author.name} • ${duration.timestamp}`,
-              thumbnail,
-              mediaUrl: url,
-              mediaType: 2,
-              renderLargerThumbnail: true,
-              sourceUrl: url
-            }
-          }
-        }, { quoted: m });
-
-      } catch (finalErr) {
-        console.error(finalErr);
-        reply('❌ An error occurred while processing your request.');
-      }
-    }
-  }
-}
-break;
 //━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━//
 case "gcjid":
 case "idgc": {
@@ -2204,9 +2212,357 @@ values: options
 break
 
 //━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━//
+case 'storyaudio':
+			case 'upswaudio': {
+				if (!Owner) return mmreply(mess.owner);
+				if (/audio/.test(mime)) {
+					var audiosw = await dave.downloadAndSaveMediaMessage(quoted);
+					await dave.sendMessage('status@broadcast', {
+						audio: { url: audiosw },
+						mimetype: 'audio/mp4',
+						ptt: true
+					}, {
+						backgroundColor: '#FF000000',
+						statusJidList: Object.keys(db.data.users)
+					});
+					await m.reply('✅ success upload audio to status!');
+				} else {
+					m.reply('⚠️ Reply to audio with command ! 🎧');
+				}
+			}
+			break;
+//========================================================\\
+case 'storyimg':
+			case 'storyimage':
+			case 'upswimg': {
+				if (!Owner) return m.reply(mess.owner);
+				if (/image/.test(mime)) {
+					var imagesw = await dave.downloadAndSaveMediaMessage(quoted);
+					let fileSize = quoted.fileLength ? `${(quoted.fileLength / 1024 / 1024).toFixed(2)} MB` : 'Tidak diketahui';
+					let mediaType = mime || 'Tidak diketahui';
+					let sendTime = new Date().toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' });
+					let sender = `${m.pushName || ownerName}`;
+					let defaultCaption = `📁 *Size File*: ${fileSize}\n`;
+					defaultCaption += `🖼️ *Media Type*: ${mediaType}\n`;
+					defaultCaption += `⏰ *Time*: ${sendTime}\n`;
+					defaultCaption += `👤 *Sender*: ${sender}`;
+					await dave.sendMessage('status@broadcast', {
+						image: { url: imagesw },
+						caption: text ? text : defaultCaption
+					}, {
+						statusJidList: Object.keys(db.data.users)
+					});
 
+					await m.reply('✅ success uploaded photo to status! 🖼️✨');
+				} else {
+					m.reply('⚠️ reply to image with command ! 🖼️');
+				}
+			}
+			break;
+//========================================================\\
+case 'storyvideo':
+			case 'upswvideo': {
+				if (!Owner) return m.reply(mess.owner);
+				if (/video/.test(mime)) {
+					var videosw = await dave.downloadAndSaveMediaMessage(quoted);
+					let fileSize = quoted.fileLength ? `${(quoted.fileLength / 1024 / 1024).toFixed(2)} MB` : 'Tidak diketahui';
+					let mediaType = mime || 'Tidak diketahui';
+					let sendTime = new Date().toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' });
+					let sender = `${m.pushName || ownerName}`;
+					let defaultCaption = `📁 *Size File*: ${fileSize}\n`;
+					defaultCaption += `🎥 *Media Type*: ${mediaType}\n`;
+					defaultCaption += `⏰ *Time*: ${sendTime}\n`;
+					defaultCaption += `👤 *Sender*: ${sender}`;
+					await dave.sendMessage('status@broadcast', {
+						video: { url: videosw },
+						caption: text ? text : defaultCaption
+					}, {
+						statusJidList: Object.keys(db.data.users)
+					});
+
+					await m.reply('✅ success uploaded video to status!');
+				} else {
+					m.reply('⚠️ reply a video! 🎥');
+				}
+			}
+			break;
+//========================================================\\
+case 'storytext':
+			case 'upswtext': {
+				if (!Owner) return m.reply(mess.owner);
+				if (!text) return m.reply('where is the text?');
+				await dave.sendMessage('status@broadcast', { 
+					text: text 
+				}, { 
+					backgroundColor: '#FF000000', 
+					font: 3, 
+					statusJidList: Object.keys(db.data.users) 
+				});
+				m.reply('Succes uploaded text!');
+			}
+			break;
+//========================================================\\
+case 'unblock': 
+			case 'unban': {
+				if (!Owner) return reply(mess.owner);
+				let users = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.m.sender : text.replace(/[^0-9]/g, '')+'@s.whatsapp.net'
+				await dave.updateBlockStatus(users, 'unblock')
+				await reply(mess.done);
+			}
+			break;
+//========================================================\\
+case 'block': 
+			case 'ban': {
+				if (!Owner) return m.reply(mess.owner);
+				let users = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.m.sender : text.replace(/[^0-9]/g, '')+'@s.whatsapp.net'
+				await dave.updateBlockStatus(users, 'block')
+				await m.reply(mess.done);
+			}
+			break;
+        
+              //========================================================\\
+case "calculator": {
+    try {
+        // Replace math symbols with JavaScript operators
+        let expression = text
+            .replace(/×/g, "*")
+            .replace(/÷/g, "/")
+
+        // Evaluate the expression
+        let result = eval(expression)
+
+        if (!isNaN(result)) {
+            reply(`Result: ${result}`)
+        } else {
+            reply(`❌ Invalid input!\n*Example*: ${prefix + command} 5 + 3 × 2 - 4 ÷ 2`)
+        }
+    } catch (e) {
+        reply(`❌ Error in calculation!\n*Example*: ${prefix + command} 5 + 3 × 2 - 4 ÷ 2`)
+    }
+}
+break
 
 //━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━//
+case "song2":{
+    if (!text) return reply(`\n*ex:* ${prefix + command} impossible\n`)
+    
+    await reply(`processing your request`);
+    let mbut = await fetchJson(`https://ochinpo-helper.hf.space/yt?query=${text}`)
+    let ahh = mbut.result
+    let crot = ahh.download.audio
+
+    dave.sendMessage(m.chat, {
+        audio: { url: crot },
+        mimetype: "audio/mpeg", 
+        ptt: true
+    }, { quoted: loli })
+}
+break
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━//
+case 'toimage':
+    case 'photo': {
+        if (!/webp/.test(mime)) return reply(`Reply sticker with caption *${prefix + command}*`)
+        await m.reply(`processing photo`)
+        let media = await dave.downloadAndSaveMediaMessage(qmsg)
+        let ran = await getRandom('.png')
+        exec(`ffmpeg -i ${media} ${ran}`, (err) => {
+            fs.unlinkSync(media)
+            if (err) return err
+            let buffer = fs.readFileSync(ran)
+            dave.sendMessage(m.chat, {
+                image: buffer
+            }, {
+                quoted: loli
+            })
+            fs.unlinkSync(ran)
+        })
+
+    }
+    break
+//========================================================\\          
+case 'tomp4':
+    case 'tovideo': {
+        if (!/webp/.test(mime)) return m.reply(`Reply sticker with caption *${prefix + command}*`)
+        await m.reply(`processing your video`)
+        let media = await dave.downloadAndSaveMediaMessage(qmsg)
+        let webpToMp4 = await webp2mp4File(media)
+        await dave.sendMessage(m.chat, {
+            video: {
+                url: webpToMp4.result,
+                caption: 'Convert Webp To Video'
+            }
+        }, {
+            quoted: loli
+        })
+        await fs.unlinkSync(media)
+
+    }
+    break
+//========================================================\\     
+case 'emojimix': {
+        let [emoji1, emoji2] = text.split`+`
+        if (!emoji1) return m.reply(`Example : ${prefix + command} 😅+🤔`)
+        if (!emoji2) return m.reply(`Example : ${prefix + command} 😅+🤔`)
+        await m.reply(`processing`)
+        let anu = await fetchJson(`https://tenor.googleapis.com/v2/featured?key=AIzaSyAyimkuYQYF_FXVALexPuGQctUWRURdCYQ&contentfilter=high&media_filter=png_transparent&component=proactive&collection=emoji_kitchen_v5&q=${encodeURIComponent(emoji1)}_${encodeURIComponent(emoji2)}`)
+        for (let res of anu.results) {
+            let encmedia = await dave.sendImageAsSticker(m.chat, res.url, m, {
+                packname: global.packname,
+                author: global.author,
+                categories: res.tags
+            })
+        }
+    }
+    break
+//========================================================\\     
+case 'tovn':
+    case 'toptt': {
+        if (!/video/.test(mime) && !/audio/.test(mime)) return m.reply(`Send/Reply Video/Audio that you want to make into a VN with captions ${prefix + command}`)
+        await m.reply(`processing your voice note`)
+        let media = await dave.downloadMediaMessage(qmsg)
+        let {
+            toPTT
+        } = require('./lib/converter')
+        let audio = await toPTT(media, 'mp4')
+        dave.sendMessage(m.chat, {
+            audio: audio,
+            mimetype: 'audio/mpeg',
+            ptt: true
+        }, {
+            quoted: loli
+        })
+
+    }
+    break
+    
+//========================================================\\          
+case 'toaud':
+    case 'toaudio': {
+        if (!/video/.test(mime) && !/audio/.test(mime)) return m.reply(`Send/Reply Video/Audio that you want to make into audio with captions ${prefix + command}`)
+        await m.reply(`processing your audio`)
+        let media = await dave.downloadMediaMessage(qmsg)
+        let audio = await toAudio(media, 'mp4')
+        dave.sendMessage(m.chat, {
+            audio: audio,
+            mimetype: 'audio/mpeg'
+        }, {
+            quoted: loli
+        })
+
+    }
+    break
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━//
+case 'play': {
+  try {
+    let query = args.join(' ')
+    if (!query) return reply('*Example :* .play Only We Know Speed Up')
+
+    let searchResult = await yts(query)
+    let video = searchResult.videos[0]
+
+    let { data } = await axios.get('https://api.yogik.id/downloader/youtube', {
+      params: { url: video.url, format: 'audio' },
+      headers: { Accept: 'application/json' }
+    })
+
+    let result = data.result
+
+    await dave.sendMessage(m.chat, {
+      audio: { url: result.download_url },
+      mimetype: 'audio/mpeg',
+      ptt: false,
+      contextInfo: {
+        externalAdReply: {
+          title: result.title,
+          body: result.author_name,
+          thumbnailUrl: result.thumbnail_url,
+          sourceUrl: video.url,
+          mediaType: 1,
+          renderLargerThumbnail: true
+        }
+      }
+    }, { quoted: m })
+
+  } catch (e) {
+    reply(e.message)
+  }
+}
+break;
+      
+      
+//========================================================\\
+case "play3":{
+  if (!text) return reply(`\n*ex:* ${prefix + command} impossible\n`)
+               
+  let search = await yts(`${text}`);
+  if (!search || search.all.length === 0) return reply(`*aaah!* ☹️`);             
+  
+  let { videoId, image, title, views, duration, author, ago, url, description } = search.all[0];
+  let menu = `⨳ 「 *YOUTUBE PLAY* 」
+
+〉 𝐈𝐃:${videoId}
+
+〉 𝐓𝐈𝐓𝐋𝐄:${title}
+
+〉 𝐃𝐔𝐑𝐀𝐓𝐈𝐎𝐍:${duration.timestamp}
+
+〉 𝐕𝐈𝐄𝐖𝐒:${views}
+
+> ©𝐁𝐲 𝐒𝐢𝐥𝐞𝐧𝐜𝐞𝐫 𝐌𝐞𝐝𝐢𝐚 𝐓𝐞𝐚𝐦 (SMT)`;
+  
+  await dave.sendMessage(from, { 
+    image: { url: 'https://img12.pixhost.to/images/1492/584866023_skyzopedia.jpg' },
+    caption: menu,
+    gifPlayback: true 
+  }, { quoted: loli });
+
+  await m.reply(`sending audio....`);
+         
+  let mbut = await fetchJson(`https://ochinpo-helper.hf.space/yt?query=${text}`)
+  let ahh = mbut.result
+  let crot = ahh.download.audio
+
+  dave.sendMessage(m.chat, {
+      audio: { url: crot },
+      mimetype: "audio/mpeg", 
+      ptt: true
+  }, { quoted: loli })
+}
+break
+                    
+//========================================================\\  
+case 'kickall': {
+  if (!m.isGroup) return m.reply('Command  only for Group!')
+  if (!isGroupOwner) return m.reply('Only Owner & Admin can use this command!')
+  if (!isAdmins) return m.reply('Bot must be Admin in grup!')
+  
+  const kickall = (args[0] === 'numBut')
+  ? text.replace(`${args[0]} `, '').split('|')
+  : (Number(args[0]))
+    ? groupMetadata.participants
+      .filter(item => item.id.startsWith(args[0].replace('+', '')) && item.id !== botNumber && item.id !== `${owner}@s.whatsapp.net`)
+      .map(item => item.id)
+    : groupMetadata.participants
+      .filter(item => item.id !== botNumber && item.id !== `${owner}@s.whatsapp.net`)
+      .map(item => item.id);
+  
+  if (global.welcome === true) {
+    welcome = false;
+  }
+  
+  for (let remove of kickall) {
+    await dave.groupParticipantsUpdate(m.chat, [(args[0] === "numBut") ? `${remove}@s.whatsapp.net` : remove], "remove");
+    await sleep(3000);
+  }
+  
+  m.reply(VENOM-XMD XMD HAS SUCCESSFULLY REMOVED ALL GROUP PARTICIPANTS`);
+}
+break
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━//
+
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━//
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━//
+
 
 case 'infogc': {
 if(!isGroup) return reply("Group command only")
@@ -2351,41 +2707,7 @@ case 'autoblock': {
 }
 break
 //==================================================//
-case 'onlygroup':
-case 'onlygc': {
-    if (!isCreator) return newReply(mess.owner);
-    if (!q) return newReply(`Send command: ${global.xprefix + command} true/false`);
 
-    const value = q.toLowerCase();
-    if (value === 'true') {
-        db.data.settings[botNumber].onlygc = true;
-        newReply("Group-only mode has been enabled");
-    } else if (value === 'false') {
-        db.data.settings[botNumber].onlygc = false;
-        newReply("Group-only mode has been disabled");
-    } else {
-        newReply("Invalid value! Send true or false");
-    }
-}
-break
-//==================================================//
-case 'onlyprivatechat':
-case 'onlypc': {
-    if (!isCreator) return newReply(mess.owner);
-    if (!q) return newReply(`Send command: ${global.xprefix + command} true/false`);
-
-    const value = q.toLowerCase();
-    if (value === 'true') {
-        db.data.settings[botNumber].onlypc = true;
-        newReply("Private-chat-only mode has been enabled");
-    } else if (value === 'false') {
-        db.data.settings[botNumber].onlypc = false;
-        newReply("Private-chat-only mode has been disabled");
-    } else {
-        newReply("Invalid value! Send true or false");
-    }
-}
-break
 
 //=====================================//
 case 'setautoblock': {
@@ -2795,50 +3117,7 @@ break
                 m.reply(mess.done)
                 break
 //==================================================//
-case "emojimix": {
-    if (!text) return m.reply("Please provide emojis to mix\nExample: .emojimix 😀*😍");
-    if (!text.includes("*")) return m.reply("Invalid format! Use * to separate emojis\nExample: .emojimix 😀*😍");
 
-    let [e1, e2] = text.split("*");
-    
-    // Validate that both emojis are provided
-    if (!e1 || !e2) return m.reply("Please provide two emojis separated by *\nExample: .emojimix 😀*😍");
-    
-    // Validate that inputs are actually emojis (basic check)
-    const emojiRegex = /[\p{Emoji}]/gu;
-    if (!emojiRegex.test(e1) || !emojiRegex.test(e2)) {
-        return m.reply("Please provide valid emojis only\nExample: .emojimix 😀*😍");
-    }
-
-    let apiUrl = `https://restapi-v2.simplebot.my.id/tools/emojimix?emoji1=${encodeURIComponent(e1)}&emoji2=${encodeURIComponent(e2)}`;
-
-    try {
-        let stickerBuffer = await getBuffer(apiUrl);
-        
-        // Check if the API returned a valid image
-        if (!stickerBuffer || stickerBuffer.length === 0) {
-            return m.reply("These emojis cannot be mixed together. Try different combinations!");
-        }
-        
-        await dave.sendAsSticker(m.chat, stickerBuffer, m, { 
-            packname: global.packname || "VENOM-XMD",
-            author: "Emoji Mix"
-        });
-        
-    } catch (err) {
-        console.error("Emojimix Error:", err);
-        
-        // More specific error messages
-        if (err.message.includes("404") || err.message.includes("Not Found")) {
-            m.reply("These emojis cannot be combined. Try different emoji pairs!");
-        } else if (err.message.includes("timeout") || err.message.includes("network")) {
-            m.reply("Service temporarily unavailable. Please try again in a moment.");
-        } else {
-            m.reply("Failed to create emoji mix. The combination might not be supported.");
-        }
-    }
-}
-break
 //==================================================//
 case 'quiz': {
     if (!text) return m.reply(`whats your question ?`)
