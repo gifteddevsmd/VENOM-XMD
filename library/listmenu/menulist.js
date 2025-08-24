@@ -2,7 +2,6 @@ const chalk = require('chalk')
 const fs = require('fs')
 
 const Menu = (pushname, runtime, ram) => `
-
 ▣ ◈ *𝐕𝐄𝐍𝐎𝐌-𝐗𝐌𝐃 MENU* ◈ ▣
 ┃ ✦ Owner    : *${global.ownername}*
 ┃ ✦ Bot Name : *${global.botname}*
@@ -13,7 +12,7 @@ const Menu = (pushname, runtime, ram) => `
 ┃ ✦ Runtime  : *${global.runtime(process.uptime())}*
 ┃ ✦ RAM      : *${global.ram()}*
 ┃ ✦ Total Features : 141
-┗━━━━━━━━━━━━━━━━━━━━━━
+┗━━━━━━━━━━━━━━━━━━━━━
 ╭──• ❰ *Mode* ❱
 ║➤ ${global.xprefix}private
 ║➤ ${global.xprefix}public
