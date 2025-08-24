@@ -2,18 +2,18 @@ const chalk = require('chalk')
 const fs = require('fs')
 
 const Menu = (pushname, runtime, ram) => `
+
 ▣ ◈ *𝐕𝐄𝐍𝐎𝐌-𝐗𝐌𝐃 MENU* ◈ ▣
 ┃ ✦ Owner    : *${global.ownername}*
 ┃ ✦ Bot Name : *${global.botname}*
 ┃ ✦ Name     : *${pushname}*
-┃ ✦ Version  : *1.0.0*
+┃ ✦ Version  : *1.0.0 / 3.0.0*
 ┃ ✦ BotType  : *${global.typebot}*
 ┃ ✦ Prefix   : *${global.xprefix || '.'}*
-┃ ✦ Runtime  : *${runtime(process.uptime())}*
-┃ ✦ RAM      : *${ram()}*
-┃ ✦ Total Features : 321
+┃ ✦ Runtime  : *${global.runtime(process.uptime())}*
+┃ ✦ RAM      : *${global.ram()}*
+┃ ✦ Total Features : 141
 ┗━━━━━━━━━━━━━━━━━━━━━━
-
 ╭──• ❰ *Mode* ❱
 ║➤ ${global.xprefix}private
 ║➤ ${global.xprefix}public
@@ -22,7 +22,6 @@ const Menu = (pushname, runtime, ram) => `
 ║➤ ${global.xprefix}autoreact
 ║➤ ${global.xprefix}autoai
 ╰⟢
-
 ╭──• ❰ *Owner Menu* ❱
 ║➤ ${global.xprefix}autoread
 ║➤ ${global.xprefix}autobio
