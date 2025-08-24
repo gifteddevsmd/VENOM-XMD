@@ -18,8 +18,12 @@ global.wm           = "VENOM-XMD"
 global.botscript    = "https://whatsapp.com/channel/0029VbApvFQ2Jl84lhONkc3k"
 
 // ==================== STICKER INFO ==================== //
-global.packname     = "VENOM-XMD"
-global.author       = "VENOM-XMD"
+global.caption = "Dave media"
+//━━━━━━━━━━━━━━━━━━━━━━━━//
+// Sticker Marker
+global.packname = process.env.PACK_NAME ||'RACHEL-XMD'
+global.packname = process.env.AUTHOR||'𝐏𝐀𝐂𝐊𝐒'
+//━━━━━━━━━━━━━━━━━━━━━━━━//
 
 // ==================== BOT SETTINGS ==================== //
 global.xprefix      = process.env.PREFIX || '.'
@@ -37,11 +41,15 @@ global.antidelete = process.env.ANTI_DELETE || true
 
 // ==================== MESSAGES ==================== //
 global.mess = {
-    limit: 'Your limit is up <\\>',
-    nsfw: 'NSFW is disabled in this group, Please tell the admin to enable',
-    done: 'Done ✓',
-    error: 'Error !',
-    success: 'Success •'
+    success: '✅ Done.',
+    admin: '🚨 Admin only.',
+    premium: '🆘must be a premium user.',
+    botAdmin: '🤖 Make me admin first.',
+    owner: '👑 Owner only.',
+    OnlyGrup: '👥 Group only.',
+    private: '📩 Private chat only.',
+    wait: '⏳ Processing...',
+    error: '⚠️ Error occurred.',
 }
 
 // ==================== THUMBNAIL ==================== //
