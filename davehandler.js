@@ -1334,7 +1334,9 @@ const [target, subject, message] = args;
         }
         break
 
- //========================================================\\    case 'ghiblistyle': case 'toghibli': {
+ //================================================\\    
+       
+case 'ghiblistyle': case 'toghibli': {
  try {
  let q = m.quoted ? m.quoted : m;
  let mime = (q.msg || q).mimetype || '';
@@ -1375,7 +1377,7 @@ const [target, subject, message] = args;
  await dave.sendMessage(m.chat, { text: `Error: ${error.message || 'error'}` }, { quoted: m });
  }
 }
-break
+break  
  //====================================================\\  
   
 case "cinfo": case "channelinfo": case "ci": { 
