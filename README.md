@@ -44,10 +44,11 @@
 - GitHub verification before deployment  
 - Multi-device WhatsApp bot  
 - QR code / Pair code session setup  
+-On heroku start the worker after deployment 
 
 ---
 
-## Optional Contact / Support
+## Contact / Support
 
 [![WhatsApp Channel](https://img.shields.io/badge/Join-Channel-green?style=for-the-badge&logo=whatsapp)](https://whatsapp.com/channel/0029VbApvFQ2Jl84lhONkc3k)  
 [![WhatsApp Group](https://img.shields.io/badge/Join-Group-green?style=for-the-badge&logo=whatsapp)](https://chat.whatsapp.com/CaPeB0sVRTrL3aG6asYeAC)  
