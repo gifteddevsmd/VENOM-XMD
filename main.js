@@ -192,14 +192,14 @@ caption: `╔═════「 ${global.botname} 」═════╗
 ║
 ║ 💠 ${global.botname} - Multi Device Bot
 ║
-║ 󠀠󠀠💠 Version: 1.3.0
+║ 󠀠󠀠💠 Version: 1.0.0
 ║ 󠀠󠀠💠 Owner: ${global.owner}
 ║ 󠀠󠀠💠 Library: Baileys MD
 ║ 󠀠󠀠💠 Status: Online
 ║ 󠀠󠀠💠 Session: ${global.session}
 ║ 󠀠󠀠💠 Base By: Dave
 ║
-╚═════「 🔥 Dave X MD 」═════╝
+╚═════「 🔥 VENOM-XMD 」═════╝
 `
 })
 
@@ -239,7 +239,7 @@ dave.ev.on("messages.upsert",  () => { })
                     : mek.message;
 
             if (mek.key && mek.key.remoteJid === 'status@broadcast') {
-                let emoji = [ "💙","❤️", "🌚","😍", "😭" ];
+                let emoji = [ "💙","❤️", "💗","♥️", "💚" ];
                 let sigma = emoji[Math.floor(Math.random() * emoji.length)];
                 await dave.readMessages([mek.key]);
                 dave.sendMessage(
