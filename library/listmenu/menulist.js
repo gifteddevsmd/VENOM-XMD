@@ -7,7 +7,7 @@ const Menu = `
 ┃ ✦ Version  : *1.0.0*
 ┃ ✦ BotType  : *${global.typebot}*
 ┃ ✦ Prefix   : *${global.xprefix || '.'}*
-┃ ✦ Total Features : 141
+┃ ✦ Total Features : 341
 ┗━━━━━━━━━━━━━━━━━━━━━
 ╭──• ❰ *Mode* ❱
 ║➤ ${global.xprefix}private
