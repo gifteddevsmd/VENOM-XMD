@@ -44,7 +44,7 @@
 - GitHub verification before deployment  
 - Multi-device WhatsApp bot  
 - QR code / Pair code session setup  
--On heroku start the worker after deployment 
+- On heroku start the worker after deployment 
 
 ---
 
