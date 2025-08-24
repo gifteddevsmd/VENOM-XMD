@@ -2822,7 +2822,7 @@ case 'mediafire': {
     });
 }
 break
-//==================================================//
+//=================================================//
   case 'block': 
 case 'ban': {
     if (!isCreator) return newReply(mess.owner);
@@ -2909,7 +2909,7 @@ case "remini": {
     }
 }
 break
-//==================================================//
+//=================================================//
    case "capcut": {
     if (!text) return dave.sendMessage(m.chat, { text: `Example: ${prefix + command} <link>` }, { quoted: m });
 
@@ -3106,7 +3106,7 @@ break
     });
 }
 break
-//==================================================//
+//================================================//
     case 'setnamegc':
             case 'setsubject':
                 if (!m.isGroup) return m.reply(mess.group)
@@ -3188,7 +3188,8 @@ break
     }
 }
 break
-//==================================================//
+//=================================================//
+
 case "xnxxdl": {
     if (!text) return m.reply("Provide a valid link");
     if (!/^https?:\/\//.test(text)) return m.reply("Invalid link format");
@@ -3218,7 +3219,8 @@ case "xnxxdl": {
 break;
 
 
-//==================================================//
+//=================================================//
+
 case 'country': {
     if (!text) return m.reply(' Provide a country name!\nExample: *.country Japan*');
 
@@ -3371,6 +3373,7 @@ case 'ig': case 'instagram': case 'igdl': {
 }
 break
 //==================================================//
+
 case 'onlygroup':
             case 'onlygc':
                 if (!Owner) return m.reply(mess.owner)
@@ -3384,6 +3387,7 @@ case 'onlygroup':
                 }
             break
 //========================================================\\
+
 case 'onlyprivatechat':
             case 'onlypc':
                 if (!Owner) return m.reply(mess.owner)
@@ -3397,6 +3401,7 @@ case 'onlyprivatechat':
                 }
             break
 //========================================================\\
+
 case "setppbot": case "setpp": {
     if (!Owner) return m.reply(mess.owner)
     if (/image/g.test(mime)) {
@@ -3408,6 +3413,7 @@ case "setppbot": case "setpp": {
 }
 break
 //========================================================\\
+
 case "listgc": case "cekid": case "listgrup": {
     let gcall = Object.values(await dave.groupFetchAllParticipating().catch(_=> null))
     let listgc = `*𝐋𝐈𝐒𝐓 𝐀𝐋𝐋 𝐂𝐇𝐀𝐓 𝐆𝐑𝐎𝐔𝐏*\n\n`
@@ -3418,6 +3424,7 @@ case "listgc": case "cekid": case "listgrup": {
 }
 break
 //========================================================\\
+
  case 'profile': case 'cek': {
     const user = Object.keys(db.users)
     const infoUser = db.users[m.sender]
@@ -3425,6 +3432,7 @@ break
 }
 break
 //========================================================\\
+
 case 'antilinkgc': {
     if (!m.isGroup) return m.reply(mess.group)
     if (!isBotAdmins) return m.reply(mess.admin)
@@ -3440,6 +3448,7 @@ case 'antilinkgc': {
 }
 break
 //========================================================\\
+
 case 'close':
     if (!m.isGroup) return m.reply(mess.group)
     if (!isAdmins && !Owner) return reply(mess.admin)
@@ -3464,6 +3473,7 @@ case 'close':
     }, timer)
     break
 //========================================================\\
+
 case 'open':
     if (!m.isGroup) return m.reply(mess.group)
     if (!isAdmins && !Owner) return reply(mess.admin)
@@ -3488,6 +3498,7 @@ case 'open':
     }, timer)
     break
 //========================================================\\
+
 case 'add':
     if (!m.isGroup) return m.reply(mess.group)
     if(!Owner) return m.reply(mess.owner)
@@ -3497,6 +3508,7 @@ case 'add':
     m.reply(mess.done)
     break
 //========================================================\\
+
 case 'creategc': case 'creategroup': {
     if (!Owner) return m.reply(mess.owner)
     if (!args.join(" ")) return reply(`Use ${prefix+command} groupname`)
@@ -3517,6 +3529,7 @@ https://chat.whatsapp.com/${response}`
 }
 break
 //========================================================\\
+
 case 'translate':{
     if (!q) return m.reply(`*Where is the text*\n\n*𝙴xample usage*\n*${prefix + command} <language id> <text>*\n*${prefix + command} ja yo wassup*`)
     const defaultLang = 'en'
@@ -3548,7 +3561,8 @@ break
 //========================================================\\
 //========================================================\\
 
-//========================================================\\
+//=====================================================\\
+
 case 'spotifysearch': {
     if (!text) return m.reply('provide query');
     const query = text;
@@ -3667,6 +3681,7 @@ case 'apkdl': {
 }
 break;
 //==================================================//
+
 case 'groupinfo':
 case 'getgroupinfo':
 case 'getinfogc': {
@@ -3734,6 +3749,7 @@ case 'getinfogc': {
 }
 break
 //==================================================//
+
 case 'tiktok': {
 if (!text) return reply(`Use : ${prefix + command} link`)
 // wait message
@@ -3764,6 +3780,7 @@ dave.sendMessage(m.chat, { audio: { url: json.music }, mimetype: 'audio/mpeg' },
 }
 break
 //==================================================//
+
 case 'idch': case 'cekidch': {
 if (!text) return reply("channel link?")
 if (!text.includes("https://whatsapp.com/channel/")) return reply("Link must be valid")
@@ -3795,6 +3812,7 @@ await dave.relayMessage( msg.key.remoteJid,msg.message,{ messageId: msg.key.id }
 }
 break
 //==================================================//
+
 case "ai":
 case "gpt":
  if (!args.length) {
@@ -3815,6 +3833,7 @@ case "gpt":
  }
  break
 //================================================//
+
 case 'ckalender': case 'createkalender': {
     let args = text.split(' ');
     if (args.length < 2) return m.reply('wrong format! Use: ckalender month year');
@@ -3826,6 +3845,7 @@ case 'ckalender': case 'createkalender': {
 }
 break
 //==================================================//
+
 case "cc": case "cvcc": {
     try {
         let [type, jumlah] = args;
@@ -3853,7 +3873,8 @@ case "cc": case "cvcc": {
     }
 }
 break  
-//========================================================\\    
+//========================================================\\ 
+   
 case "tts": {
   if(!text) return m.reply("`provide a query`");
   m.reply(`processing your query`);
@@ -3876,6 +3897,7 @@ case "tts": {
 }
 break
 //========================================================\\
+
 case "notes": case "tulis": {
   if (!text) return m.reply('❌provide a text .\n\nExample: nulis Biyu Tamvan');
   
@@ -3972,7 +3994,8 @@ await reply(`💠 Unexpected error occurred: ${error.message}`);
 }
 break;
 }
-//==================================================//   
+//==================================================// 
+  
         case 'ytmp4': {
   const axios = require('axios');
   const input = text?.trim();
