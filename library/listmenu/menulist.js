@@ -1,10 +1,9 @@
 const chalk = require('chalk')
 const fs = require('fs')
 
-const Menu = (pushname, runtime, ram) => `
+const Menu = `
 ▣ ◈ *𝐕𝐄𝐍𝐎𝐌-𝐗𝐌𝐃 MENU* ◈ ▣
 ┃ ✦ Owner    : *${global.ownername}*
-┃ ✦ Bot Name : *${global.botname}*
 ┃ ✦ Name     : *${pushname}*
 ┃ ✦ Version  : *1.0.0 / 3.0.0*
 ┃ ✦ BotType  : *${global.typebot}*
