@@ -4,7 +4,7 @@ const fs = require('fs')
 const Menu = `
 ▣ ◈ *𝐕𝐄𝐍𝐎𝐌-𝐗𝐌𝐃 MENU* ◈ ▣
 ┃ ✦ Owner    : *${global.ownername}*
-┃ ✦ Version  : *1.0.0 / 3.0.0*
+┃ ✦ Version  : *1.0.0*
 ┃ ✦ BotType  : *${global.typebot}*
 ┃ ✦ Prefix   : *${global.xprefix || '.'}*
 ┃ ✦ Runtime  : *${global.runtime(process.uptime())}*
