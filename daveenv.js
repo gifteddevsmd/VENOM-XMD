@@ -49,10 +49,16 @@ global.thumb = "https://files.catbox.moe/4ryp6k.jpg"
 global.wagc = "https://chat.whatsapp.com/LfTFxkUQ1H7Eg2D0vR3n6g?mode=ac_t"
 global.caption = "dave media"
 //━━━━━━━━━━━━━━━━━━━━━━━━//
+
+const appname = process.env.APP_NAME || '';
+const herokuapi = process.env.HEROKU_API;
+//━━━━━━━━━━━━━━━━━━━━━━━━//
+
 // Sticker Marker
 global.packname = "VENOM-XMD"
 global.author = "VENOM-XMD"
 //━━━━━━━━━━━━━━━━━━━━━━━━//
+
 // Respon Message
 global.mess = {
     success: '✅ Done.',
