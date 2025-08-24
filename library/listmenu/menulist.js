@@ -1,300 +1,235 @@
 const chalk = require('chalk')
 const fs = require('fs')
 
-const Menu = `
+const Menu = (pushname, runtime, ram) => `
 ▣ ◈ *𝐕𝐄𝐍𝐎𝐌-𝐗𝐌𝐃 MENU* ◈ ▣
-┃ ✦ Owner   : ${global.ownername}
-┃ ✦ Version : 1.0.0
-┃ ✦ BotType : ${global.typebot}
-┃ ✦ Prefix  : ${global.xprefix || '.'}
+┃ ✦ Owner    : *${global.ownername}*
+┃ ✦ Bot Name : *${global.botname}*
+┃ ✦ Name     : *${pushname}*
+┃ ✦ Version  : *1.0.0 / 3.0.0*
+┃ ✦ BotType  : *${global.typebot}*
+┃ ✦ Prefix   : *${global.xprefix || '.'}*
+┃ ✦ Runtime  : *${runtime(process.uptime())}*
+┃ ✦ RAM      : *${ram()}*
+┃ ✦ Total Features : 321
 ┗━━━━━━━━━━━━━━━━━━━━━━
-╭──• ❰ *Owner Menu* ❱
-║◦${xprefix}autoread
-║◦${xprefix}autobio 
-║◦${xprefix}autotype 
-║◦${xprefix}unavailable 
-║◦autorecord 
-║◦${xprefix}autorecordtype 
-║◦${xprefix}autoswview 
-║◦${xprefix}setautoblock 
-║◦${xprefix}setantiforeign 
-║◦${xprefix}autoblock 
-║◦${xprefix}onlygc 
-║◦${xprefix}onlypc 
-║◦${xprefix}anticall 
-║◦${xprefix}self 
-║◦${xprefix}public 
-║◦${xprefix}join 
-║◦${xprefix}poll 
-║◦${xprefix}bc 
-║◦${xprefix}bcgroup 
-║◦${xprefix}setmenu 
-║◦${xprefix}setimgmenu 
-║◦${xprefix}setvidmenu 
-║◦${xprefix}setgifmenu 
-║◦${xprefix}setreply 
-║◦${xprefix}setprefix 
-║◦${xprefix}addlimit 
-║◦${xprefix}dellimit 
-║◦${xprefix}resethit 
-║◦${xprefix}resetuser 
-║◦${xprefix}creategc 
-║◦${xprefix}setexif 
-║◦${xprefix}userjid 
-║◦${xprefix}setbotbio 
-║◦${xprefix}delppbot 
-║◦${xprefix}trackip 
-║◦${xprefix}setppbot 
-║◦${xprefix}addprem 
-║◦${xprefix}delprem 
-║◦${xprefix}addowner 
-║◦${xprefix}delowner 
-║◦${xprefix}block 
-║◦${xprefix}unblock 
-║◦${xprefix}leavegc 
-╰⟢
-╭──• ❰ *Group Menu* ❱
-║◦${xprefix}antibot 
-║◦${xprefix}antiviewonce 
-║◦${xprefix}welcome 
-║◦${xprefix}adminevent 
-║◦${xprefix}groupevent 
-║◦${xprefix}antiforeign 
-║◦${xprefix}antimedia 
-║◦${xprefix}antiaudio 
-║◦${xprefix}antivideo 
-║◦${xprefix}antiimage 
-║◦${xprefix}antidocument 
-║◦${xprefix}antilocation 
-║◦${xprefix}anticontact 
-║◦${xprefix}antisticker 
-║◦${xprefix}antipoll 
-║◦${xprefix}antilink 
-║◦${xprefix}antilinkgc 
-║◦${xprefix}antivirtex 
-║◦${xprefix}grouplink 
-║◦${xprefix}listadmin 
-║◦${xprefix}invite 
-║◦${xprefix}delete 
-║◦${xprefix}setppgroup 
-║◦${xprefix}delppgroup 
-║◦${xprefix}setnamegc 
-║◦${xprefix}setdesc 
-║◦${xprefix}add 
-║◦${xprefix}kick 
-║◦${xprefix}promote 
-║◦${xprefix}demote 
-║◦${xprefix}getcontact 
-║◦${xprefix}savecontact 
-║◦${xprefix}sendcontact 
-║◦${xprefix}contactag 
-║◦${xprefix}hidetag 
-║◦${xprefix}totag 
-║◦${xprefix}tagall 
-║◦${xprefix}editinfo 
-║◦${xprefix}opentime 
-║◦${xprefix}closetime 
-║◦${xprefix}resetlink 
-║◦${xprefix}getbio 
-║◦${xprefix}vote 
-║◦${xprefix}upvote 
-║◦${xprefix}downvote 
-║◦${xprefix}checkvote 
-║◦${xprefix}delvote 
-║◦${xprefix}autostickergc 
-║◦${xprefix}react 
-║◦${xprefix}kickall
-║◦${xprefix}open
-║◦${xprefix}close
-╰⟢
-╭──• ❰ *Download Menu* ❱
-║◦${xprefix}ytsearch 
-║◦${xprefix}play 
-║◦${xprefix}ytmp3 
-║◦${xprefix}ytmp4 
-║◦${xprefix}tiktokaudio 
-║◦${xprefix}tiktok 
-║◦${xprefix}igvideo 
-║◦${xprefix}igimage 
-║◦${xprefix}facebook 
-║◦${xprefix}mediafire 
-║◦${xprefix}google 
-║◦${xprefix}imdb 
-║◦${xprefix}weather 
-║◦${xprefix}wanumber 
-║◦${xprefix}spotify 
-║◦${xprefix}gitclone 
-║◦${xprefix}happymod 
-║◦${xprefix}gdrive 
-║◦${xprefix}pinterest 
-║◦${xprefix}ringtone 
-╰⟢
-╭──• ❰ *Random Video* ❱
-║◦${xprefix}tiktokgirl 
-║◦${xprefix}tiktoknukthy 
-║◦${xprefix}tiktokkayes 
-║◦${xprefix}tiktokpanrika 
-║◦${xprefix}tiktoknotnot 
-║◦${xprefix}tiktokghea 
-║◦${xprefix}tiktoksantuy 
-║◦${xprefix}tiktokbocil 
-╰⟢
-╭──• ❰ *Stalker* ❱
-║◦${xprefix}igstalk 
-║◦${xprefix}tiktokstalk 
-║◦${xprefix}mlstalk 
-║◦${xprefix}npmstalk 
-║◦${xprefix}ghstalk 
+
+╭──• ❰ *Mode* ❱
+║➤ ${global.xprefix}private
+║➤ ${global.xprefix}public
+║➤ ${global.xprefix}recording
+║➤ ${global.xprefix}typing
+║➤ ${global.xprefix}autoreact
+║➤ ${global.xprefix}autoai
 ╰⟢
 
-╭──• ❰ *OpenAI* ❱
-║◦${xprefix}openai 
-║◦${xprefix}dalle 
-║◦${xprefix}ai 
-║◦${xprefix}remini 
+╭──• ❰ *Owner Menu* ❱
+║➤ ${global.xprefix}autoread
+║➤ ${global.xprefix}autobio
+║➤ ${global.xprefix}autotype
+║➤ ${global.xprefix}unavailable
+║➤ ${global.xprefix}autorecord
+║➤ ${global.xprefix}autorecordtype
+║➤ ${global.xprefix}autoswview
+║➤ ${global.xprefix}setautoblock
+║➤ ${global.xprefix}setantiforeign
+║➤ ${global.xprefix}autoblock
+║➤ ${global.xprefix}onlygc
+║➤ ${global.xprefix}onlypc
+║➤ ${global.xprefix}anticall
+║➤ ${global.xprefix}self
+║➤ ${global.xprefix}public
+║➤ ${global.xprefix}join
+║➤ ${global.xprefix}poll
+║➤ ${global.xprefix}bc
+║➤ ${global.xprefix}bcgroup
+║➤ ${global.xprefix}setmenu
+║➤ ${global.xprefix}setimgmenu
+║➤ ${global.xprefix}setvidmenu
+║➤ ${global.xprefix}setgifmenu
+║➤ ${global.xprefix}setreply
+║➤ ${global.xprefix}setprefix
+║➤ ${global.xprefix}addlimit
+║➤ ${global.xprefix}dellimit
+║➤ ${global.xprefix}resethit
+║➤ ${global.xprefix}resetuser
+║➤ ${global.xprefix}creategc
+║➤ ${global.xprefix}setexif
+║➤ ${global.xprefix}userjid
+║➤ ${global.xprefix}setbotbio
+║➤ ${global.xprefix}delppbot
+║➤ ${global.xprefix}trackip
+║➤ ${global.xprefix}setppbot
+║➤ ${global.xprefix}addprem
+║➤ ${global.xprefix}delprem
+║➤ ${global.xprefix}addowner
+║➤ ${global.xprefix}delowner
+║➤ ${global.xprefix}block
+║➤ ${global.xprefix}unblock
+║➤ ${global.xprefix}leavegc
+║➤ ${global.xprefix}getbio
+║➤ ${global.xprefix}getpp
+║➤ ${global.xprefix}getplugin
+║➤ ${global.xprefix}storytext
+║➤ ${global.xprefix}storyaudio
+║➤ ${global.xprefix}storyimage
+║➤ ${global.xprefix}storyvideo
+║➤ ${global.xprefix}reactch
+║➤ ${global.xprefix}createch
+║➤ ${global.xprefix}clear
 ╰⟢
-╭──• ❰ *Fun Menu* ❱
-║◦${xprefix}define 
-║◦${xprefix}lyrics 
-║◦${xprefix}suit 
-║◦${xprefix}math 
-║◦${xprefix}tictactoe 
-║◦${xprefix}fact 
-║◦${xprefix}truth 
-║◦${xprefix}dare 
-║◦${xprefix}couple 
-║◦${xprefix}soulmate 
-║◦${xprefix}stupidcheck 
-║◦${xprefix}handsomecheck 
-║◦${xprefix}uncleancheck 
-║◦${xprefix}hotcheck 
-║◦${xprefix}smartcheck 
-║◦${xprefix}greatcheck 
-║◦${xprefix}evilcheck 
-║◦${xprefix}dogcheck 
-║◦${xprefix}coolcheck 
-║◦${xprefix}waifucheck 
-║◦${xprefix}awesomecheck 
-║◦${xprefix}gaycheck 
-║◦${xprefix}cutecheck 
-║◦${xprefix}lesbiancheck 
-║◦${xprefix}hornycheck 
-║◦${xprefix}prettycheck 
-║◦${xprefix}lovelycheck 
-║◦${xprefix}uglycheck 
-║◦${xprefix}pick 
-║◦${xprefix}pickupline 
-║◦${xprefix}quotes 
-║◦${xprefix}can 
-║◦${xprefix}is 
-║◦${xprefix}gecg 
-║◦${xprefix}checkme 
-║◦${xprefix}tqto 
-╰⟢
-╭──• ❰ *PhotoOxy Maker* ❱
-║◦${xprefix}shadow   
-║◦${xprefix}write  
-║◦${xprefix}romantic  
-║◦${xprefix}burnpaper 
-║◦${xprefix}smoke 
-║◦${xprefix}narutobanner  
-║◦${xprefix}love  
-║◦${xprefix}undergrass 
-║◦${xprefix}doublelove  
-║◦${xprefix}coffecup 
-║◦${xprefix}underwaterocean 
-║◦${xprefix}smokyneon 
-║◦${xprefix}starstext 
-║◦${xprefix}rainboweffect 
-║◦${xprefix}balloontext 
-║◦${xprefix}metalliceffect 
-║◦${xprefix}embroiderytext 
-║◦${xprefix}flamingtext 
-║◦${xprefix}stonetext 
-║◦${xprefix}writeart 
-║◦${xprefix}summertext 
-║◦${xprefix}wolfmetaltext 
-║◦${xprefix}nature3dtext 
-║◦${xprefix}rosestext 
-║◦${xprefix}naturetypography 
-║◦${xprefix}quotesunder 
-║◦${xprefix}shinetext 
-╰⟢
-╭──• ❰ *Ephoto360 Maker* ❱
-║◦${xprefix}glitchtext 
-║◦${xprefix}writetext 
-║◦${xprefix}advancedglow 
-║◦${xprefix}typographytext 
-║◦${xprefix}pixelglitch 
-║◦${xprefix}neonglitch 
-║◦${xprefix}flagtext 
-║◦${xprefix}flag3dtext 
-║◦${xprefix}deletingtext 
-║◦${xprefix}blackpinkstyle 
-║◦${xprefix}glowingtext 
-║◦${xprefix}underwatertext 
-║◦${xprefix}logomaker 
-║◦${xprefix}cartoonstyle 
-║◦${xprefix}papercutstyle 
-║◦${xprefix}watercolortext 
-║◦${xprefix}effectclouds 
-║◦${xprefix}blackpinklogo 
-║◦${xprefix}gradienttext 
-║◦${xprefix}summerbeach 
-║◦${xprefix}luxurygold 
-║◦${xprefix}multicoloredneon 
-║◦${xprefix}sandsummer 
-║◦${xprefix}galaxywallpaper 
-║◦${xprefix}1917style 
-║◦${xprefix}makingneon 
-║◦${xprefix}freecreate 
-║◦${xprefix}galaxystyle 
-║◦${xprefix}lighteffects 
-╰⟢
-╭──• ❰ *Other Menu* ❱
-║◦${xprefix}ping 
-║◦${xprefix}menu 
-║◦${xprefix}repo 
-║◦${xprefix}listpc 
-║◦${xprefix}listgc 
-║◦${xprefix}idgroup 
-║◦${xprefix}owner 
-║◦${xprefix}tts 
-║◦${xprefix}say 
-║◦${xprefix}checkaccount 
-║◦${xprefix}vv 
-║◦${xprefix}quran 
-║◦${xprefix}bible 
+
+╭──• ❰ *General* ❱
+║➤ ${global.xprefix}ping
+║➤ ${global.xprefix}repo
+║➤ ${global.xprefix}bot
+║➤ ${global.xprefix}autostatusview
+║➤ ${global.xprefix}uptime
+║➤ ${global.xprefix}delete
+║➤ ${global.xprefix}listplugin
+║➤ ${global.xprefix}cc
+║➤ ${global.xprefix}ckalender
+║➤ ${global.xprefix}fixtures
+║➤ ${global.xprefix}news
+║➤ ${global.xprefix}vcf
+║➤ ${global.xprefix}save
+║➤ ${global.xprefix}say
 ╰⟢
 ╭──• ❰ *Bug & War* ❱
-║◦${xprefix}dave 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
-║◦${xprefix}pmbug 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
-║◦${xprefix}delaybug 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
-║◦${xprefix}docubug 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
-║◦${xprefix}unlimitedbug 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
-║◦${xprefix}bombug 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
-║◦${xprefix}lagbug 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
-║◦${xprefix}trollybug 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
-║◦${xprefix}gcbug 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
-║◦${xprefix}delaygcbug 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
-║◦${xprefix}laggcbug 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
-║◦${xprefix}bomgcbug 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
+║➤ ${global.xprefix}dave 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
+║➤ ${global.xprefix}pmbug 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
+║➤ ${global.xprefix}delaybug 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
+║➤ ${global.xprefix}docubug 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
+║➤ ${global.xprefix}unlimitedbug 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
+║➤ ${global.xprefix}bombug 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
 ╰⟢
-> VENOM-XMD VERSION 1
-> GIFTED DAVE
-> ENJOY
-`;
+╭──• ❰ *Download* ❱
+║➤ ${global.xprefix}song
+║➤ ${global.xprefix}play
+║➤ ${global.xprefix}play2
+║➤ ${global.xprefix}tiktok
+║➤ ${global.xprefix}vv
+║➤ ${global.xprefix}vv2
+║➤ ${global.xprefix}anime
+║➤ ${global.xprefix}detiknews
+║➤ ${global.xprefix}apk
+║➤ ${global.xprefix}apk2
+║➤ ${global.xprefix}fb
+║➤ ${global.xprefix}igdl
+║➤ ${global.xprefix}igdl2
+║➤ ${global.xprefix}lyrics
+║➤ ${global.xprefix}spotifydown
+║➤ ${global.xprefix}spotifysearch
+║➤ ${global.xprefix}ytmp3
+║➤ ${global.xprefix}ytmp4
+║➤ ${global.xprefix}mediafire
+║➤ ${global.xprefix}playtiktok
+║➤ ${global.xprefix}play3
+║➤ ${global.xprefix}song2
+╰⟢
+╭──• ❰ *Group* ❱
+║➤ ${global.xprefix}remove
+║➤ ${global.xprefix}tagall
+║➤ ${global.xprefix}hidetag
+║➤ ${global.xprefix}promote
+║➤ ${global.xprefix}demote
+║➤ ${global.xprefix}kickall
+║➤ ${global.xprefix}kill
+║➤ ${global.xprefix}invite
+║➤ ${global.xprefix}add
+║➤ ${global.xprefix}open
+║➤ ${global.xprefix}close
+║➤ ${global.xprefix}antilinkgc
+║➤ ${global.xprefix}antilink
+║➤ ${global.xprefix}getidgc
+║➤ ${global.xprefix}ceklinkgc
+║➤ ${global.xprefix}gcinfo
+║➤ ${global.xprefix}poll
+║➤ ${global.xprefix}setppgc
+║➤ ${global.xprefix}listonline
+║➤ ${global.xprefix}resetlink
+║➤ ${global.xprefix}pin
+║➤ ${global.xprefix}setnamegc
+║➤ ${global.xprefix}request-join
+║➤ ${global.xprefix}approve
+║➤ ${global.xprefix}reject
+║➤ ${global.xprefix}left
+╰⟢
+╭──• ❰ *Converter* ❱
+║➤ ${global.xprefix}s
+║➤ ${global.xprefix}take
+║➤ ${global.xprefix}brat
+║➤ ${global.xprefix}emojimix
+║➤ ${global.xprefix}notes
+║➤ ${global.xprefix}photo
+║➤ ${global.xprefix}tovideo
+║➤ ${global.xprefix}toaudio
+║➤ ${global.xprefix}tovn
+║➤ ${global.xprefix}translate
+║➤ ${global.xprefix}flux
+║➤ ${global.xprefix}deepimage
+║➤ ${global.xprefix}tourl
+║➤ ${global.xprefix}logo
+║➤ ${global.xprefix}tts
+║➤ ${global.xprefix}ghiblistyle
+╰⟢
+╭──• ❰ *Search / AI* ❱
+║➤ ${global.xprefix}ai
+║➤ ${global.xprefix}ai2
+║➤ ${global.xprefix}country
+║➤ ${global.xprefix}quiz
+║➤ ${global.xprefix}gpt
+║➤ ${global.xprefix}gpt2
+║➤ ${global.xprefix}gpt3
+║➤ ${global.xprefix}gemma
+║➤ ${global.xprefix}yts
+║➤ ${global.xprefix}pinterest
+║➤ ${global.xprefix}igstory
+║➤ ${global.xprefix}ytstalk
+║➤ ${global.xprefix}ffstalk
+║➤ ${global.xprefix}telestalk
+║➤ ${global.xprefix}meme
+║➤ ${global.xprefix}channelinfo
+║➤ ${global.xprefix}cekkodam
+║➤ ${global.xprefix}define
+║➤ ${global.xprefix}sfile
+║➤ ${global.xprefix}myip
+║➤ ${global.xprefix}trackip
+║➤ ${global.xprefix}xvideos
+║➤ ${global.xprefix}yiffersearch
+╰⟢
+╭──• ❰ *Maths* ❱
+║➤ ${global.xprefix}calculator
+╰⟢
+╭──• ❰ *Creator* ❱
+║➤ ${global.xprefix}Quran
+║➤ ${global.xprefix}Bible
+╰⟢
+╭──• ❰ *Developer* ❱
+║➤ ${global.xprefix}githubstalk
+║➤ ${global.xprefix}gitclone
+║➤ ${global.xprefix}getfile
+║➤ ${global.xprefix}scweb
+║➤ ${global.xprefix}getvars
+║➤ ${global.xprefix}setvar
+║➤ ${global.xprefix}update
+╰⟢
+╭──• ❰ *Email* ❱
+║➤ ${global.xprefix}sendemail
+║➤ ${global.xprefix}tempmail
+╰⟢
 
+> *VENOM-XMD*
+> *ENJOY* 💠
+`;
 
 module.exports = Menu
 
 let file = require.resolve(__filename)
 fs.watchFile(file, () => {
-        fs.unwatchFile(file)
-        console.log(chalk.redBright(`Update ${__filename}`))
-        delete require.cache[file]
-        require(file)
+    fs.unwatchFile(file)
+    console.log(chalk.redBright(`Update ${__filename}`))
+    delete require.cache[file]
+    require(file)
 })
-
-//𝐕𝐄𝐍𝐎𝐌-𝐗𝐌𝐃//
-
+// 𝐕𝐄𝐍𝐎𝐌-𝐗𝐌𝐃 //
