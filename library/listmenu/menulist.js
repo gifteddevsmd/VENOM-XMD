@@ -7,8 +7,6 @@ const Menu = `
 ┃ ✦ Version  : *1.0.0*
 ┃ ✦ BotType  : *${global.typebot}*
 ┃ ✦ Prefix   : *${global.xprefix || '.'}*
-┃ ✦ Runtime  : *${global.runtime(process.uptime())}*
-┃ ✦ RAM      : *${global.ram()}*
 ┃ ✦ Total Features : 141
 ┗━━━━━━━━━━━━━━━━━━━━━
 ╭──• ❰ *Mode* ❱
