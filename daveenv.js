@@ -6,7 +6,8 @@ if (fs.existsSync('.env')) require('dotenv').config({ path: __dirname+'/.env' })
 global.SESSION_ID = process.env.SESSION_ID || '' 
 global.botname      = process.env.BOT_NAME || 'VENOM-XMD'
 global.ownername    = 'GIFTED DAVE'
-global.ownernumber  = process.env.OWNER_NUMBER || '254104260236'
+global.error = ["6666",]
+global.owner = ["254104260236",]
 global.creator      = process.env.OWNER_NUMBER ? `${process.env.OWNER_NUMBER}@s.whatsapp.net` : '254104260236@s.whatsapp.net'
 global.websitex     = "https://whatsapp.com/channel/0029VbApvFQ2Jl84lhONkc3k"
 global.wagc         = "https://chat.whatsapp.com/LfTFxkUQ1H7Eg2D0vR3n6g?mode=ac_t"
