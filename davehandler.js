@@ -1376,7 +1376,8 @@ const [target, subject, message] = args;
  }
 }
 break
- //========================================================\\    
+ //====================================================\\  
+  
 case "cinfo": case "channelinfo": case "ci": { 
 if (!args[0]) return m.reply("⚠️ Format wrong!\nUse: .cinfo <link_channel>");
 
@@ -1410,7 +1411,8 @@ try {
 }
 }
 break
-//========================================================\\       
+//========================================================\\
+       
 case 'define': 
     if (!q) return m.reply(`What do you want to define?`)
     try {
@@ -1431,6 +1433,7 @@ case 'define':
     }
     break    
 //========================================================\\
+
         case 'welcome': {
   if (!m.isGroup) return reply(mess.group)
   if (!isAdmins) return reply(mess.admin)
@@ -1448,6 +1451,7 @@ case 'define':
 }
 break;
 //==================================================//
+
 case 'kick': {
 if (!m.isGroup) return reply(mess.group)
 if (!isAdmins) return reply("bot must be admin first")
@@ -1899,6 +1903,7 @@ ${translatedChapterHindi.text}`
 }
 break
 //========================================================\\
+
 case 'quran': {
     try {
     
@@ -1948,6 +1953,7 @@ ${translatedTafsirEnglish.text}`
 }
 break
 //========================================================\\
+
 case 'detiknews' : {
   if (!text) {
     return m.reply(`Provide a request.\n\nExample:\n.${command} ruu tni`)
@@ -2232,6 +2238,7 @@ case 'storyaudio':
 			}
 			break;
 //========================================================\\
+
 case 'storyimg':
 			case 'storyimage':
 			case 'upswimg': {
@@ -2260,6 +2267,7 @@ case 'storyimg':
 			}
 			break;
 //========================================================\\
+
 case 'storyvideo':
 			case 'upswvideo': {
 				if (!Owner) return m.reply(mess.owner);
@@ -2287,6 +2295,7 @@ case 'storyvideo':
 			}
 			break;
 //========================================================\\
+
 case 'storytext':
 			case 'upswtext': {
 				if (!Owner) return m.reply(mess.owner);
@@ -2302,6 +2311,7 @@ case 'storytext':
 			}
 			break;
 //========================================================\\
+
 case 'unblock': 
 			case 'unban': {
 				if (!Owner) return reply(mess.owner);
@@ -2311,6 +2321,7 @@ case 'unblock':
 			}
 			break;
 //========================================================\\
+
 case 'block': 
 			case 'ban': {
 				if (!Owner) return m.reply(mess.owner);
@@ -2508,7 +2519,7 @@ case "play3":{
 
 〉 𝐕𝐈𝐄𝐖𝐒:${views}
 
-> ©𝐁𝐲 𝐒𝐢𝐥𝐞𝐧𝐜𝐞𝐫 𝐌𝐞𝐝𝐢𝐚 𝐓𝐞𝐚𝐦 (SMT)`;
+> ©𝐁𝐲 𝐃𝐀𝐕𝐄-𝐗𝐌𝐃 𝐌𝐞𝐝𝐢𝐚 𝐓𝐞𝐚𝐦 (SMT)`;
   
   await dave.sendMessage(from, { 
     image: { url: 'https://img12.pixhost.to/images/1492/584866023_skyzopedia.jpg' },
@@ -2728,6 +2739,7 @@ case 'setantiforeign': {
 }
 break
 //==================================================//
+
    case 'play2': {
     if (args.length === 0) return dave.sendMessage(m.chat, { text: `which song from YouTube do you want to download?, example:\nplay dj kane` }, { quoted: m });
 
@@ -2792,6 +2804,7 @@ _processing audio..._`;
 break
 
 //==================================================//
+
 case 'mediafire': {
   if (!text) return m.reply('provide a mediafire link');
   
@@ -2864,6 +2877,7 @@ case 'unban': {
 }
 break
 //==================================================//
+
 case "tohd":
 case "hd":
 case "remini": {
