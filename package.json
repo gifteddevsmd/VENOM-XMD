@@ -13,7 +13,7 @@
     "@adiwajshing/keyed-db": "^0.2.4",
     "@hapi/boom": "^10.0.0",
                 "@whiskeysockets/baileys": "github:skyzopedia/Baileys",
-    "awesome-phonenumber": "^4.4.0",
+    "awesome-phonenumber": "^2.64.0",
     "axios": "^1.6.8",
     "api-dylux": "^1.8.5",
     "btch-downloader": "^4.0.15",
