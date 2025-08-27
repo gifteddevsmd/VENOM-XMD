@@ -37,12 +37,12 @@
     },
     "PACK_NAME": {
       "description": "type your sticker pack name here",
-      "value": "Trashcore pack",
+      "value": "dave pack",
       "required": false
     },
     "AUTHOR": {
       "description": "type your author sticker name here",
-      "value": "Trashcore",
+      "value": "dave",
       "required": false
     },
     "SESSION_ID": {
