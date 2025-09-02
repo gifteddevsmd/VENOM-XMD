@@ -91,7 +91,7 @@ const Menu = `
 ╰⟢
 ╭──• ❰ *Bug & War* ❱
 ║➤ ${global.xprefix}dave 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
-║➤ ${global.xprefix}pmbug 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
+║➤ ${global.xprefix}dave-group 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
 ║➤ ${global.xprefix}delaybug 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
 ║➤ ${global.xprefix}docubug 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
 ║➤ ${global.xprefix}unlimitedbug 𝙋𝙍𝙀𝙈𝙄𝙐𝙈
