@@ -6,6 +6,7 @@ if (fs.existsSync('.env')) require('dotenv').config({ path: __dirname+'/.env' })
 global.SESSION_ID = process.env.SESSION_ID || '.' 
 global.botname      = process.env.BOT_NAME || 'VENOM-XMD'
 global.ownername    = 'GIFTED DAVE'
+global.ownername = process.env.OWNER_NAME ||'dave'
 global.error = ["6666",]
 global.owner = ["254104260236",]
 global.creator      = process.env.OWNER_NUMBER ? `${process.env.OWNER_NUMBER}@s.whatsapp.net` : '254104260236@s.whatsapp.net'
@@ -41,16 +42,17 @@ global.antidelete = process.env.ANTI_DELETE || true
 
 // ==================== MESSAGES ==================== //
 global.mess = {
-    success: '✅ Done.',
-    admin: '🚨 Admin only.',
-    premium: '🆘must be a premium user.',
-    botAdmin: '🤖 Make me admin first.',
-    owner: '👑 Owner only.',
-    OnlyGrup: '👥 Group only.',
-    private: '📩 Private chat only.',
-    wait: '⏳ Processing...',
-    error: '⚠️ Error occurred.',
+  developer: "This feature is for developers only!!",
+  owner: " feature is for owners only!",
+  group: "This feature is for group chats only!!",
+  private: "This feature is for private chats only!",
+  admin: "This feature is for admins only!!",
+  botadmin: "This feature is for bot admins only!!",
+  wait: "Please wait, loading...",
+  error: "An error occurred!",
+  done: "Process completed!"
 }
+
 
 // ==================== THUMBNAIL ==================== //
 global.thumb = "https://files.catbox.moe/4ryp6k.jpg"
