@@ -1,13 +1,13 @@
 <p align="center">
-  <img src="https://files.catbox.moe/eh7hlm.jpg" alt="VENOM-XMD" width="500"/>
+  <img src="https://files.catbox.moe/u1hquf.jpg" alt="VENOM-XMD" width="300"/>
 </p>
 
 <p align="center">
-  <a href="#"><img title="VENOM-XMD" src="https://img.shields.io/badge/VENOM-XMD-green?colorA=%23ff0000&colorB=%23017e40&style=for-the-badge"></a>
+  <a href="#"><img title="VENOM-XMD" src="https://img.shields.io/badge/VENOM--XMD-green?colorA=%23ff0000&colorB=%23017e40&style=for-the-badge"></a>
 </p>
 
 <p align="center">
-  <a href="https://github.com/giftdee"><img title="Author" src="https://img.shields.io/badge/Author-VENOM-XMD-red.svg?style=for-the-badge&logo=github"></a>
+  <a href="https://github.com/giftdee"><img title="Author" src="https://img.shields.io/badge/Author-Developer--Dave-red.svg?style=for-the-badge&logo=github"></a>
 </p>
 
 ---
@@ -24,7 +24,7 @@
      </a>
    </p>
 
-3. **Other Deployment Platforms**  
+3. **Deployment Platforms**  
    <p align="center">
      <a href="https://bot-hosting.net/?aff=1370480585960587298">
        <img src="https://img.shields.io/badge/Premium--Hosting-blue?style=for-the-badge" alt="Premium Hosting">
@@ -39,14 +39,6 @@
 
 ---
 
-## Features
-
-- GitHub verification before deployment  
-- Multi-device WhatsApp bot  
-- QR code / Pair code session setup  
-- On heroku start the worker after deployment 
-
----
 
 ## Contact / Support
 
