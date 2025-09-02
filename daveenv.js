@@ -56,7 +56,7 @@ global.mess = {
 global.thumb = "https://files.catbox.moe/4ryp6k.jpg"
 
 // ==================== AUTO FEATURES / TOGGLES ==================== //
-global.botversion = "1.0.0"
+global.botversion = "1.1.0"
 global.typebot = "Plugin"
 global.session = "davesession"
 global.connect = true
