@@ -398,6 +398,7 @@ if (m.isGroup) {
         reaction(m.chat, "❌")
     }
  }
+
 /////////////test bot no prefix///////////////
 if ((budy.match) && ["bot"].includes(budy) && !isCmd) {
 reply(`🔥 VENOM-XMD is always online ⚡`)
