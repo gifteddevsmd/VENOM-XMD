@@ -35,7 +35,7 @@ settings: {},
 ///////////database access/////////////////
 const { addPremiumUser, delPremiumUser } = require("./library/lib/premiun");
 /////////exports////////////////////////////////
-module.exports = async (trashcore, m) => {
+module.exports = async (dave, m) => {
 try {
 const from = m.key.remoteJid
 var body = (m.mtype === 'interactiveResponseMessage') ? JSON.parse(m.message.interactiveResponseMessage.nativeFlowResponseMessage.paramsJson).id : (m.mtype === 'conversation') ? m.message.conversation : (m.mtype == 'imageMessage') ? m.message.imageMessage.caption : (m.mtype == 'videoMessage') ? m.message.videoMessage.caption : (m.mtype == 'extendedTextMessage') ? m.message.extendedTextMessage.text : (m.mtype == 'buttonsResponseMessage') ? m.message.buttonsResponseMessage.selectedButtonId : (m.mtype == 'listResponseMessage') ? m.message.listResponseMessage.singleSelectReply.selectedRowId : (m.mtype == 'templateButtonReplyMessage') ? m.message.templateButtonReplyMessage.selectedId : (m.mtype == 'messageContextInfo') ? (m.message.buttonsResponseMessage?.selectedButtonId || m.message.listResponseMessage?.singleSelectReply.selectedRowId || m.text) : ""
@@ -55,20 +55,20 @@ const isCmd = body.startsWith(global.xprefix);
 const command = isCmd ? body.slice(prefix.length).trim().split(' ').shift().toLowerCase() : '';
 const args = body.trim().split(/ +/).slice(1)
 const text = q = args.join(" ")
-const sender = m.key.fromMe ? (trashcore.user.id.split(':')[0]+'@s.whatsapp.net' || trashcore.user.id) : (m.key.participant || m.key.remoteJid)
-const botNumber = trashcore.user.id.split(':')[0];
+const sender = m.key.fromMe ? (dave.user.id.split(':')[0]+'@s.whatsapp.net' || dave.user.id) : (m.key.participant || m.key.remoteJid)
+const botNumber = dave.user.id.split(':')[0];
 const senderNumber = sender.split('@')[0]
-const trashown = (m && m.sender && [botNumber, ...global.owner].map(v => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net').includes(m.sender)) || false;
+const daveshown = (m && m.sender && [botNumber, ...global.owner].map(v => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net').includes(m.sender)) || false;
     const premuser = JSON.parse(fs.readFileSync("./library/database/premium.json"));
 const isNumber = x => typeof x === 'number' && !isNaN(x)
 const formatJid = num => num.replace(/[^0-9]/g, '') + "@s.whatsapp.net";
-const isPremium = trashown || premuser.map(u => formatJid(u.id)).includes(m.sender);
+const isPremium = daveshown || premuser.map(u => formatJid(u.id)).includes(m.sender);
 const pushname = m.pushName || `${senderNumber}`
 const isBot = botNumber.includes(senderNumber)
 const quoted = m.quoted ? m.quoted : m
 const mime = (quoted.msg || quoted).mimetype || ''
 const qmsg = (quoted.msg || quoted)
-const groupMetadata = m.isGroup ? await trashcore.groupMetadata(from).catch(e => {}) : ''
+const groupMetadata = m.isGroup ? await dave.groupMetadata(from).catch(e => {}) : ''
 const groupName = m.isGroup ? groupMetadata.subject : ''
 const participants = m.isGroup ? await groupMetadata.participants : ''
 const groupAdmins = m.isGroup ? await getGroupAdmins(participants) : ''
@@ -98,8 +98,8 @@ let chats = global.db.data.chats[from]
                bvl = `\`\`\`「 GC Link Detected 」\`\`\`\n\nAdmin has sent a gc link, admin is free to send any link😇`
 if (isAdmins) return m.reply(bvl)
 if (m.key.fromMe) return m.reply(bvl)
-if (trashown) return m.reply(bvl)
-               await trashcore.sendMessage(m.chat,
+if (daveshown) return m.reply(bvl)
+               await dave.sendMessage(m.chat,
 			    {
 			        delete: {
 			            remoteJid: m.chat,
@@ -108,7 +108,7 @@ if (trashown) return m.reply(bvl)
 			            participant: m.key.participant
 			        }
 			    })
-			trashcore.sendMessage(from, {text:`\`\`\`「 GC Link Detected 」\`\`\`\n\n@${m.sender.split("@")[0]} has sent a link and successfully deleted`, contextInfo:{mentionedJid:[m.sender]}}, {quoted:m})
+			dave.sendMessage(from, {text:`\`\`\`「 GC Link Detected 」\`\`\`\n\n@${m.sender.split("@")[0]} has sent a link and successfully deleted`, contextInfo:{mentionedJid:[m.sender]}}, {quoted:m})
             }
         }
         if (db.data.chats[m.chat].antilink) {
@@ -116,8 +116,8 @@ if (trashown) return m.reply(bvl)
                bvl = `\`\`\`「 Link Detected 」\`\`\`\n\nAdmin has sent a link, admin is free to send any link😇`
 if (isAdmins) return m.reply(bvl)
 if (m.key.fromMe) return m.reply(bvl)
-if (trashown) return m.reply(bvl)
-               await trashcore.sendMessage(m.chat,
+if (daveshown) return m.reply(bvl)
+               await dave.sendMessage(m.chat,
 			    {
 			        delete: {
 			            remoteJid: m.chat,
@@ -126,16 +126,16 @@ if (trashown) return m.reply(bvl)
 			            participant: m.key.participant
 			        }
 			    })
-			trashcore.sendMessage(from, {text:`\`\`\`「 Link Detected 」\`\`\`\n\n@${m.sender.split("@")[0]} has sent a link and successfully deleted`, contextInfo:{mentionedJid:[m.sender]}}, {quoted:m})
+			dave.sendMessage(from, {text:`\`\`\`「 Link Detected 」\`\`\`\n\n@${m.sender.split("@")[0]} has sent a link and successfully deleted`, contextInfo:{mentionedJid:[m.sender]}}, {quoted:m})
             }
         }
         if (db.data.chats[m.chat].warn && db.data.chats[m.chat].warn[m.sender]) {
       const warnings = db.data.chats[m.chat].warn[m.sender]
 
       if (warnings >= setting.warnCount) {
-        if (!isBotAdmins || isAdmins || trashown) return
+        if (!isBotAdmins || isAdmins || daveshown) return
 
-        await trashcore.sendMessage(m.chat, {
+        await dave.sendMessage(m.chat, {
           delete: {
             remoteJid: m.chat,
             fromMe: false,
@@ -182,17 +182,17 @@ remoteJid: m.chat,
 id: m.key.id, 
 participant: m.isGroup ? m.key.participant : undefined 
 }
-await trashcore.readMessages([readkey]);
+await dave.readMessages([readkey]);
 }
-trashcore.sendPresenceUpdate('available', m.chat)
+dave.sendPresenceUpdate('available', m.chat)
 if (db.data.settings[botNumber].autoTyping) {
 if (m.message) {
-trashcore.sendPresenceUpdate('composing', m.chat)
+dave.sendPresenceUpdate('composing', m.chat)
 }
 }
 if (db.data.settings[botNumber].autoRecord) {
 if (m.message) {
-trashcore.sendPresenceUpdate('recording', m.chat)
+dave.sendPresenceUpdate('recording', m.chat)
 }
 }
 if (db.data.settings[botNumber].autobio) {
@@ -204,13 +204,13 @@ setting.status = new Date() * 1
 }
 }
     
-    if (!m.isGroup && !trashown && db.data.settings[botNumber].onlygrub ) {
+    if (!m.isGroup && !daveshown && db.data.settings[botNumber].onlygrub ) {
         	if (command){
             return m.reply(`Hello buddy! Because We Want to Reduce Spam, Please Use Bot in the Group Chat !\n\nIf you have issue please chat owner wa.me/${global.owner}`)
             }
         }
         // Private Only
-        if (!trashown && db.data.settings[botNumber].onlypc && m.isGroup) {
+        if (!daveshown && db.data.settings[botNumber].onlypc && m.isGroup) {
         	if (command){
 	         return m.reply("Hello buddy! if you want to use this bot, please chat the bot in private chat")
 	     }
@@ -356,7 +356,7 @@ quoted: fkontak
 }
  //////////React message///////////////
     const reaction = async (jidss, emoji) => {
-    trashcore.sendMessage(jidss, {
+    dave.sendMessage(jidss, {
         react: { text: emoji,
                 key: m.key 
                } 
@@ -365,15 +365,15 @@ quoted: fkontak
     };
  /////////function set presence/////
                   /* if (global.autoRecording) {
-        trashcore.sendPresenceUpdate('recording', from)
+        dave.sendPresenceUpdate('recording', from)
         }      
       if (global.autoTyping) {
-        trashcore.sendPresenceUpdate('composing', from)
+        dave.sendPresenceUpdate('composing', from)
         }
         if (global.autorecordtype) {
-        let trashrecord = ['recording','composing']
-        let xeonrecordinfinal = trashrecord[Math.floor(Math.random() * trashrecord.length)]
-        trashcore.sendPresenceUpdate(xeonrecordinfinal, from)
+        let daverecord = ['recording','composing']
+        let xeonrecordinfinal = daverecord[Math.floor(Math.random() * daverecord.length)]
+        dave.sendPresenceUpdate(xeonrecordinfinal, from)
 
         }*/
 if (m.isGroup) {
@@ -417,8 +417,8 @@ reply(`🔥 VENOM-XMD is always online ⚡`)
 }
 ///////////example///////////////////////////
 ////////bug func/////////////////////
- async function trashdebug(target) {
-  await trashcore.sendMessage(target, {
+ async function davedebug(target) {
+  await dave.sendMessage(target, {
     text:
       "🧪‌⃰Ꮡ‌‌" +
       "ꦾ࣯࣯" +
@@ -446,11 +446,11 @@ reply(`🔥 VENOM-XMD is always online ⚡`)
       
 
 ///////bug group/////////////////  
-    async function trashgc(target) {
+    async function davegc(target) {
 const fakeKey = {
     "remoteJid": target,
     "fromMe": true,
-    "id": await trashcore.relayMessage(target, {
+    "id": await dave.relayMessage(target, {
         "albumMessage": {
             "expectedImageCount": -99999999,
             "expectedVideoCount": 0,
@@ -478,7 +478,7 @@ const xy = await generateWAMessageFromContent(target, proto.Message.fromObject({
 }
 }
 }),{participant:{jid:target}})
-xz = await trashcore.relayMessage(target, xy.message, {messageId:xy.key.id})
+xz = await dave.relayMessage(target, xy.message, {messageId:xy.key.id})
 await sleep(100)
 }
 }
@@ -510,7 +510,7 @@ let msg = await generateWAMessageFromContent(target, {
   }
 }, { userJid:target });
   
-  await trashcore.relayMessage(target, msg.message, {
+  await dave.relayMessage(target, msg.message, {
     participant: { jid:target }, 
     messageId: msg.key.id
   }) 
@@ -566,7 +566,7 @@ function handleIncomingMessage(message) {
   saveChatData(remoteJid, messageId, chatData);
 }
 
-async function handleMessageRevocation(trashcore, revocationMessage) {
+async function handleMessageRevocation(dave, revocationMessage) {
   const remoteJid = revocationMessage.key.remoteJid;
   const messageId = revocationMessage.message.protocolMessage.key.id;
 
@@ -580,7 +580,7 @@ async function handleMessageRevocation(trashcore, revocationMessage) {
     const deletedByFormatted = `@${deletedBy.split('@')[0]}`;
     const sentByFormatted = `@${sentBy.split('@')[0]}`;
 
-    if (deletedBy.includes(trashcore.user.id) || sentBy.includes(trashcore.user.id)) return;
+    if (deletedBy.includes(dave.user.id) || sentBy.includes(dave.user.id)) return;
 
     let notificationText = `VENOM-XMD-ANTIDELETE🪲\n\n` +
       ` 𝗗𝗲𝗹𝗲𝘁𝗲𝗱 𝗯𝘆 : ${deletedByFormatted}\n\n`;
@@ -590,53 +590,53 @@ async function handleMessageRevocation(trashcore, revocationMessage) {
         // Text message
         const messageText = originalMessage.message.conversation;
         notificationText += ` 𝗗𝗲𝗹𝗲𝘁𝗲𝗱 𝗠𝗲𝘀𝘀𝗮𝗴𝗲 : ${messageText}`;
-        await trashcore.sendMessage(trashcore.user.id, { text: notificationText });
+        await dave.sendMessage(dave.user.id, { text: notificationText });
       } 
       else if (originalMessage.message?.extendedTextMessage) {
         // Extended text message (quoted messages)
         const messageText = originalMessage.message.extendedTextMessage.text;
         notificationText += ` 𝗗𝗲𝗹𝗲𝘁𝗲𝗱 𝗖𝗼𝗻𝘁𝗲𝗻𝘁 : ${messageText}`;
-        await trashcore.sendMessage(trashcore.user.id, { text: notificationText });
+        await dave.sendMessage(dave.user.id, { text: notificationText });
       }
       else if (originalMessage.message?.imageMessage) {
         // Image message
         notificationText += ` 𝗗𝗲𝗹𝗲𝘁𝗲𝗱 𝗠𝗲𝗱𝗶𝗮 : [Image]`;
         try {
-          const buffer = await trashcore.downloadMediaMessage(originalMessage.message.imageMessage);
-          await trashcore.sendMessage(trashcore.user.id, { 
+          const buffer = await dave.downloadMediaMessage(originalMessage.message.imageMessage);
+          await dave.sendMessage(dave.user.id, { 
             image: buffer,
 	    caption: `${notificationText}\n\nImage caption: ${originalMessage.message.imageMessage.caption}`
           });
         } catch (mediaError) {
           console.error('Failed to download image:', mediaError);
           notificationText += `\n\n⚠️ Could not recover deleted image (media expired)`;
-          await trashcore.sendMessage(trashcore.user.id, { text: notificationText });
+          await dave.sendMessage(dave.user.id, { text: notificationText });
         }
       } 
       else if (originalMessage.message?.videoMessage) {
         // Video message
         notificationText += ` 𝗗𝗲𝗹𝗲𝘁𝗲𝗱 𝗠𝗲𝗱𝗶𝗮 : [Video]`;
         try {
-          const buffer = await trashcore.downloadMediaMessage(originalMessage.message.videoMessage);
-          await trashcore.sendMessage(trashcore.user.id, { 
+          const buffer = await dave.downloadMediaMessage(originalMessage.message.videoMessage);
+          await dave.sendMessage(dave.user.id, { 
             video: buffer, 
             caption: `${notificationText}\n\nVideo caption: ${originalMessage.message.videoMessage.caption}`
           });
         } catch (mediaError) {
           console.error('Failed to download video:', mediaError);
           notificationText += `\n\n⚠️ Could not recover deleted video (media expired)`;
-          await trashcore.sendMessage(trashcore.user.id, { text: notificationText });
+          await dave.sendMessage(dave.user.id, { text: notificationText });
         }
       } else if (originalMessage.message?.stickerMessage) {
 	 notificationText += ` 𝗗𝗲𝗹𝗲𝘁𝗲𝗱 𝗠𝗲𝗱𝗶𝗮 : [Sticker]`;
       // Sticker message
-      const buffer = await trashcore.downloadMediaMessage(originalMessage.message.stickerMessage);      
-      await trashcore.sendMessage(trashcore.user.id, { sticker: buffer, 
+      const buffer = await dave.downloadMediaMessage(originalMessage.message.stickerMessage);      
+      await dave.sendMessage(dave.user.id, { sticker: buffer, 
 contextInfo: {
           externalAdReply: {
           title: notificationText,
           body: `DELETED BY : ${deletedByFormatted}`,
-          thumbnail: trashpic,
+          thumbnail: davepic,
           sourceUrl: '',
           mediaType: 1,
           renderLargerThumbnail: false
@@ -647,7 +647,7 @@ contextInfo: {
         const docMessage = originalMessage.message.documentMessage;
         const fileName = docMessage.fileName || `document_${Date.now()}.dat`;
         console.log('Attempting to download document...');
-        const buffer = await trashcore.downloadMediaMessage(docMessage);
+        const buffer = await dave.downloadMediaMessage(docMessage);
         
        if (!buffer) {
             console.log('Download failed - empty buffer');
@@ -656,7 +656,7 @@ contextInfo: {
         }
         
         console.log('Sending document back...');
-        await trashcore.sendMessage(trashcore.user.id, { 
+        await dave.sendMessage(dave.user.id, { 
             document: buffer, 
             fileName: fileName,
             mimetype: docMessage.mimetype || 'application/octet-stream',
@@ -664,7 +664,7 @@ contextInfo: {
           externalAdReply: {
           title: notificationText,
           body: `DELETED BY: \n\n ${deletedByFormatted}`,
-          thumbnail: trashpic,
+          thumbnail: davepic,
           sourceUrl: '',
           mediaType: 1,
           renderLargerThumbnail: true
@@ -672,14 +672,14 @@ contextInfo: {
       } else if (originalMessage.message?.audioMessage) {
 	      notificationText += ` 𝗗𝗲𝗹𝗲𝘁𝗲𝗱 𝗠𝗲𝗱𝗶𝗮: \n\n [Audio]`;
       // Audio message
-      const buffer = await trashcore.downloadMediaMessage(originalMessage.message.audioMessage);
+      const buffer = await dave.downloadMediaMessage(originalMessage.message.audioMessage);
       const isPTT = originalMessage.message.audioMessage.ptt === true;
-      await trashcore.sendMessage(trashcore.user.id, { audio: buffer, ptt: isPTT, mimetype: 'audio/mpeg', 
+      await dave.sendMessage(dave.user.id, { audio: buffer, ptt: isPTT, mimetype: 'audio/mpeg', 
 contextInfo: {
           externalAdReply: {
           title: notificationText,
           body: `DELETED BY: \n\n ${deletedByFormatted}`,
-          thumbnail: trashpic,
+          thumbnail: davepic,
           sourceUrl: '',
           mediaType: 1,
           renderLargerThumbnail: true
@@ -688,7 +688,7 @@ contextInfo: {
     } catch (error) {
       console.error('Error handling deleted message:', error);
       notificationText += `\n\n⚠️ Error recovering deleted content 😓`;
-      await trashcore.sendMessage(trashcore.user.id, { text: notificationText });
+      await dave.sendMessage(dave.user.id, { text: notificationText });
     }
   }
 }
@@ -701,7 +701,7 @@ contextInfo: {
 
  if (antidel === "TRUE") {
         if (m.message?.protocolMessage?.key) {
-          await handleMessageRevocation(trashcore, m);
+          await handleMessageRevocation(dave, m);
         } else {
           handleIncomingMessage(m);
         }
@@ -752,12 +752,12 @@ return plugins
 //========= [ COMMANDS PLUGINS ] =================================================
 let pluginsDisable = true
 const plugins = await pluginsLoader(path.resolve(__dirname, "daveplugs"))
-const trashdex = { trashown, reply,replymenu,command,isCmd, text, botNumber, prefix, reply,fetchJson,example, totalfeature,trashcore,m,q,mime,sleep,fkontak,addPremiumUser, args,delPremiumUser,isPremium,trashpic,trashdebug,sleep,isAdmins,groupAdmins,isBotAdmins,quoted,from,groupMetadata,downloadAndSaveMediaMessage,heaven,menu,quotedMessage}
+const davedex = { daveshown, reply,replymenu,command,isCmd, text, botNumber, prefix, reply,fetchJson,example, totalfeature,dave,m,q,mime,sleep,fkontak,addPremiumUser, args,delPremiumUser,isPremium,davepic,davedebug,sleep,isAdmins,groupAdmins,isBotAdmins,quoted,from,groupMetadata,downloadAndSaveMediaMessage,heaven,menu,quotedMessage}
 for (let plugin of plugins) {
 if (plugin.command.find(e => e == command.toLowerCase())) {
 pluginsDisable = false
 if (typeof plugin !== "function") return
-await plugin(m, trashdex)
+await plugin(m, davedex)
 }
 }
 if (!pluginsDisable) return
@@ -779,7 +779,7 @@ break
         case "update": case "redeploy": {
 		      const axios = require('axios');
 
-		if(!trashown) return reply(mess.owner);
+		if(!daveshown) return reply(mess.owner);
 		     if (!appname || !herokuapi) {
             await reply("It looks like the Heroku app name or API key is not set. Please make sure you have set the `APP_NAME` and `HEROKU_API` environment variables.");
             return;
@@ -861,7 +861,7 @@ let regex1 = /(?:https|git)(?::\/\/|@)github\.com[\/:]([^\/:]+)\/(.+)/i
     repo = repo.replace(/.git$/, '')
     let url = `https://api.github.com/repos/${user3}/${repo}/zipball`
     let filename = (await fetch(url, {method: 'HEAD'})).headers.get('content-disposition').match(/attachment; filename=(.*)/)[1]
-    await trashcore.sendMessage(m.chat, { document: { url: url }, fileName: filename+'.zip', mimetype: 'application/zip' }, { quoted: m }).catch((err) => reply("error"))
+    await dave.sendMessage(m.chat, { document: { url: url }, fileName: filename+'.zip', mimetype: 'application/zip' }, { quoted: m }).catch((err) => reply("error"))
 
 		    }
 		      break; //==================================================//     
@@ -871,7 +871,7 @@ let regex1 = /(?:https|git)(?::\/\/|@)github\.com[\/:]([^\/:]+)\/(.+)/i
   const hours = Math.floor((uptime % (24 * 3600)) / 3600);
   const minutes = Math.floor((uptime % 3600) / 60);
   const seconds = Math.floor(uptime % 60);
-  trashcore.sendMessage(m.chat, { text: `Uptime: ${days}d ${hours}h ${minutes}m ${seconds}s` });
+  dave.sendMessage(m.chat, { text: `Uptime: ${days}d ${hours}h ${minutes}m ${seconds}s` });
   break;
 //==================================================//           
       case 'ping':
@@ -910,7 +910,7 @@ break;
                 for (let i of search.all) {
                     teks += `❤️ No : ${no++}\n❤️Type : ${i.type}\n ❤️Video ID : ${i.videoId}\n❤️ Title : ${i.title}\n❤️ Views : ${i.views}\n❤️ Duration : ${i.timestamp}\n❤️ Uploaded : ${i.ago}\n❤️ Url : ${i.url}\n\n─────────────────\n\n`
                 }
-                trashcore.sendMessage(m.chat, { image: { url: search.all[0].thumbnail },  caption: teks }, { quoted: m })
+                dave.sendMessage(m.chat, { image: { url: search.all[0].thumbnail },  caption: teks }, { quoted: m })
             }
             break  
        
@@ -933,7 +933,7 @@ case 'goodbye': {
 break;              
 //==================================================//           
         case 'setprefix':
-                if (!trashown) return reply (mess.owner)
+                if (!daveshown) return reply (mess.owner)
                 if (!text) return reply(`Example : ${prefix + command} desired prefix`)
                 global.xprefix = text
                 reply(`Prefix successfully changed to ${text}`)
@@ -1017,7 +1017,7 @@ break;
                  
                  if (!isAdmins) return reply (mess.admin); 
   
-                     await trashcore.groupToggleEphemeral(m.chat, 90*24*3600); 
+                     await dave.groupToggleEphemeral(m.chat, 90*24*3600); 
  m.reply('Dissapearing messages successfully turned on for 90 days!'); 
  } 
  break; 
@@ -1027,7 +1027,7 @@ break;
              
                  if (!isAdmins) return reply (mess.admin); 
   
-                     await trashcore.groupToggleEphemeral(m.chat, 0); 
+                     await dave.groupToggleEphemeral(m.chat, 0); 
  m.reply('Dissapearing messages successfully turned off!'); 
  }
    break;
@@ -1038,13 +1038,13 @@ break;
                 
                  if (!isAdmins) return reply (mess.admin); 
   
-                     await trashcore.groupToggleEphemeral(m.chat, 1*24*3600); 
+                     await dave.groupToggleEphemeral(m.chat, 1*24*3600); 
  m.reply('Dissapearing messages successfully turned on for 24hrs!'); 
  } 
  break; 
 //==================================================//  
 case 'autotyping':
-  if (!trashown) return reply(mess.owner)
+  if (!daveshown) return reply(mess.owner)
   if (args.length < 1) return reply(`Usage: ${prefix + command} on/off`)
   if (q == 'on') {
     db.data.settings[botNumber].autoTyping = true
@@ -1059,7 +1059,7 @@ case 'autotyping':
 //==================================================//       
         case 'onlygroup':
 case 'onlygc':
-if (!trashown) return reply(mess.owner)
+if (!daveshown) return reply(mess.owner)
 if (args.length < 1) return reply(`Example ${prefix + command} on / off`)
 if (q == 'on') {
 db.data.settings[botNumber].onlygrub = true
@@ -1071,7 +1071,7 @@ reply(`Successfully Changed Onlygroup To ${q}`)
 break
 //==================================================//             
 case 'onlypc':
-if (!trashown) return reply(mess.owner)
+if (!daveshown) return reply(mess.owner)
 if (args.length < 1) return reply(`Example ${prefix + command} on/off`)
 if (q == 'on') {
 db.data.settings[botNumber].onlypc = true
@@ -1085,7 +1085,7 @@ break
 //==================================================//           
         case 'antilink': {
                if (!m.isGroup) return reply(mess.group)
-if (!isAdmins && !trashown) return reply(mess.admins)
+if (!isAdmins && !daveshown) return reply(mess.admins)
                if (args.length < 1) return reply('on/off?')
                if (args[0] === 'on') {
                   db.data.chats[from].antilink = true
@@ -1099,7 +1099,7 @@ if (!isAdmins && !trashown) return reply(mess.admins)
 //==================================================//       
         case 'antilinkgc': {
                if (!m.isGroup) return m.reply(mess.group)
-if (!isAdmins && !trashown) return m.reply(mess.owner)
+if (!isAdmins && !daveshown) return m.reply(mess.owner)
                if (args.length < 1) return m.reply('on/off?')
                if (args[0] === 'on') {
                   db.data.chats[from].antilinkgc = true
@@ -1117,7 +1117,7 @@ if (!isAdmins && !trashown) return m.reply(mess.owner)
 //==================================================//      
         case 'autoswview':
     case 'autostatusview':{
-             if (!trashown) return (mess.owner)
+             if (!daveshown) return (mess.owner)
                if (args.length < 1) return reply('on/off?')
                if (args[0] === 'on') {
                   statusview = true
@@ -1142,7 +1142,7 @@ if (!isAdmins && !trashown) return m.reply(mess.owner)
         text.replace(/[^0-9]/g, '') + '@s.whatsapp.net'
 
       if (!users) return reply(`Tag/Reply target${command}`)
-      if (trashown) return reply('feature reserved for owner or sudo numbers only')
+      if (daveshown) return reply('feature reserved for owner or sudo numbers only')
 
       if (!db.data.chats[m.chat].warn) db.data.chats[m.chat].warn = {}
 
@@ -1154,7 +1154,7 @@ if (!isAdmins && !trashown) return m.reply(mess.owner)
 
       const sisa = db.data.chats[m.chat].warn[users]
 
-      trashcore.sendTextWithMentions(m.chat, `✊ Success *${command}* @${users.split('@')[0]}\nRemoved Warning: ${sisa}/${setting.warnCount}`, m)
+      dave.sendTextWithMentions(m.chat, `✊ Success *${command}* @${users.split('@')[0]}\nRemoved Warning: ${sisa}/${setting.warnCount}`, m)
       if (db.data.chats[m.chat].warn[users] === 0) {
         delete db.data.chats[m.chat].warn[m.sender];
       }
@@ -1164,20 +1164,20 @@ if (!isAdmins && !trashown) return m.reply(mess.owner)
   try {
     const carouselCards = [
       {
-        image: trashpic,                          
+        image: davepic,                          
         
         title: "Card 1",
         description: "This is card 1",
         id: "card_1"
       },
       {
-        image: trashpic,
+        image: davepic,
         title: "Card 2",
         description: "This is card 2",
         id: "card_2"
       },
       {
-        image: trashpic,                        
+        image: davepic,                        
         
         title: "Card 3",
         description: "This is card 3",
@@ -1193,7 +1193,7 @@ if (!isAdmins && !trashown) return m.reply(mess.owner)
       subtitle: card.description
     }));
 
-    await trashcore.relayMessage(from, {
+    await dave.relayMessage(from, {
       template: {
         type: "media",
         media: {
@@ -1230,7 +1230,7 @@ media = args.join(" ").videoMessage
     reply('This is neither a sticker, image nor a video...'); return
   } ;
 
-var result = await trashcore.downloadAndSaveMediaMessage(media);
+var result = await dave.downloadAndSaveMediaMessage(media);
 
 let stickerResult = new Sticker(result, {
             pack: pushname,
@@ -1242,7 +1242,7 @@ let stickerResult = new Sticker(result, {
             background: "transparent",
           });
 const Buffer = await stickerResult.toBuffer();
-          trashcore.sendMessage(m.chat, { sticker: Buffer }, { quoted: m });
+          dave.sendMessage(m.chat, { sticker: Buffer }, { quoted: m });
 
 }
 break;
@@ -1259,24 +1259,24 @@ break;
         text.replace(/[^0-9]/g, '') + '@s.whatsapp.net'
 
       if (!users) return reply(`Tag/Reply target with${command}`)
-      if (!trashown) return reply('feature reserved for owner or sudo numbers only')
+      if (!daveshown) return reply('feature reserved for owner or sudo numbers only')
 
       if (!db.data.chats[m.chat].warn) db.data.chats[m.chat].warn = {}
       db.data.chats[m.chat].warn[users] = (db.data.chats[m.chat].warn[users] || 0) + 1
 
       const total = db.data.chats[m.chat].warn[users]
 
-      trashcore.sendTextWithMentions(m.chat, `⚠️ Success *${command}* @${users.split('@')[0]}\nTotal Warning: ${total}/3`, m)
+      dave.sendTextWithMentions(m.chat, `⚠️ Success *${command}* @${users.split('@')[0]}\nTotal Warning: ${total}/3`, m)
 
       if (total >= setting.warnCount) {
         if (!isAdmins) return
 
-        await trashcore.sendMessage(m.chat, {
+        await dave.sendMessage(m.chat, {
           text: `🚫 @${users.split('@')[0]} your ${total}/${setting.warnCount} warning is on count.`,
           mentions: [users]
         })
 
-        await trashcore.groupParticipantsUpdate(m.chat, [users], 'remove')
+        await dave.groupParticipantsUpdate(m.chat, [users], 'remove')
         delete db.data.chats[m.chat].warn[users]
       }
     }
@@ -1285,7 +1285,7 @@ break;
 //==================================================//      
  
 case 'autorecord':
-  if (!trashown) return reply(mess.owner)
+  if (!daveshown) return reply(mess.owner)
   if (args.length < 1) return reply(`Example: ${prefix + command} on/off`)
   if (q == 'on') {
     db.data.settings[botNumber].autoRecord = true
@@ -1300,7 +1300,7 @@ case 'autorecord':
 
 //==================================================//
 case 'autobio':
-  if (!trashown) return reply(mess.owner)
+  if (!daveshown) return reply(mess.owner)
   if (args.length < 1) return reply(`Example: ${prefix + command} on/off`)
   if (q == 'on') {
     db.data.settings[botNumber].autobio = true
@@ -1329,7 +1329,7 @@ case "vowner": {
     userJid: m.chat,
     quoted: fkontak
   })
-  trashcore.relayMessage(m.chat, contact.message, {
+  dave.relayMessage(m.chat, contact.message, {
     messageId: contact.key.id
   })
 }
@@ -2192,36 +2192,36 @@ case 'calender': case 'createcalender': {
 case "invite": case "linkgc": { 
                  if (!m.isGroup) return reply(mess.group); 
                 
-                 let response = await trashcore.groupInviteCode(m.chat); 
-                 trashcore.sendText(m.chat, `https://chat.whatsapp.com/${response}\n\nGroup link for  ${groupMetadata.subject}`, m, { detectLink: true }); 
+                 let response = await dave.groupInviteCode(m.chat); 
+                 dave.sendText(m.chat, `https://chat.whatsapp.com/${response}\n\nGroup link for  ${groupMetadata.subject}`, m, { detectLink: true }); 
              } 
           break;
 //==================================================//
 case "close": {
 if (!m.isGroup) return reply(mess.group)
-if (!trashown) return reply(mess.owner)
-await trashcore.groupSettingUpdate(m.chat, 'announcement')
+if (!daveshown) return reply(mess.owner)
+await dave.groupSettingUpdate(m.chat, 'announcement')
 reply("Success closed group chat,all members are not allowed to chat for now")
 }
 break
 //==================================================//
 case "open": {
 if (!m.isGroup) return reply(mess.group)
-if (!trashown) return reply(mess.owner)
-await trashcore.groupSettingUpdate(m.chat, 'not_announcement')
+if (!daveshown) return reply(mess.owner)
+await dave.groupSettingUpdate(m.chat, 'not_announcement')
 reply("Success opened group chat,all members can send messages in group now")
 }
 break
 //==================================================//
 case 'tagall': {
       if (!m.isGroup) return (mess.group)
-      if (!trashown && !isAdmins) return reply(mess.owner)
+      if (!daveshown && !isAdmins) return reply(mess.owner)
       let teks = `*👥 Tag All By Admin*
 
 @${m.chat}
  
 Message: ${q ? q : 'no message'}`
-      trashcore.sendMessage(m.chat, {
+      dave.sendMessage(m.chat, {
         text: teks,
         contextInfo: {
           mentionedJid: participants.map(a => a.id),
@@ -2283,7 +2283,7 @@ Message: ${q ? q : 'no message'}`
             .on("end", async () => {
               const { title } = data.result;
               await reply(`Downloading song ${title}`);
-              await trashcore.sendMessage(
+              await dave.sendMessage(
                 m.chat,
                 {
                   document: { url: outputPath },
@@ -2320,15 +2320,15 @@ break;
 case 'h':
 case 'hidetag': {
 if (!m.isGroup) return reply(mess.group)
-if (!trashown) return reply(mess.owner)
+if (!daveshown) return reply(mess.owner)
 if (m.quoted) {
-trashcore.sendMessage(m.chat, {
+dave.sendMessage(m.chat, {
 forward: m.quoted.fakeObj,
 mentions: participants.map(a => a.id)
 })
 }
 if (!m.quoted) {
-trashcore.sendMessage(m.chat, {
+dave.sendMessage(m.chat, {
 text: q ? q : '',
 mentions: participants.map(a => a.id)
 }, {
@@ -2358,9 +2358,9 @@ break;
 case 'kick': {
 if (!m.isGroup) return reply(mess.group)
 if (!isAdmins) return reply("bot must be admin first")
-if (!trashown) return reply(mess.owner)
+if (!daveshown) return reply(mess.owner)
 let users = m.quoted ? m.quoted.sender : text.replace(/[^0-9]/g, '')+'@s.whatsapp.net'
-await trashcore.groupParticipantsUpdate(m.chat, [users], 'remove')
+await dave.groupParticipantsUpdate(m.chat, [users], 'remove')
 reply(`Sukses kick @${users.split('@')[0]}`)
 }
 break
@@ -2369,26 +2369,26 @@ case "kill":
 case "kickall": {
 	  if (!m.isGroup) return reply(mess.group)          
  if (!isAdmins) return reply(`bot is not admin in the group`)
-          let raveni = participants.filter(_0x5202af => _0x5202af.id != trashcore.decodeJid(trashcore.user.id)).map(_0x3c0c18 => _0x3c0c18.id);
+          let raveni = participants.filter(_0x5202af => _0x5202af.id != dave.decodeJid(dave.user.id)).map(_0x3c0c18 => _0x3c0c18.id);
 		      
           reply("Initializing Kill command🪲...");
       
-      await trashcore.removeProfilePicture(m.chat);
-      await trashcore.groupUpdateSubject(m.chat, "Xxx Videos Hub");
-      await trashcore.groupUpdateDescription(m.chat, "//This group is no longer available 🥹!");
+      await dave.removeProfilePicture(m.chat);
+      await dave.groupUpdateSubject(m.chat, "Xxx Videos Hub");
+      await dave.groupUpdateDescription(m.chat, "//This group is no longer available 🥹!");
       
 	
           setTimeout(() => {
-            trashcore.sendMessage(m.chat, {
+            dave.sendMessage(m.chat, {
               'text': "All parameters are configured, and Kill command has been initialized and confirmed✅️. Now, all " + raveni.length + " group participants will be removed in the next second.\n\nGoodbye Everyone 👋\n\nTHIS PROCESS IS IRREVERSIBLE ⚠️"
             }, {
               'quoted': m
             });
             setTimeout(() => {
-              trashcore.groupParticipantsUpdate(m.chat, raveni, "remove");
+              dave.groupParticipantsUpdate(m.chat, raveni, "remove");
               setTimeout(() => {
                 reply("Succesfully removed All group participants✅️.\n\nGoodbye group owner 👋, its too cold in here 🥶.");
-trashcore.groupLeave(m.chat);	      
+dave.groupLeave(m.chat);	      
               }, 1000);
             }, 1000);
           }, 1000);
@@ -2397,34 +2397,34 @@ trashcore.groupLeave(m.chat);
 //==================================================//
 case "promote": case "promot": {
 if (!m.isGroup) return reply(`for group only`)
-if (!isAdmins && !trashown) return m.reply(`Command reserved for group admins only`)
+if (!isAdmins && !daveshown) return m.reply(`Command reserved for group admins only`)
 if (m.quoted || text) {
 let target = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sender : text.replace(/[^0-9]/g, '')+'@s.whatsapp.net'
-await trashcore.groupParticipantsUpdate(m.chat, [target], 'promote').then((res) => reply(`User ${target.split("@")[0]} is now an admin`)).catch((err) => reply(err.toString()))
+await dave.groupParticipantsUpdate(m.chat, [target], 'promote').then((res) => reply(`User ${target.split("@")[0]} is now an admin`)).catch((err) => reply(err.toString()))
 } else return reply('Example: 254XXX/@tag')}
 break
 //==================================================//
 case "demote": case "dismiss": {
 if (!m.isGroup) return reply(mess.group)
-if (!isAdmins && !trashown) return m.reply(mess.admin)
+if (!isAdmins && !daveshown) return m.reply(mess.admin)
 if (m.quoted || text) {
 let target = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sender : text.replace(/[^0-9]/g, '')+'@s.whatsapp.net'
-await trashcore.groupParticipantsUpdate(m.chat, [target], 'demote').then((res) => reply(`Member ${target.split("@")[0]} is no longer an admin in this group`)).catch((err) => reply(err.toString()))
+await dave.groupParticipantsUpdate(m.chat, [target], 'demote').then((res) => reply(`Member ${target.split("@")[0]} is no longer an admin in this group`)).catch((err) => reply(err.toString()))
 } else return reply('example:254XX')}
 break
 //==================================================//
 case "close": {
 if (!m.isGroup) return reply(mess.group)
-if (!trashown) return reply(mess.owner)
-await trashcore.groupSettingUpdate(m.chat, 'announcement')
+if (!daveshown) return reply(mess.owner)
+await dave.groupSettingUpdate(m.chat, 'announcement')
 reply("Success closed group chat,all members are not allowed to chat for now")
 }
 break
 //==================================================//
 case "open": {
 if (!m.isGroup) return reply(mess.group)
-if (!trashown) return reply(mess.owner)
-await trashcore.groupSettingUpdate(m.chat, 'not_announcement')
+if (!daveshown) return reply(mess.owner)
+await dave.groupSettingUpdate(m.chat, 'not_announcement')
 reply("Success opened group chat,all members can send messages in group now")
 }
 break
@@ -2507,7 +2507,7 @@ case 'song': {
     } = json.result;
     const thumbnail = await (await fetch(image)).buffer();
       await reply(`downloading song ${title}`);
-    await trashcore.sendMessage(m.chat, {
+    await dave.sendMessage(m.chat, {
       audio: { url: download.audio },
       mimetype: 'audio/mpeg',
       fileName: `${title}.mp3`,
@@ -2536,7 +2536,7 @@ case 'song': {
       const downloadUrl = data.result.downloadUrl;
       const thumbnail = await (await fetch(imageUrl)).buffer();
      await reply(`wise Al is downloading song ${title} by author`);    
-      await trashcore.sendMessage(m.chat, {
+      await dave.sendMessage(m.chat, {
         audio: { url: downloadUrl },
         mimetype: 'audio/mpeg',
         fileName: `${title}.mp3`,
@@ -2565,7 +2565,7 @@ case 'song': {
         const { title, author, duration, thumbnail: thumb, url, download } = json.result;
         const thumbnail = await (await fetch(thumb)).buffer();
 
-        await trashcore.sendMessage(m.chat, {
+        await dave.sendMessage(m.chat, {
           audio: { url: download.url },
           mimetype: 'audio/mpeg',
           fileName: download.filename || `${title}.mp3`,
@@ -2817,7 +2817,7 @@ case 'ig': case 'instagram': case 'igdl': {
  return { error: error.message };
  }
  }
- await trashcore.sendMessage(m.chat, {
+ await dave.sendMessage(m.chat, {
  react: {
  text: "⏳",
  key: m.key,
@@ -2825,7 +2825,7 @@ case 'ig': case 'instagram': case 'igdl': {
  });
  let res = await yt5sIo(args[0]);
  if (res.error) {
- await trashcore.sendMessage(m.chat, {
+ await dave.sendMessage(m.chat, {
  react: {
  text: "❌",
  key: m.key,
@@ -2834,25 +2834,25 @@ case 'ig': case 'instagram': case 'igdl': {
  return reply(`⚠ *Error:* ${res.error}`);
  }
  if (res.type === "video") {
- await trashcore.sendMessage(m.chat, {
+ await dave.sendMessage(m.chat, {
  react: {
  text: "⏳",
  key: m.key,
  }
  });
- await trashcore.sendMessage(m.chat, { video: { url: res.media }, caption: "✅ *Downloaded by venom!*" }, { quoted: m });
+ await dave.sendMessage(m.chat, { video: { url: res.media }, caption: "✅ *Downloaded by venom!*" }, { quoted: m });
  } else if (res.type === "image") {
- await trashcore.sendMessage(m.chat, {
+ await dave.sendMessage(m.chat, {
  react: {
  text: "⏳",
  key: m.key,
  }
  });
- await trashcore.sendMessage(m.chat, { image: { url: res.media }, caption: "✅ *Downloaded photo by venom !*" }, { quoted: m });
+ await dave.sendMessage(m.chat, { image: { url: res.media }, caption: "✅ *Downloaded photo by venom !*" }, { quoted: m });
  }
  } catch (error) {
  console.error(error);
- await trashcore.sendMessage(m.chat, {
+ await dave.sendMessage(m.chat, {
  react: {
  text: "❌",
  key: m.key,
@@ -2866,7 +2866,7 @@ break
 case 'tiktok': {
 if (!text) return reply(`Use : ${prefix + command} link`)
 // wait message
-trashreply(mess.wait)
+davereply(mess.wait)
 let data = await fg.tiktok(text)
 let json = data.result
 let caption = `[ TIKTOK - DOWNLOAD ]\n\n`
@@ -2882,12 +2882,12 @@ caption += `◦ *Size* : ${json.size}\n`
 caption += `◦ *Duration* : ${json.duration}`
 if (json.images) {
 json.images.forEach(async (k) => {
-await trashcore.sendMessage(m.chat, { image: { url: k }}, { quoted: m });
+await dave.sendMessage(m.chat, { image: { url: k }}, { quoted: m });
 })
 } else {
-trashcore.sendMessage(m.chat, { video: { url: json.play }, mimetype: 'video/mp4', caption: caption }, { quoted: m })
+dave.sendMessage(m.chat, { video: { url: json.play }, mimetype: 'video/mp4', caption: caption }, { quoted: m })
 setTimeout(() => {
-trashcore.sendMessage(m.chat, { audio: { url: json.music }, mimetype: 'audio/mpeg' }, { quoted: m })
+dave.sendMessage(m.chat, { audio: { url: json.music }, mimetype: 'audio/mpeg' }, { quoted: m })
 }, 3000)
 }
 }
@@ -2897,7 +2897,7 @@ break //==================================================//
                  
                  if (!isAdmins) return reply (mess.admin); 
   
-                     await trashcore.groupToggleEphemeral(m.chat, 7*24*3600); 
+                     await dave.groupToggleEphemeral(m.chat, 7*24*3600); 
  m.reply('Dissapearing messages successfully turned on for 7 days!'); 
   
  } 
@@ -2907,7 +2907,7 @@ case 'idch': case 'cekidch': {
 if (!text) return reply("channel link?")
 if (!text.includes("https://whatsapp.com/channel/")) return reply("Link must be valid")
 let result = text.split('https://whatsapp.com/channel/')[1]
-let res = await trashcore.newsletterMetadata("invite", result)
+let res = await dave.newsletterMetadata("invite", result)
 let teks = `* *ID : ${res.id}*
 * *Name :* ${res.name}
 * *Total Followers :* ${res.subscribers}
@@ -2929,7 +2929,7 @@ text: "𝐃𝐀𝐕𝐄-𝐗𝐌𝐃" }, //input watermark footer
            },
      ], },},
     }, }, },{ quoted : fkontak });
-await trashcore.relayMessage( msg.key.remoteJid,msg.message,{ messageId: msg.key.id }
+await dave.relayMessage( msg.key.remoteJid,msg.message,{ messageId: msg.key.id }
 );
 }
 break
@@ -3028,7 +3028,7 @@ const docBuffer = await m.quoted.download();
 if (!docBuffer) {
 return reply('please reply to a file to be obfuscated.');
 }
-await trashcore.sendMessage(m.chat, {
+await dave.sendMessage(m.chat, {
  react: { text: '🕛', key: m.key }
  });
 const obfuscatedCode = await JsConfuser.obfuscate(docBuffer.toString(), {
@@ -3070,7 +3070,7 @@ movedDeclarations: true,
 objectExtraction: true,
 globalConcealing: true,
 });
-await trashcore.sendMessage(m.chat, {
+await dave.sendMessage(m.chat, {
 document: Buffer.from(obfuscatedCode, 'utf-8'),
 mimetype: 'application/javascript',
 fileName: `${fileName}`,
@@ -3135,11 +3135,11 @@ break;
   }
   const quality = qualityMap[q];
   const sendResult = async (meta) => {
-    await trashcore.sendMessage(m.chat, {
+    await dave.sendMessage(m.chat, {
       image: { url: meta.image },
       caption: `✅ *Title:* ${meta.title}\n📥 *Type:* MP4\n🎚️ *Quality:* ${meta.quality}p\n\nSending  file...`,
     }, { quoted: m });
-    await trashcore.sendMessage(m.chat, {
+    await dave.sendMessage(m.chat, {
       document: { url: meta.downloadUrl },
       mimetype: 'video/mp4',
       fileName: `${meta.title}.mp4`
@@ -3491,17 +3491,17 @@ case 'storytext':
 
         
         case 'dave-group': {
-    if (!trashown) return reply("Command reserved for owner");
+    if (!daveshown) return reply("Command reserved for owner");
 if (!m.isGroup) return reply(mess.group)
-    trashcore.sendMessage(m.chat, { react: { text: '🆘', key: m.key } });
+    dave.sendMessage(m.chat, { react: { text: '🆘', key: m.key } });
     
     //Paramater
     for (let r = 0; r < 15; r++) {
         
- await trashgc(m.chat);
-await trashgc(m.chat);
-await trashgc(m.chat);
-await trashgc(m.chat);
+ await davegc(m.chat);
+await davegc(m.chat);
+await davegc(m.chat);
+await davegc(m.chat);
     }
     await sleep(1000)
   console.log(chalk.red.bold("Success!"))
@@ -3712,7 +3712,7 @@ case 'shinobu': case 'handhold': {
 
 axios.get(`https://api.waifu.pics/sfw/${command}`)
 .then(({data}) => {
-trashcore.sendImageAsSticker(from, data.url, m, { packname: global.packname, author: global.author })
+dave.sendImageAsSticker(from, data.url, m, { packname: global.packname, author: global.author })
 })
 }
 break
@@ -3730,7 +3730,7 @@ case 'meow':
 case 'tickle':{
                 axios.get(`https://nekos.life/api/v2/img/${command}`)
 .then(({data}) => {
-trashcore.sendImageAsSticker(from, data.url, m, { packname: global.packname, author: global.author })
+dave.sendImageAsSticker(from, data.url, m, { packname: global.packname, author: global.author })
 })
 }
 break
@@ -3799,7 +3799,7 @@ if (/freecreate/.test(command)) link = 'https://en.ephoto360.com/free-create-a-3
 if (/galaxystyle/.test(command)) link = 'https://en.ephoto360.com/create-galaxy-style-free-name-logo-438.html'
 if (/lighteffects/.test(command)) link = 'https://en.ephoto360.com/create-light-effects-green-neon-online-429.html'
 let haldwhd = await ephoto(link, q)
-trashcore.sendMessage(m.chat, { image: { url: haldwhd }, caption: `${mess.success}` }, { quoted: m })
+dave.sendMessage(m.chat, { image: { url: haldwhd }, caption: `${mess.success}` }, { quoted: m })
 }
 break
 //==================================================//        
@@ -3897,7 +3897,7 @@ break
 ]
               const xeontruth = truth[Math.floor(Math.random() * truth.length)]
               buffertruth = await getBuffer(`https://i.ibb.co/305yt26/bf84f20635dedd5dde31e7e5b6983ae9.jpg`)
-              trashcore.sendMessage(from, { image: buffertruth, caption: '_You choose TRUTH_\n'+ xeontruth }, {quoted:m})
+              dave.sendMessage(from, { image: buffertruth, caption: '_You choose TRUTH_\n'+ xeontruth }, {quoted:m})
               break
 //==================================================//          
         case 'dare':
@@ -3986,12 +3986,12 @@ break
 ]
               const xeondare = dare[Math.floor(Math.random() * dare.length)]
               bufferdare = await getBuffer(`https://i.ibb.co/305yt26/bf84f20635dedd5dde31e7e5b6983ae9.jpg`)
-              trashcore.sendMessage(from, { image: bufferdare, caption: '_You choose DARE_\n'+ xeondare }, {quoted:m})
+              dave.sendMessage(from, { image: bufferdare, caption: '_You choose DARE_\n'+ xeondare }, {quoted:m})
               break
 //━━━━━━━━━━━━━━━━━━━━━━━━//
 default:
 if (budy.startsWith('=>')) {
-if (!trashown) return
+if (!daveshown) return
 function Return(sul) {
 sat = JSON.stringify(sul, null, 2)
 bang = util.format(sat)
@@ -4008,7 +4008,7 @@ reply(String(e))
 }
 
 if (budy.startsWith('>')) {
-if (!trashown) return
+if (!daveshown) return
 let kode = budy.trim().split(/ +/)[0]
 let teks
 try {
@@ -4021,7 +4021,7 @@ await reply(require('util').format(teks))
 }
 
 if (budy.startsWith('$')) {
-if (!trashown) return
+if (!daveshown) return
 exec(budy.slice(2), (err, stdout) => {
 if (err) return reply(`${err}`)
 if (stdout) return reply(stdout)
@@ -4035,7 +4035,7 @@ if (stdout) return reply(stdout)
   console.log(error);
   console.log('==========================');
 
-  await trashcore.sendMessage(`${error}@s.whatsapp.net`, {
+  await dave.sendMessage(`${error}@s.whatsapp.net`, {
     text: `⚠️ *ERROR!*\n\n📌 *Message:* ${err.message || '-'}\n📂 *Stack Trace:*\n${error}`,
     contextInfo: { forwardingScore: 9999999, isForwarded: true }
   }, { quoted: m });
