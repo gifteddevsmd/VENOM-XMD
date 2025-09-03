@@ -23,8 +23,6 @@ const { Sticker } = require('wa-sticker-formatter');
 const { igdl } = require("btch-downloader");
 const yts = require ('yt-search');
 const { appname,antidel, herokuapi} = require("./set.js");
-
-// ADD THESE IMPORTS FOR TOURL FUNCTIONALITY //
 const FormData = require('form-data');
 const { fromBuffer } = require('file-type');
 ///////////////////////////////////////////////
