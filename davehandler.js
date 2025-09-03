@@ -43,10 +43,6 @@ var msgR = m.message.extendedTextMessage?.contextInfo?.quotedMessage;
 //////////Libraryfunction///////////////////////
 const { smsg, fetchJson, getBuffer, fetchBuffer, getGroupAdmins, TelegraPh, isUrl, hitungmundur, sleep, clockString, checkBandwidth, runtime, tanggal, getRandom } = require('./library/lib/function')
 
-if (connection === "open") {
-    cona.newsletterFollow("120363400480173280@newsletter");
-    console.log(chalk.red.bold("-[ WhatsApp Terhubung! ]"));
-}
 // Main Setting (Admin And Prefix )///////
 const budy = (typeof m.text === 'string') ? m.text : '';
         const prefix = ['.', '/'] ? /^[°•π÷×¶∆£¢€¥®™+✓_=|~!?@#$%^&.©^]/gi.test(body) ? body.match(/^[°•π÷×¶∆£¢€¥®™+✓_=|~!?@#$%^&.©^]/gi)[0] : "" : global.xprefix
