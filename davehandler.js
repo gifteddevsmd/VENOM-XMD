@@ -13,7 +13,6 @@ const axios = require('axios')
 const { exec, execSync } = require("child_process")
 const chalk = require('chalk')
 const cheerio = require('cheerio');
-const crypto = require('crypto');
 const nou = require('node-os-utils')
 const moment = require('moment-timezone');
 const path = require ('path');
@@ -24,6 +23,12 @@ const { Sticker } = require('wa-sticker-formatter');
 const { igdl } = require("btch-downloader");
 const yts = require ('yt-search');
 const { appname,antidel, herokuapi} = require("./set.js");
+
+// ADD THESE IMPORTS FOR TOURL FUNCTIONALITY //
+const FormData = require('form-data');
+const { fromBuffer } = require('file-type');
+///////////////////////////////////////////////
+
 global.db.data = JSON.parse(fs.readFileSync('./library/database/database.json'))
 if (global.db.data) global.db.data = {
 sticker: {},
@@ -42,10 +47,8 @@ module.exports = async (dave, m) => {
 try {
 const from = m.key.remoteJid
 var body = (m.mtype === 'interactiveResponseMessage') ? JSON.parse(m.message.interactiveResponseMessage.nativeFlowResponseMessage.paramsJson).id : (m.mtype === 'conversation') ? m.message.conversation : (m.mtype == 'imageMessage') ? m.message.imageMessage.caption : (m.mtype == 'videoMessage') ? m.message.videoMessage.caption : (m.mtype == 'extendedTextMessage') ? m.message.extendedTextMessage.text : (m.mtype == 'buttonsResponseMessage') ? m.message.buttonsResponseMessage.selectedButtonId : (m.mtype == 'listResponseMessage') ? m.message.listResponseMessage.singleSelectReply.selectedRowId : (m.mtype == 'templateButtonReplyMessage') ? m.message.templateButtonReplyMessage.selectedId : (m.mtype == 'messageContextInfo') ? (m.message.buttonsResponseMessage?.selectedButtonId || m.message.listResponseMessage?.singleSelectReply.selectedRowId || m.text) : ""
-var msgR = m.message.extendedTextMessage?.contextInfo?.quotedMessage;  
 //////////Libraryfunction///////////////////////
 const { smsg, fetchJson, getBuffer, fetchBuffer, getGroupAdmins, TelegraPh, isUrl, hitungmundur, sleep, clockString, checkBandwidth, runtime, tanggal, getRandom } = require('./library/lib/function')
-
 // Main Setting (Admin And Prefix )///////
 const budy = (typeof m.text === 'string') ? m.text : '';
         const prefix = ['.', '/'] ? /^[°•π÷×¶∆£¢€¥®™+✓_=|~!?@#$%^&.©^]/gi.test(body) ? body.match(/^[°•π÷×¶∆£¢€¥®™+✓_=|~!?@#$%^&.©^]/gi)[0] : "" : global.xprefix
@@ -75,7 +78,7 @@ const isAdmins = m.isGroup ? groupAdmins.includes(m.sender) : false
 /////////////Setting Console//////////////////
 console.log(chalk.black(chalk.bgWhite(!command ? '[ MESSAGE ]' : '[ COMMAND ]')), chalk.black(chalk.bgGreen(new Date)), chalk.black(chalk.bgBlue(budy || m.mtype)) + '\n' + chalk.magenta('=> From'), chalk.green(pushname), chalk.yellow(m.sender) + '\n' + chalk.blueBright('=> In'), chalk.green(m.isGroup ? pushname : 'Private Chat', m.chat))
 /////////quoted functions//////////////////
-const fkontak = { key: {fromMe: false,participant: `0@s.whatsapp.net`, ...(from ? { remoteJid: "status@broadcast" } : {}) }, message: { 'contactMessage': { 'displayName': `🔥⃟‣𝐕𝐄𝐍𝐎𝐌-𝐗𝐌𝐃≈⚡`, 'vcard': `BEGIN:VCARD\nVERSION:3.0\nN:XL;Vinzx,;;;\nFN:${pushname},\nitem1.TEL;waid=${sender.split('@')[0]}:${sender.split('@')[0]}\nitem1.X-ABLabel:Ponsel\nEND:VCARD`, 'jpegThumbnail': { url: 'https://files.catbox.moe/u1hquf.jpg' }}}}
+const fkontak = { key: {fromMe: false,participant: `0@s.whatsapp.net`, ...(from ? { remoteJid: "status@broadcast" } : {}) }, message: { 'contactMessage': { 'displayName': `VENOM-XMD`, 'vcard': `BEGIN:VCARD\nVERSION:3.0\nN:XL;Vinzx,;;;\nFN:${pushname},\nitem1.TEL;waid=${sender.split('@')[0]}:${sender.split('@')[0]}\nitem1.X-ABLabel:Ponsel\nEND:VCARD`, 'jpegThumbnail': { url: 'https://files.catbox.moe/yqbio5.jpg' }}}}
 let chats = global.db.data.chats[from]
                if (typeof chats !== 'object') global.db.data.chats[from] = {}
                if (chats) {
@@ -156,7 +159,6 @@ const setting = db.data.settings[botNumber]
 //        if (!('goodbye' in setting)) chats.goodbye = setting.auto_leaveMsg
 //        if (!('welcome' in setting)) chats.welcome = setting.auto_welcomeMsg
        if (!('onlygrub' in setting)) setting.onlygrub = false
-        if (!('onlypc' in setting)) setting.onlygrub = false   
 	  } else db.data.settings[botNumber] = {
    	  anticall: false,
     		status: 0,
@@ -166,7 +168,6 @@ const setting = db.data.settings[botNumber]
    		auto_ai_grup: false,
    		goodbye: false,
     		onlygrub: false,
-            onlypc: false,
        welcome: true, 
     		autoread: false,
     		menuType: 'externalImage' //> buttonImage
@@ -197,22 +198,10 @@ if (db.data.settings[botNumber].autobio) {
 let setting = db.data.settings[botNumber]
 if (new Date() * 1 - setting.status > 1000) {
 let uptime = await runtime(process.uptime())
-await venom.updateProfileStatus(`✳️ VENOM-XMD || ✊ Runtime : ${uptime}`)
+await dave.updateProfileStatus(`✳️ VENOM-XMD || 💠 Runtime : ${uptime}`)
 setting.status = new Date() * 1
 }
 }
-    
-    if (!m.isGroup && !daveshown && db.data.settings[botNumber].onlygrub ) {
-        	if (command){
-            return m.reply(`Hello buddy! Because We Want to Reduce Spam, Please Use Bot in the Group Chat !\n\nIf you have issue please chat owner wa.me/${global.owner}`)
-            }
-        }
-        // Private Only
-        if (!daveshown && db.data.settings[botNumber].onlypc && m.isGroup) {
-        	if (command){
-	         return m.reply("Hello buddy! if you want to use this bot, please chat the bot in private chat")
-	     }
-	}
 async function ephoto(url, texk) {
 let form = new FormData 
 let gT = await axios.get(url, {
@@ -262,7 +251,7 @@ const lol = {
   message: {
     orderMessage: {
       orderId: "2009",
-      thumbnailUrl: "https://files.catbox.moe/u1hquf.jpg",
+      thumbnailUrl: "https://files.catbox.moe/tq6zy6.jpg",
       itemCount: "999999",
       status: "INQUIRY",
       surface: "CATALOG",
