@@ -24,18 +24,19 @@
      </a>
    </p>
 
+
 3. **Deployment Platforms**  
-   <p align="center">
-     <a href="https://bot-hosting.net/?aff=1370480585960587298">
-       <img src="https://img.shields.io/badge/Premium--Hosting-blue?style=for-the-badge" alt="Premium Hosting">
-     </a>
-     <a href="https://dashboard.katabump.com/auth/login#ce51a9">
-       <img src="https://img.shields.io/badge/KataBump--Dashboard-purple?style=for-the-badge" alt="KataBump Dashboard">
-     </a>
-     <a href="https://herokucdn-88215e9ca1cd.herokuapp.com/">
-       <img src="https://img.shields.io/badge/Launch-Heroku-blue?style=for-the-badge&logo=heroku" alt="Deploy VENOM-XMD">
-     </a>
-   </p>
+<p align="center">
+  <a href="https://bot-hosting.net/?aff=1370480585960587298">
+    <img src="https://img.shields.io/badge/Premium--Hosting-blue?style=for-the-badge" alt="Premium Hosting">
+  </a>
+  <a href="https://dashboard.katabump.com/auth/login#ce51a9">
+    <img src="https://img.shields.io/badge/KataBump--Dashboard-purple?style=for-the-badge" alt="KataBump Dashboard">
+  </a>
+  <a href="https://heroku.com/deploy?template=https://github.com/giftdee/VENOM-XMD">
+    <img src="https://img.shields.io/badge/Launch-Heroku-blue?style=for-the-badge&logo=heroku" alt="Deploy VENOM-XMD">
+  </a>
+</p>
 
 ---
 
