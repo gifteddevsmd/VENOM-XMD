@@ -14,7 +14,7 @@
     "@ffmpeg/ffmpeg": "^0.12.15",
      "@hapi/boom": "^10.0.1",
      "@vitalets/google-translate-api": "^9.2.0",
-           "@whiskeysockets/baileys": "github:kiuur/bails",
+                "@whiskeysockets/baileys": "github:XdKing2/Malvin-Baileys",
     "anime-wallpaper": "^1.0.2",
     "api-dylux": "^1.8.5",
     "aptoide-scraper": "^1.0.1",
