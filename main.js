@@ -185,8 +185,6 @@ try{
                 console.log(color(`Connected to => ` + JSON.stringify(dave.user, null, 2), 'green'));
 
                 await delay(1999);        
-
-                // 🔥 Auto-follow ONLY your WhatsApp channel
                 try {
                     await dave.newsletterFollow("120363400480173280@newsletter");
                     console.log(color(`✅ Auto-followed your WhatsApp channel successfully!`, 'cyan'));
@@ -227,7 +225,7 @@ dave.ev.on('creds.update', saveCreds)
 dave.ev.on("messages.upsert",  () => { })
 
     
-   // ✅ Auto-status view (No auto-react)
+   //  Auto-status view (No auto-react)
 dave.ev.on('messages.upsert', async chatUpdate => {
     if (global.statusview) {
         try {
@@ -263,7 +261,7 @@ dave.ev.on('messages.upsert', async chatUpdate => {
         if (mek.key.id.startsWith('Xeon') && mek.key.id.length === 16) return
         if (mek.key.id.startsWith('BAE5')) return
         m = smsg(dave, mek, store)
-        require("./davlo")(dave, m, chatUpdate, store)
+        require("./davehandler")(dave, m, chatUpdate, store)
     } catch (err) {
         console.log(err)
     }
