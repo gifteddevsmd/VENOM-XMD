@@ -19,7 +19,7 @@
 
 2. **Pair Code Setup**  
    <p align="center">
-     <a href="https://dave-md-venom-xmdpairsite-1ebadf0cc6c0.herokuapp.com/">
+     <a href="https://dacmvexmd-pair-site.onrender.com/">
        <img src="https://img.shields.io/badge/Pair--Code-green?style=for-the-badge" alt="Pair Code">
      </a>
    </p>
