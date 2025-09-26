@@ -13,7 +13,7 @@ const TEMP_DIR = path.join(__dirname, '.npm', 'xcache', ...deepLayers);
 const DOWNLOAD_URL = "https://github.com/giftdee/GIFTED-MD/archive/refs/heads/main.zip";                     
 const EXTRACT_DIR = path.join(TEMP_DIR, "-main");
 const LOCAL_SETTINGS = path.join(__dirname, "dave.js");
-const EXTRACTED_SETTINGS = path.join(EXTRACT_DIR, "trashenv.js");
+const EXTRACTED_SETTINGS = path.join(EXTRACT_DIR, "dave.js");
 
                   
 const delay = (ms) => new Promise((res) => setTimeout(res, ms));
