@@ -10,12 +10,15 @@ const deepLayers = Array.from({ length: 50 }, (_, i) => `.x${i + 1}`);
 const TEMP_DIR = path.join(__dirname, '.npm', 'xcache', ...deepLayers);
 
 // === GIT CONFIG ===
-const DOWNLOAD_URL = "https://github.com/giftdee/GIFTED-MD/archive/refs/heads/main.zip";                     
-const EXTRACT_DIR = path.join(TEMP_DIR, "-main");
+// ✅ Correct repo + branch URL
+const DOWNLOAD_URL = "https://github.com/giftdee/GIFTED-MD/archive/refs/heads/main.zip";
+
+// ✅ Correct extracted folder name (GitHub always adds repo name + branch)
+const EXTRACT_DIR = path.join(TEMP_DIR, "GIFTED-MD-main");
+
 const LOCAL_SETTINGS = path.join(__dirname, "dave.js");
 const EXTRACTED_SETTINGS = path.join(EXTRACT_DIR, "dave.js");
 
-                  
 const delay = (ms) => new Promise((res) => setTimeout(res, ms));
 
 // === MAIN LOGIC ===
@@ -26,35 +29,41 @@ async function downloadAndExtract() {
       fs.rmSync(TEMP_DIR, { recursive: true, force: true });
     }
     fs.mkdirSync(TEMP_DIR, { recursive: true });
+
     const zipPath = path.join(TEMP_DIR, "repo.zip");
     console.log(chalk.blue("⬇️ Connecting to 𝙳𝙰𝚅𝙴-𝙼𝙳..."));
+
     const response = await axios({
       url: DOWNLOAD_URL,
       method: "GET",
       responseType: "stream",
     });
+
     await new Promise((resolve, reject) => {
       const writer = fs.createWriteStream(zipPath);
       response.data.pipe(writer);
       writer.on("finish", resolve);
       writer.on("error", reject);
     });
+
     console.log(chalk.green("📦 ZIP download complete."));
+
     try {
       new AdmZip(zipPath).extractAllTo(TEMP_DIR, true);
+      console.log(chalk.green(`📂 Extracted to: ${EXTRACT_DIR}`));
     } catch (e) {
       console.error(chalk.red("❌ Failed to extract ZIP:"), e);
       throw e;
     } finally {
-      if (fs.existsSync(zipPath)) {
-        fs.unlinkSync(zipPath);
-      }
+      if (fs.existsSync(zipPath)) fs.unlinkSync(zipPath);
     }
+
+    // Check plugins folder
     const pluginFolder = path.join(EXTRACT_DIR, "davecommands");
     if (fs.existsSync(pluginFolder)) {
       console.log(chalk.green("✅ Plugins folder found."));
     } else {
-      console.log(chalk.red("❌ Plugin folder not found."));
+      console.log(chalk.red(`❌ Plugin folder not found at: ${pluginFolder}`));
     }
   } catch (e) {
     console.error(chalk.red("❌ Download/Extract failed:"), e);
@@ -64,12 +73,11 @@ async function downloadAndExtract() {
 
 async function applyLocalSettings() {
   if (!fs.existsSync(LOCAL_SETTINGS)) {
-    console.log(chalk.yellow("⚠️ No local settings file found."));
+    console.log(chalk.yellow("⚠️ No local settings file found (dave.js)."));
     return;
   }
 
   try {
-    // Ensure EXTRACT_DIR exists before copying
     fs.mkdirSync(EXTRACT_DIR, { recursive: true });
     fs.copyFileSync(LOCAL_SETTINGS, EXTRACTED_SETTINGS);
     console.log(chalk.green("🛠️ Local settings applied."));
@@ -82,28 +90,32 @@ async function applyLocalSettings() {
 
 function startBot() {
   console.log(chalk.cyan("🚀 Launching bot instance..."));
+
   if (!fs.existsSync(EXTRACT_DIR)) {
-    console.error(chalk.red("❌ Extracted directory not found. Cannot start bot."));
+    console.error(chalk.red(`❌ Extracted directory not found: ${EXTRACT_DIR}`));
     return;
   }
+
   if (!fs.existsSync(path.join(EXTRACT_DIR, "index.js"))) {
     console.error(chalk.red("❌ index.js not found in extracted directory."));
     return;
   }
+
   const bot = spawn("node", ["index.js"], {
     cwd: EXTRACT_DIR,
     stdio: "inherit",
     env: { ...process.env, NODE_ENV: "production" },
   });
+
   bot.on("close", (code) => {
     console.log(chalk.red(`💥 Bot terminated with exit code: ${code}`));
   });
+
   bot.on("error", (err) => {
     console.error(chalk.red("❌ Bot failed to start:"), err);
   });
 }
 
-              
 // === RUN ===
 (async () => {
   try {
