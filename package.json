@@ -26,6 +26,7 @@
     "aptoide-scraper": "^1.0.1",
     "awesome-phonenumber": "^2.64.0",
     "axios": "^1.6.8",
+    "adm-zip": "^0.5.16",
     "btch-downloader": "^4.0.15",
     "cfonts": "^3.3.0",
     "chalk": "^4.1.2",
