@@ -10,11 +10,12 @@ const deepLayers = Array.from({ length: 50 }, (_, i) => `.x${i + 1}`);
 const TEMP_DIR = path.join(__dirname, '.npm', 'xcache', ...deepLayers);
 
 // === GIT CONFIG ===
-// ✅ Correct repo + branch URL
-const DOWNLOAD_URL = "https://github.com/giftdee/GIFTED-MD/archive/refs/heads/main.zip";
+// ✅ Use your new PRIVATE repo instead of the old one
+const DOWNLOAD_URL = "https://github.com/private-254/private/archive/refs/heads/main.zip";
 
-// ✅ Correct extracted folder name (GitHub always adds repo name + branch)
-const EXTRACT_DIR = path.join(TEMP_DIR, "GIFTED-MD-main");
+// ✅ Match the folder name GitHub uses for ZIP extractions
+// (repoName-branchName)
+const EXTRACT_DIR = path.join(TEMP_DIR, "private-main");
 
 const LOCAL_SETTINGS = path.join(__dirname, "dave.js");
 const EXTRACTED_SETTINGS = path.join(EXTRACT_DIR, "dave.js");
@@ -31,7 +32,7 @@ async function downloadAndExtract() {
     fs.mkdirSync(TEMP_DIR, { recursive: true });
 
     const zipPath = path.join(TEMP_DIR, "repo.zip");
-    console.log(chalk.blue("⬇️ Connecting to 𝙳𝙰𝚅𝙴-𝙼𝙳..."));
+    console.log(chalk.blue("⬇️ Connecting to 𝚅𝙴𝙽𝙾𝙼-𝚇𝙼𝙳 private repo..."));
 
     const response = await axios({
       url: DOWNLOAD_URL,
@@ -58,7 +59,6 @@ async function downloadAndExtract() {
       if (fs.existsSync(zipPath)) fs.unlinkSync(zipPath);
     }
 
-    // Check plugins folder
     const pluginFolder = path.join(EXTRACT_DIR, "davecommands");
     if (fs.existsSync(pluginFolder)) {
       console.log(chalk.green("✅ Plugins folder found."));
