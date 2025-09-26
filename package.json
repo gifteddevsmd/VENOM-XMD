@@ -1,11 +1,17 @@
 {
+  
   "name": "VENOM-XMD",
-  "version": "1.1.0",
-  "description": "simple Whatsapp bot made by Dave",
-  "main": "main.js",
+  "version": "2.0.0",
+  "description": "X",
+  "main": "index.js",
+  "engines": {
+      "node": ">= 20.x",
+      "npm": ">= 10.x"
+   },
   "scripts": {
-    "code": "node main.js",
-    "start": "node index.js"
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Gifted Dave",
   "license": "MIT",
