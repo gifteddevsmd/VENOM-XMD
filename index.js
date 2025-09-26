@@ -1,4 +1,4 @@
-/* By Trashcore 
+/* credits to trashcore dev
 Respect my work don't just copy paste*/
 
 
