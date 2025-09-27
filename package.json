@@ -1,16 +1,17 @@
 {
-  
-  "name": "VENOM-XMD",
-  "version": "2.0.0",
-  "description": "X",
+  "name": "Venom-Xmd",
+  "version": "1.0.0",
+  "description": "The best Whatsapp bot",
   "main": "index.js",
   "engines": {
-      "node": ">= 20.x",
-      "npm": ">= 10.x"
-   },
+    "node": ">=20.x",
+    "npm": ">=10.x"
+  },
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
+    "stop": "pkill -f node",
+    "restart": "npm stop && npm start",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Gifted Dave",
