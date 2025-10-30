@@ -8,10 +8,10 @@
   </a>
 
   <a href="https://github.com/gifteddevsmd/VENOM-XMD/fork">
-    <img src="https://img.shields.io/badge/Fork-Dave--Ai-blue?style=for-the-badge&logo=github" alt="Fork venom-xmd" width="200">
+    <img src="https://img.shields.io/badge/Fork-venom--xmd-blue?style=for-the-badge&logo=github" alt="Fork venom-xmd" width="200">
   </a>
 
   <a href="https://vercel-eta-snowy.vercel.app/">
-    <img src="https://img.shields.io/badge/Deploy-Vvenom--xmd-green?style=for-the-badge&logo=heroku" alt="Deploy venom-xmd" width="200">
+    <img src="https://img.shields.io/badge/Deploy-venom--xmd-green?style=for-the-badge&logo=heroku" alt="Deploy venom-xmd" width="200">
   </a>
 </p>
