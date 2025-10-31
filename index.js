@@ -39,8 +39,10 @@ process.on('uncaughtException', (error) => {
   console.error(chalk.red('UNCAUGHT EXCEPTION:'), error);
 });
 
-const sessionDir = path.join(__dirname, 'session');
-const credsPath = path.join(sessionDir, 'creds.json');
+const sessionDir = path.join(__dirname, 'session')
+const credsPath = path.join(sessionDir, 'creds.json')
+const loginFile = path.join(sessionDir, 'login.json')
+const envPath = path.join(process.cwd(), '.env');
 
 async function saveSessionFromConfig() {
   try {
@@ -61,32 +63,37 @@ async function saveSessionFromConfig() {
   }
 }
 
-async function startvenom() {
-  try {
-    // ensure session dir exists
+async function venom() {
+    log('Connecting to WhatsApp...', 'cyan');
+    const { version } = await fetchLatestBaileysVersion();
+    
+    // Ensure session directory exists before Baileys attempts to use it
     await fs.promises.mkdir(sessionDir, { recursive: true });
 
-    const store = makeInMemoryStore({ logger: pino().child({ level: 'silent' }) });
-    const { state, saveCreds } = await useMultiFileAuthState('./session');
-    const { version } = await fetchLatestBaileysVersion();
+    const { state, saveCreds } = await useMultiFileAuthState(`./session`);
+    const msgRetryCounterCache = new NodeCache();
 
     const venom = makeWASocket({
-      version,
-      keepAliveIntervalMs: 10000,
-      printQRInTerminal: false,
-      logger: pino({ level: 'silent' }),
-      auth: {
-        creds: state.creds,
-        keys: makeCacheableSignalKeyStore(
-          state.keys,
-          pino({ level: 'silent' }).child({ level: 'silent' })
-        )
-      },
-      browser: ["Ubuntu", "Chrome", "20.0.00"],
-      syncFullHistory: true
+        version,
+        logger: pino({ level: 'silent' }),
+        printQRInTerminal: false, 
+        browser: ["Ubuntu", "Chrome", "20.0.04"],
+        auth: {
+            creds: state.creds,
+            keys: makeCacheableSignalKeyStore(state.keys, pino({ level: "fatal" }).child({ level: "fatal" })),
+        },
+        markOnlineOnConnect: true,
+        generateHighQualityLinkPreview: true,
+        syncFullHistory: true,
+        getMessage: async (key) => {
+            let jid = jidNormalizedUser(key.remoteJid);
+            // This now uses the globally available 'store' which is loaded inside tylor()
+            let msg = await store.loadMessage(jid, key.id); 
+            return msg?.message || "";
+        },
+        msgRetryCounterCache
     });
 
-    venom.ev.on('creds.update', saveCreds);
     store.bind(venom.ev);
 
     // If not registered and no SESSION_ID, *don't* block on readline in non-interactive envs
