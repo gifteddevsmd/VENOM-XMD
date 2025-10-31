@@ -13,7 +13,6 @@ const TEMP_DIR = path.join(__dirname, ".npm", "xcache", ...deepLayers);
 const REPO_OWNER = "private-254";
 const REPO_NAME = "private";
 const BRANCH = "main";
-// Alternative download URL without the "archive" format
 const DOWNLOAD_URL = `https://codeload.github.com/${REPO_OWNER}/${REPO_NAME}/zip/refs/heads/${BRANCH}`;
 
 // Fixed path configurations
@@ -37,7 +36,7 @@ async function getLatestCommitSHA() {
     });
     return res.data.sha;
   } catch (err) {
-    console.error(chalk.red("❌ Failed to fetch latest commit from GitHub:"), err.message);
+    console.error(chalk.red("❌ Failed to fetch latest commit:"), err.message);
     return null;
   }
 }
@@ -59,11 +58,12 @@ function saveCachedSHA(sha) {
 // === DOWNLOAD & EXTRACT ===
 async function downloadAndExtract(force = false) {
   try {
-    // Skip version check if force download or no existing files
-    if (!force && fs.existsSync(EXTRACT_DIR)) {
+    // Check if we have a working bot already
+    const mainFile = path.join(EXTRACT_DIR, "index.js");
+    if (!force && fs.existsSync(mainFile)) {
       const latestSHA = await getLatestCommitSHA();
       const cachedSHA = readCachedSHA();
-
+      
       if (cachedSHA === latestSHA) {
         console.log(chalk.green("✅ Bot is up-to-date, skipping download."));
         return;
@@ -110,7 +110,8 @@ async function downloadAndExtract(force = false) {
     console.error(chalk.red("❌ Download/Extract failed:"), e.message);
     
     // If we have existing files, use them even if download fails
-    if (fs.existsSync(EXTRACT_DIR)) {
+    const mainFile = path.join(EXTRACT_DIR, "index.js");
+    if (fs.existsSync(mainFile)) {
       console.log(chalk.yellow("⚠️ Using existing bot files despite download failure."));
       return;
     }
@@ -139,51 +140,108 @@ async function applyLocalSettings() {
 
 function startBot() {
   console.log(chalk.cyan("🚀 Launching bot instance..."));
+  console.log(chalk.blue("📁 Working directory:"), EXTRACT_DIR);
 
   if (!fs.existsSync(EXTRACT_DIR)) {
-    console.error(chalk.red("❌ Extracted directory not found. Cannot start bot."));
+    console.error(chalk.red("❌ Extracted directory not found."));
     return;
   }
 
   const mainFile = path.join(EXTRACT_DIR, "index.js");
   if (!fs.existsSync(mainFile)) {
-    console.error(chalk.red("❌ index.js not found in extracted directory."));
+    console.error(chalk.red("❌ index.js not found."));
     console.log(chalk.yellow("📁 Available files:"), fs.readdirSync(EXTRACT_DIR));
     return;
   }
 
-  console.log(chalk.green("🤖 Starting bot..."));
+  console.log(chalk.green("🤖 Starting: node index.js"));
+  
+  // Spawn the bot process with better handling
   const bot = spawn("node", ["index.js"], {
     cwd: EXTRACT_DIR,
     stdio: "inherit",
-    env: { ...process.env, NODE_ENV: "production" },
+    env: {
+      ...process.env,
+      NODE_ENV: "production",
+      FORCE_COLOR: "1"  // Force color output
+    },
+    detached: false
   });
 
-  bot.on("close", (code) => {
-    console.log(chalk.red(`💥 Bot terminated with exit code: ${code}`));
-    // Auto-restart on crash
-    if (code !== 0) {
-      console.log(chalk.yellow("🔄 Restarting bot in 3 seconds..."));
-      setTimeout(startBot, 3000);
-    }
+  // Add process listeners for better debugging
+  bot.on("close", (code, signal) => {
+    console.log(chalk.yellow(`🔴 Bot process closed - Code: ${code}, Signal: ${signal}`));
+    
+    // Auto-restart with increasing delay
+    const restartDelay = 5000; // 5 seconds
+    console.log(chalk.blue(`🔄 Restarting bot in ${restartDelay/1000} seconds...`));
+    setTimeout(startBot, restartDelay);
+  });
+
+  bot.on("exit", (code, signal) => {
+    console.log(chalk.yellow(`🔴 Bot process exited - Code: ${code}, Signal: ${signal}`));
   });
 
   bot.on("error", (err) => {
     console.error(chalk.red("❌ Bot failed to start:"), err);
-    console.log(chalk.yellow("🔄 Restarting bot in 3 seconds..."));
-    setTimeout(startBot, 3000);
+    console.log(chalk.blue("🔄 Restarting bot in 5 seconds..."));
+    setTimeout(startBot, 5000);
   });
+
+  // Monitor for inactivity/hanging
+  let activityTimer = setTimeout(() => {
+    console.log(chalk.yellow("⚠️ No bot activity detected for 30 seconds. Checking process..."));
+    
+    // Check if process is still alive but not producing output
+    if (!bot.killed) {
+      console.log(chalk.yellow("⚠️ Bot process seems to be hanging. Restarting..."));
+      bot.kill('SIGTERM');
+    }
+  }, 30000);
+
+  bot.on("close", () => {
+    clearTimeout(activityTimer);
+  });
+
+  return bot;
 }
+
+// === MAIN WITH PROCESS HANDLERS ===
+process.on('SIGINT', () => {
+  console.log(chalk.yellow('\n🛑 Received SIGINT. Shutting down gracefully...'));
+  process.exit(0);
+});
+
+process.on('SIGTERM', () => {
+  console.log(chalk.yellow('\n🛑 Received SIGTERM. Shutting down gracefully...'));
+  process.exit(0);
+});
+
+process.on('uncaughtException', (error) => {
+  console.error(chalk.red('💥 Uncaught Exception:'), error);
+  process.exit(1);
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+  console.error(chalk.red('💥 Unhandled Rejection at:'), promise, 'reason:', reason);
+  process.exit(1);
+});
 
 // === RUN ===
 (async () => {
   try {
     console.log(chalk.blue("🔧 Initializing bot launcher..."));
+    console.log(chalk.blue("📦 Repository:"), `${REPO_OWNER}/${REPO_NAME}`);
+    
     await downloadAndExtract();
     await applyLocalSettings();
+    
+    console.log(chalk.green("🎯 Starting bot process..."));
     startBot();
+    
   } catch (e) {
     console.error(chalk.red("❌ Fatal error in main execution:"), e.message);
-    process.exit(1);
+    console.log(chalk.yellow("🔄 Restarting launcher in 10 seconds..."));
+    setTimeout(() => process.exit(1), 10000);
   }
 })();
