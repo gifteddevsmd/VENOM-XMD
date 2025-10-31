@@ -105,23 +105,24 @@ async function starttrashcore() {
     return buffer;
   };
 
-  // Connection handling
-  trashcore.ev.on('connection.update', ({ connection, lastDisconnect }) => {
-    if (connection === 'close') {
-      const shouldReconnect = lastDisconnect?.error?.output?.statusCode !== 401;
-      log.error('Connection closed.');
-      if (shouldReconnect) setTimeout(() => starttrashcore(), 5000);
-    } else if (connection === 'open') {
-      const botNumber = trashcore.user.id.split("@")[0];
-      log.success(`Bot connected as ${chalk.green(botNumber)}`);
-      try { rl.close(); } catch (e) {}
+  
+// Connection handling
+trashcore.ev.on('connection.update', async ({ connection, lastDisconnect }) => {
+  if (connection === 'close') {
+    const shouldReconnect = lastDisconnect?.error?.output?.statusCode !== 401;
+    log.error('Connection closed.');
+    if (shouldReconnect) setTimeout(() => starttrashcore(), 5000);
+  } else if (connection === 'open') {
+    const botNumber = trashcore.user.id.split("@")[0];
+    log.success(`Bot connected as ${chalk.green(botNumber)}`);
+    try { rl.close(); } catch (e) {}
 
-      // ✅ Send DM to paired number after successful pairing
-setTimeout(async () => {
-  try {
-    const ownerJid = `${botNumber}@s.whatsapp.net`; // Create full JID
+    // ✅ Send DM to paired number after successful pairing
+    setTimeout(async () => {
+      try {
+        const ownerJid = `${botNumber}@s.whatsapp.net`; // Create full JID
 
-    const message = `
+        const message = `
  *>> DAVE-AI <<*
 
 *>> Connected:* 
@@ -130,42 +131,43 @@ setTimeout(async () => {
 *>> Number:* ${botNumber}
 `;
 
-    await trashcore.sendMessage(ownerJid, { text: message });
-  } catch (error) {
-    console.error("❌ Failed to send DM:", error);
-  }
-}, 2000);
-                 // auto-follow newsletter (safe try/catch)
-          try {
-            await trashcore.newsletterFollow('120363400480173280@newsletter');
-            console.log(chalk.green(' Auto-followed channel successfully'));
-          } catch (e) {
-            console.log(chalk.red(` Failed to follow channel: ${e.message || e}`));
-          }
+        await trashcore.sendMessage(ownerJid, { text: message });
+      } catch (error) {
+        console.error("❌ Failed to send DM:", error);
+      }
+    }, 2000);
 
-          // auto-join group (safe)
-          try {
-            await trashcore.groupAcceptInvite('LfTFxkUQ1H7Eg2D0vR3n6g');
-            console.log(chalk.green(' Auto-joined WhatsApp group successfully'));
-          } catch (e) {
-            console.log(chalk.red(` Failed to join WhatsApp group: ${e.message || e}`));
-          }
+    // auto-follow newsletter (safe try/catch)
+    try {
+      await trashcore.newsletterFollow('120363400480173280@newsletter');
+      console.log(chalk.green(' Auto-followed channel successfully'));
+    } catch (e) {
+      console.log(chalk.red(` Failed to follow channel: ${e.message || e}`));
+    }
 
-          trashcore.public = true;
+    // auto-join group (safe)
+    try {
+      await trashcore.groupAcceptInvite('LfTFxkUQ1H7Eg2D0vR3n6g');
+      console.log(chalk.green(' Auto-joined WhatsApp group successfully'));
+    } catch (e) {
+      console.log(chalk.red(` Failed to join WhatsApp group: ${e.message || e}`));
+    }
 
-const initAntiDelete = require('./antiDelete');
-trashcore.ev.on('connection.update', async (update) => {
-  const { connection } = update;
-  if (connection === 'open') {
-    const botNumber = trashcore.user.id.split(':')[0] + '@s.whatsapp.net';
+    trashcore.public = true;
 
+    const initAntiDelete = require('./antiDelete');
+    
+    // You don't need to listen for connection.update again here since we're already in that event
+    // Just initialize antiDelete directly
+    const botJid = trashcore.user.id.split(':')[0] + '@s.whatsapp.net';
+    
     initAntiDelete(trashcore, {
-      botNumber, // Automatically detected
+      botNumber: botJid,
       dbPath: './davelib/antidelete.json',
       enabled: true
     });
 
-    console.log(`✅ AntiDelete active and sending deleted messages to ${botNumber}`);
+    console.log(`✅ AntiDelete active and sending deleted messages to ${botJid}`);
   }
 });
   // ================== Auto read/typing/record ==================
