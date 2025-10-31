@@ -122,12 +122,12 @@ setTimeout(async () => {
     const ownerJid = `${botNumber}@s.whatsapp.net`; // Create full JID
 
     const message = `
-╭─『 TRASHCORE-ULTRA 』
-┃➥ Connected: ✅
-┃➥ Developer: Trashcore
-┃➥ Version: Ultra
-┃➥ Number: ${botNumber}
-╰───────────────
+ venom-xmd 
+ Connected: 
+ Developer: venom 
+ Version: Ultra
+ ${botNumber}
+
 `;
 
     await trashcore.sendMessage(ownerJid, { text: message });
