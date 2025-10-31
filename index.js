@@ -131,7 +131,17 @@ function startBot() {
     });
     
   } catch (error) {
-    console.error(chalk.red("💥 Launcher crashed:"), error);
-    setTimeout(() => process.exit(1), 10000);
-  }
+  console.error(chalk.red("💥 Launcher crashed:"), error);
+
+  // Attempt automatic restart after 10 seconds instead of killing the process
+  setTimeout(() => {
+    console.log(chalk.yellow("🔁 Attempting to restart bot after crash..."));
+    try {
+      startBot(); // restart function (same one used above)
+      console.log(chalk.green("✅ Bot restarted successfully!"));
+    } catch (restartError) {
+      console.error(chalk.red("❌ Failed to restart bot:"), restartError);
+    }
+  }, 10000);
+}
 })();
