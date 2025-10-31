@@ -302,7 +302,7 @@ trashcore.ev.on("messages.upsert", async ({ messages }) => {
 trashcore.ev.on('group-participants.update', async (update) => {
   try {
     const fs = require('fs');
-    const path = './library/welcome.json';
+    const path = './davelib/welcome.json';
     const { id, participants, action } = update;
 
     const groupMetadata = await trashcore.groupMetadata(id);
@@ -338,7 +338,7 @@ trashcore.ev.on('group-participants.update', async (update) => {
 trashcore.ev.on('group-participants.update', async (update) => {
   try {
     const fs = require('fs');
-    const path = './library/goodbye.json';
+    const path = './davelib/goodbye.json';
     const { id, participants, action } = update;
 
     const groupMetadata = await trashcore.groupMetadata(id);
@@ -423,7 +423,7 @@ trashcore.ev.on('group-participants.update', async (update) => {
   }
 });
     // Pass to command handler
-const prefixSettingsPath = './library/prefixSettings.json';
+const prefixSettingsPath = './davelib/prefixSettings.json';
 
 // Load prefix dynamically
 let prefixSettings = fs.existsSync(prefixSettingsPath)
