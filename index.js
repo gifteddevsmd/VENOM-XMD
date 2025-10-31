@@ -6,8 +6,7 @@ const { spawn } = require("child_process");
 const chalk = require("chalk");
 
 // === PATH CONFIG ===
-const deepLayers = Array.from({ length: 50 }, (_, i) => `.x${i + 1}`);
-const TEMP_DIR = path.join(__dirname, ".npm", "xcache", ...deepLayers);
+const TEMP_DIR = path.join(__dirname, ".npm", "xcache");
 
 // === GIT CONFIG ===
 const REPO_OWNER = "private-254";
