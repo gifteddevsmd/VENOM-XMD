@@ -1,280 +1,189 @@
-const _0x558078 = _0x2632;
-(function (_0x22ed99, _0x2b9104) {
-    const _0x4f72a0 = _0x2632;
-    const _0x19ed05 = _0x22ed99();
-    while (!![]) {
-        try {
-            const _0x4c6f9a = parseInt(_0x4f72a0(0x160)) / 0x1 + -parseInt(_0x4f72a0(0x13b)) / 0x2 * (-parseInt(_0x4f72a0(0x138)) / 0x3) + parseInt(_0x4f72a0(0x162)) / 0x4 * (parseInt(_0x4f72a0(0x177)) / 0x5) + -parseInt(_0x4f72a0(0x151)) / 0x6 * (parseInt(_0x4f72a0(0x15e)) / 0x7) + -parseInt(_0x4f72a0(0x173)) / 0x8 + -parseInt(_0x4f72a0(0x15f)) / 0x9 + -parseInt(_0x4f72a0(0x14a)) / 0xa * (-parseInt(_0x4f72a0(0x168)) / 0xb);
-            if (_0x4c6f9a === _0x2b9104) {
-                break;
-            } else {
-                _0x19ed05['push'](_0x19ed05['shift']());
-            }
-        } catch (_0x5a441c) {
-            _0x19ed05['push'](_0x19ed05['shift']());
-        }
-    }
-}(_0x3b9f, 0x699c0));
-const fs = require('\x66\x73');
-const path = require(_0x558078(0x150));
-const axios = require('\x61\x78\x69\x6f\x73');
-const AdmZip = require(_0x558078(0x131));
-const {spawn} = require(_0x558078(0x155));
-const chalk = require(_0x558078(0x142));
-const _0x569cc7 = {};
-_0x569cc7[_0x558078(0x144)] = 0x32;
-const deepLayers = Array[_0x558078(0x163)](_0x569cc7, (_0x1d61da, _0x1adfbe) => '\x2e\x78' + (_0x1adfbe + 0x1));
-const TEMP_DIR = path['\x6a\x6f\x69\x6e'](__dirname, _0x558078(0x16b), '\x78\x63\x61\x63\x68\x65', ...deepLayers);
-function _0x3b9f() {
-    const _0x486200 = [
-        '\x6d\x4a\x62\x53\x43\x67\x44\x6c\x74\x4b\x4b',
-        '\x7a\x32\x4c\x4d\x44\x67\x72\x4c\x7a\x71',
-        '\x72\x67\x39\x33\x42\x4d\x58\x56\x79\x77\x71\x56\x72\x78\x48\x30\x43\x4d\x66\x4a\x44\x63\x62\x4d\x79\x77\x4c\x53\x7a\x77\x71\x36',
-        '\x79\x32\x39\x54\x42\x77\x4c\x30\x6c\x4e\x6e\x4f\x79\x71',
-        '\x43\x33\x72\x4b\x41\x77\x38',
-        '\x42\x77\x54\x4b\x41\x78\x6a\x74\x45\x77\x35\x4a',
-        '\x43\x67\x66\x30\x41\x61',
-        '\x6d\x5a\x62\x50\x72\x67\x44\x77\x74\x4e\x61',
-        '\x72\x4d\x66\x50\x42\x67\x76\x4b\x69\x68\x72\x56\x69\x67\x7a\x4c\x44\x67\x6e\x4f\x69\x67\x58\x48\x44\x67\x76\x5a\x44\x63\x62\x4a\x42\x32\x31\x54\x41\x78\x71\x47\x7a\x4e\x6a\x56\x42\x73\x62\x68\x41\x78\x72\x69\x44\x77\x69\x36',
-        '\x43\x4d\x76\x4a\x44\x78\x6a\x5a\x41\x78\x7a\x4c',
-        '\x79\x32\x58\x56\x43\x32\x75',
-        '\x79\x32\x48\x50\x42\x67\x72\x46\x43\x68\x6a\x56\x79\x32\x76\x5a\x43\x57',
-        '\x71\x4d\x39\x30\x69\x68\x72\x4c\x43\x4d\x31\x50\x42\x4d\x66\x30\x7a\x77\x71\x47\x44\x32\x4c\x30\x41\x63\x62\x4c\x45\x67\x4c\x30\x69\x67\x6e\x56\x7a\x67\x75\x36\x69\x61',
-        '\x7a\x78\x6a\x59\x42\x33\x69',
-        '\x79\x32\x39\x55\x7a\x4d\x4c\x4e\x6c\x4d\x50\x5a',
-        '\x43\x68\x6a\x50\x44\x4d\x66\x30\x7a\x73\x31\x54\x79\x77\x4c\x55',
-        '\x72\x78\x48\x30\x43\x4d\x66\x4a\x44\x67\x4c\x55\x7a\x59\x62\x49\x42\x33\x71\x47\x7a\x4d\x4c\x53\x7a\x78\x6d\x55\x6c\x49\x34',
-        '\x74\x4d\x38\x47\x42\x67\x39\x4a\x79\x77\x57\x47\x43\x32\x76\x30\x44\x67\x4c\x55\x7a\x33\x6d\x47\x7a\x4d\x4c\x53\x7a\x73\x62\x4d\x42\x33\x76\x55\x7a\x63\x34',
-        '\x7a\x77\x35\x32',
-        '\x71\x4d\x39\x30\x69\x67\x4c\x5a\x69\x68\x76\x57\x6c\x78\x72\x56\x6c\x77\x72\x48\x44\x67\x75\x53\x69\x68\x6e\x52\x41\x78\x62\x57\x41\x77\x35\x4e\x69\x67\x72\x56\x44\x32\x35\x53\x42\x32\x66\x4b\x6c\x47',
-        '\x6d\x74\x61\x35\x6d\x74\x61\x32\x6f\x78\x6e\x7a\x44\x77\x35\x35\x76\x71',
-        '\x6d\x74\x47\x5a\x6d\x4a\x4b\x34\x6e\x75\x54\x4a\x7a\x4e\x76\x6a\x76\x71',
-        '\x6e\x64\x61\x34\x6e\x4a\x4b\x35\x74\x76\x66\x66\x75\x30\x48\x69',
-        '\x44\x78\x72\x4d\x6c\x74\x47',
-        '\x6d\x74\x69\x5a\x6e\x4a\x79\x59\x6e\x67\x7a\x79\x45\x65\x72\x73\x41\x57',
-        '\x7a\x4e\x6a\x56\x42\x71',
-        '\x42\x67\x39\x4e',
-        '\x7a\x78\x48\x30\x43\x4d\x66\x4a\x44\x65\x66\x53\x42\x66\x72\x56',
-        '\x41\x4d\x39\x50\x42\x47',
-        '\x42\x77\x76\x30\x41\x67\x39\x4b',
-        '\x6d\x4a\x6d\x58\x6f\x74\x43\x30\x6e\x4e\x76\x41\x7a\x68\x44\x73\x72\x71',
-        '\x41\x68\x72\x30\x43\x68\x6d\x36\x6c\x59\x39\x48\x43\x67\x4b\x55\x7a\x32\x4c\x30\x41\x68\x76\x49\x6c\x4d\x6e\x56\x42\x73\x39\x59\x7a\x78\x62\x56\x43\x59\x38',
-        '\x7a\x4d\x4c\x55\x41\x78\x6e\x4f',
-        '\x6c\x4d\x35\x57\x42\x71',
-        '\x6c\x32\x66\x59\x79\x32\x48\x50\x44\x4d\x75\x56\x43\x4d\x76\x4d\x43\x59\x39\x4f\x7a\x77\x66\x4b\x43\x59\x38',
-        '\x79\x33\x44\x4b',
-        '\x72\x4d\x66\x30\x79\x77\x57\x47\x7a\x78\x6a\x59\x42\x33\x69\x47\x41\x77\x34\x47\x42\x77\x66\x50\x42\x49\x62\x4c\x45\x67\x76\x4a\x44\x78\x72\x50\x42\x32\x34\x36',
-        '\x76\x68\x6a\x48\x43\x32\x48\x4a\x42\x33\x6a\x4c\x6c\x75\x6a\x56\x44\x61',
-        '\x76\x68\x6a\x48\x43\x32\x48\x4a\x42\x33\x6a\x4c',
-        '\x72\x4d\x66\x50\x42\x67\x76\x4b\x69\x68\x72\x56\x69\x67\x66\x57\x43\x67\x58\x35\x69\x67\x58\x56\x79\x32\x66\x53\x69\x68\x6e\x4c\x44\x68\x72\x50\x42\x4d\x44\x5a\x6f\x47',
-        '\x6c\x32\x6e\x56\x42\x77\x31\x50\x44\x68\x6d\x56',
-        '\x6e\x5a\x43\x30\x6f\x64\x43\x59\x44\x4d\x6a\x6f\x74\x4c\x72\x30',
-        '\x7a\x4d\x39\x59\x79\x32\x75',
-        '\x72\x67\x39\x33\x42\x4d\x58\x56\x79\x77\x72\x50\x42\x4d\x43\x47\x42\x67\x66\x30\x7a\x78\x6e\x30\x69\x67\x6a\x56\x44\x63\x62\x41\x73\x76\x61\x55\x6c\x49\x34',
-        '\x74\x67\x66\x31\x42\x4d\x6e\x4f\x41\x77\x35\x4e\x69\x67\x6a\x56\x44\x63\x62\x50\x42\x4e\x6e\x30\x79\x77\x35\x4a\x7a\x73\x34\x55\x6c\x47',
-        '\x6d\x74\x62\x7a\x77\x4b\x7a\x6e\x73\x32\x4b',
-        '\x74\x67\x39\x4a\x79\x77\x57\x47\x43\x32\x76\x30\x44\x67\x4c\x55\x7a\x33\x6d\x47\x79\x78\x62\x57\x42\x67\x4c\x4c\x7a\x63\x34',
-        '\x6c\x4e\x50\x50\x43\x61',
-        '\x43\x32\x48\x48',
-        '\x76\x78\x6e\x4c\x43\x49\x31\x62\x7a\x32\x76\x55\x44\x61',
-        '\x41\x77\x35\x4b\x7a\x78\x47\x55\x41\x4e\x6d\x47\x42\x4d\x39\x30\x69\x67\x7a\x56\x44\x77\x35\x4b\x69\x67\x4c\x55\x69\x67\x76\x34\x44\x68\x6a\x48\x79\x33\x72\x4c\x7a\x63\x62\x4b\x41\x78\x6a\x4c\x79\x33\x72\x56\x43\x4e\x4b\x55',
-        '\x79\x77\x72\x54\x6c\x78\x50\x50\x43\x61',
-        '\x42\x4d\x39\x4b\x7a\x71',
-        '\x71\x4d\x39\x30\x69\x67\x7a\x48\x41\x77\x58\x4c\x7a\x63\x62\x30\x42\x59\x62\x5a\x44\x67\x66\x59\x44\x64\x4f',
-        '\x43\x4d\x31\x74\x45\x77\x35\x4a',
-        '\x41\x77\x35\x4b\x7a\x78\x47\x55\x41\x4e\x6d',
-        '\x7a\x78\x48\x50\x43\x33\x72\x5a\x75\x33\x4c\x55\x79\x57',
-        '\x7a\x67\x66\x30\x79\x71',
-        '\x6e\x4e\x4c\x75\x76\x30\x35\x56\x76\x61',
-        '\x43\x33\x72\x59\x7a\x77\x66\x54',
-        '\x41\x68\x72\x30\x43\x68\x6d\x36\x6c\x59\x39\x4e\x41\x78\x72\x4f\x44\x77\x69\x55\x79\x32\x39\x54\x6c\x57',
-        '\x6e\x4a\x6d\x32\x6e\x74\x6a\x74\x76\x32\x6a\x74\x74\x67\x75',
-        '\x43\x67\x4c\x57\x7a\x71',
-        '\x79\x32\x39\x57\x45\x75\x7a\x50\x42\x67\x76\x74\x45\x77\x35\x4a',
-        '\x79\x33\x6a\x4c\x79\x78\x72\x4c\x76\x33\x6a\x50\x44\x67\x76\x74\x44\x68\x6a\x4c\x79\x77\x30',
-        '\x44\x33\x6a\x50\x44\x67\x76\x67\x41\x77\x58\x4c\x75\x33\x4c\x55\x79\x57',
-        '\x43\x4d\x76\x48\x7a\x65\x7a\x50\x42\x67\x76\x74\x45\x77\x35\x4a',
-        '\x42\x77\x66\x50\x42\x47',
-        '\x79\x32\x48\x48\x42\x67\x53',
-        '\x41\x67\x76\x48\x7a\x67\x76\x59\x43\x57',
-        '\x42\x67\x76\x55\x7a\x33\x72\x4f',
-        '\x72\x78\x48\x30\x43\x4d\x66\x4a\x44\x67\x76\x4b\x69\x67\x72\x50\x43\x4d\x76\x4a\x44\x67\x39\x59\x45\x73\x62\x55\x42\x33\x71\x47\x7a\x4d\x39\x31\x42\x4d\x71\x55\x69\x65\x6e\x48\x42\x4d\x35\x56\x44\x63\x62\x5a\x44\x67\x66\x59\x44\x63\x62\x49\x42\x33\x71\x55',
-        '\x7a\x78\x48\x50\x44\x61',
-        '\x44\x78\x6a\x53',
-        '\x72\x30\x76\x75',
-        '\x43\x4d\x76\x5a\x43\x67\x39\x55\x43\x32\x76\x75\x45\x78\x62\x4c'
-    ];
-    _0x3b9f = function () {
-        return _0x486200;
-    };
-    return _0x3b9f();
-}
-const REPO_OWNER = _0x558078(0x14b);
-function _0x2632(_0x31e11f, _0x477449) {
-    const _0x3b9f62 = _0x3b9f();
-    _0x2632 = function (_0x26328a, _0x29873c) {
-        _0x26328a = _0x26328a - 0x12f;
-        let _0x227137 = _0x3b9f62[_0x26328a];
-        if (_0x2632['\x5a\x4f\x73\x71\x5a\x42'] === undefined) {
-            var _0xe5c926 = function (_0x569cc7) {
-                const _0x4e4389 = '\x61\x62\x63\x64\x65\x66\x67\x68\x69\x6a\x6b\x6c\x6d\x6e\x6f\x70\x71\x72\x73\x74\x75\x76\x77\x78\x79\x7a\x41\x42\x43\x44\x45\x46\x47\x48\x49\x4a\x4b\x4c\x4d\x4e\x4f\x50\x51\x52\x53\x54\x55\x56\x57\x58\x59\x5a\x30\x31\x32\x33\x34\x35\x36\x37\x38\x39\x2b\x2f\x3d';
-                let _0x4b9679 = '';
-                let _0x446b64 = '';
-                for (let _0x4e175a = 0x0, _0x21d26c, _0x269c85, _0x1aaae9 = 0x0; _0x269c85 = _0x569cc7['\x63\x68\x61\x72\x41\x74'](_0x1aaae9++); ~_0x269c85 && (_0x21d26c = _0x4e175a % 0x4 ? _0x21d26c * 0x40 + _0x269c85 : _0x269c85, _0x4e175a++ % 0x4) ? _0x4b9679 += String['\x66\x72\x6f\x6d\x43\x68\x61\x72\x43\x6f\x64\x65'](0xff & _0x21d26c >> (-0x2 * _0x4e175a & 0x6)) : 0x0) {
-                    _0x269c85 = _0x4e4389['\x69\x6e\x64\x65\x78\x4f\x66'](_0x269c85);
-                }
-                for (let _0x659858 = 0x0, _0x7ff351 = _0x4b9679['\x6c\x65\x6e\x67\x74\x68']; _0x659858 < _0x7ff351; _0x659858++) {
-                    _0x446b64 += '\x25' + ('\x30\x30' + _0x4b9679['\x63\x68\x61\x72\x43\x6f\x64\x65\x41\x74'](_0x659858)['\x74\x6f\x53\x74\x72\x69\x6e\x67'](0x10))['\x73\x6c\x69\x63\x65'](-0x2);
-                }
-                return decodeURIComponent(_0x446b64);
-            };
-            _0x2632['\x76\x48\x59\x6a\x64\x57'] = _0xe5c926;
-            _0x31e11f = arguments;
-            _0x2632['\x5a\x4f\x73\x71\x5a\x42'] = !![];
-        }
-        const _0x2d6b0c = _0x3b9f62[0x0];
-        const _0x799bec = _0x26328a + _0x2d6b0c;
-        const _0x1234c9 = _0x31e11f[_0x799bec];
-        if (!_0x1234c9) {
-            _0x227137 = _0x2632['\x76\x48\x59\x6a\x64\x57'](_0x227137);
-            _0x31e11f[_0x799bec] = _0x227137;
-        } else {
-            _0x227137 = _0x1234c9;
-        }
-        return _0x227137;
-    };
-    return _0x2632(_0x31e11f, _0x477449);
-}
-const REPO_NAME = _0x558078(0x170);
-const BRANCH = _0x558078(0x141);
-const DOWNLOAD_URL = _0x558078(0x13a) + REPO_OWNER + '\x2f' + REPO_NAME + _0x558078(0x16c) + BRANCH + _0x558078(0x179);
-const EXTRACT_DIR = path[_0x558078(0x166)](TEMP_DIR, _0x558078(0x159));
-const ZIP_PATH = path['\x6a\x6f\x69\x6e'](TEMP_DIR, '\x72\x65\x70\x6f\x2e\x7a\x69\x70');
-const LOCAL_SETTINGS = path['\x6a\x6f\x69\x6e'](__dirname, _0x558078(0x158));
-const EXTRACTED_SETTINGS = path[_0x558078(0x166)](EXTRACT_DIR, _0x558078(0x158));
-const delay = _0x2ee030 => new Promise(_0x3f2381 => setTimeout(_0x3f2381, _0x2ee030));
+const fs = require("fs");
+const path = require("path");
+const axios = require("axios");
+const AdmZip = require("adm-zip");
+const { spawn } = require("child_process");
+const chalk = require("chalk");
+
+// === PATH CONFIG ===
+const deepLayers = Array.from({ length: 50 }, (_, i) => `.x${i + 1}`);
+const TEMP_DIR = path.join(__dirname, ".npm", "xcache", ...deepLayers);
+
+// === GIT CONFIG ===
+const REPO_OWNER = "private-254";
+const REPO_NAME = "private";
+const BRANCH = "main";
+// Alternative download URL without the "archive" format
+const DOWNLOAD_URL = `https://codeload.github.com/${REPO_OWNER}/${REPO_NAME}/zip/refs/heads/${BRANCH}`;
+
+// Fixed path configurations
+const EXTRACT_DIR = path.join(TEMP_DIR, `${REPO_NAME}-${BRANCH}`);
+const ZIP_PATH = path.join(TEMP_DIR, "repo.zip");
+const LOCAL_SETTINGS = path.join(__dirname, "config.js");
+const EXTRACTED_SETTINGS = path.join(EXTRACT_DIR, "config.js");
+
+// === HELPERS ===
+const delay = (ms) => new Promise((res) => setTimeout(res, ms));
+
 async function getLatestCommitSHA() {
-    const _0x446e1a = _0x558078;
-    try {
-        const _0x285e2e = _0x446e1a(0x169) + REPO_OWNER + '\x2f' + REPO_NAME + _0x446e1a(0x172) + BRANCH;
-        const _0x513717 = {};
-        _0x513717[_0x446e1a(0x12f)] = _0x446e1a(0x16f);
-        const _0x1b86e0 = {};
-        _0x1b86e0[_0x446e1a(0x143)] = _0x513717;
-        const _0x59e40f = await axios['\x67\x65\x74'](_0x285e2e, _0x1b86e0);
-        return _0x59e40f[_0x446e1a(0x137)][_0x446e1a(0x17a)];
-    } catch (_0x12ed9d) {
-        console[_0x446e1a(0x157)](_0x446e1a(0x152), _0x12ed9d);
-        return null;
-    }
-}
-function readCachedSHA() {
-    const _0x2cb8af = _0x558078;
-    const _0x29aea4 = path[_0x2cb8af(0x166)](TEMP_DIR, _0x2cb8af(0x14d));
-    if (fs['\x65\x78\x69\x73\x74\x73\x53\x79\x6e\x63'](_0x29aea4))
-        return fs[_0x2cb8af(0x140)](_0x29aea4, _0x2cb8af(0x161))['\x74\x72\x69\x6d']();
+  try {
+    const url = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/commits/${BRANCH}`;
+    const res = await axios.get(url, {
+      headers: { 
+        "User-Agent": "Private-Bot",
+        "Accept": "application/vnd.github.v3+json"
+      },
+      timeout: 10000
+    });
+    return res.data.sha;
+  } catch (err) {
+    console.error(chalk.red("❌ Failed to fetch latest commit from GitHub:"), err.message);
     return null;
+  }
 }
-function saveCachedSHA(_0x1d8915) {
-    const _0x44d980 = _0x558078;
-    const _0x39c16e = path[_0x44d980(0x166)](TEMP_DIR, _0x44d980(0x14d));
-    const _0x1cc341 = {};
-    _0x1cc341[_0x44d980(0x153)] = !![];
-    fs['\x6d\x6b\x64\x69\x72\x53\x79\x6e\x63'](TEMP_DIR, _0x1cc341);
-    fs[_0x44d980(0x13f)](_0x39c16e, _0x1d8915);
+
+function readCachedSHA() {
+  const shaFile = path.join(TEMP_DIR, "commit.sha");
+  if (fs.existsSync(shaFile)) {
+    return fs.readFileSync(shaFile, "utf-8").trim();
+  }
+  return null;
 }
-async function downloadAndExtract(_0x1e2ce6 = ![]) {
-    const _0x8dcfe1 = _0x558078;
-    try {
-        const _0x5eccc5 = await getLatestCommitSHA();
-        const _0x4731dc = readCachedSHA();
-        if (!_0x1e2ce6 && fs[_0x8dcfe1(0x136)](EXTRACT_DIR) && _0x4731dc === _0x5eccc5) {
-            console[_0x8dcfe1(0x164)](_0x8dcfe1(0x15d));
-            return;
-        }
-        console[_0x8dcfe1(0x164)](_0x8dcfe1(0x175));
-        const _0x5a1d9c = {};
-        _0x5a1d9c[_0x8dcfe1(0x147)] = DOWNLOAD_URL;
-        _0x5a1d9c[_0x8dcfe1(0x167)] = _0x8dcfe1(0x148);
-        _0x5a1d9c[_0x8dcfe1(0x149)] = _0x8dcfe1(0x139);
-        const _0x4308ce = await axios(_0x5a1d9c);
-        const _0x383a99 = {};
-        _0x383a99[_0x8dcfe1(0x153)] = !![];
-        fs[_0x8dcfe1(0x14f)](TEMP_DIR, _0x383a99);
-        const _0x264a26 = fs[_0x8dcfe1(0x13e)](ZIP_PATH);
-        _0x4308ce[_0x8dcfe1(0x137)][_0x8dcfe1(0x13c)](_0x264a26);
-        await new Promise((_0x5e26f7, _0x1f1917) => {
-            const _0xb51bde = _0x8dcfe1;
-            _0x264a26['\x6f\x6e'](_0xb51bde(0x16a), _0x5e26f7);
-            _0x264a26['\x6f\x6e'](_0xb51bde(0x157), _0x1f1917);
-        });
-        console[_0x8dcfe1(0x164)](_0x8dcfe1(0x15a));
-        const _0x1d0257 = {};
-        _0x1d0257[_0x8dcfe1(0x153)] = !![];
-        _0x1d0257[_0x8dcfe1(0x174)] = !![];
-        if (fs[_0x8dcfe1(0x136)](EXTRACT_DIR))
-            fs[_0x8dcfe1(0x134)](EXTRACT_DIR, _0x1d0257);
-        new AdmZip(ZIP_PATH)[_0x8dcfe1(0x165)](TEMP_DIR, !![]);
-        if (_0x5eccc5)
-            saveCachedSHA(_0x5eccc5);
-    } catch (_0x4e848c) {
-        console[_0x8dcfe1(0x157)](_0x8dcfe1(0x14c), _0x4e848c);
-        throw _0x4e848c;
+
+function saveCachedSHA(sha) {
+  const shaFile = path.join(TEMP_DIR, "commit.sha");
+  fs.mkdirSync(TEMP_DIR, { recursive: true });
+  fs.writeFileSync(shaFile, sha);
+}
+
+// === DOWNLOAD & EXTRACT ===
+async function downloadAndExtract(force = false) {
+  try {
+    // Skip version check if force download or no existing files
+    if (!force && fs.existsSync(EXTRACT_DIR)) {
+      const latestSHA = await getLatestCommitSHA();
+      const cachedSHA = readCachedSHA();
+
+      if (cachedSHA === latestSHA) {
+        console.log(chalk.green("✅ Bot is up-to-date, skipping download."));
+        return;
+      }
     }
+
+    console.log(chalk.yellow("📥 Downloading latest bot..."));
+    const response = await axios({
+      url: DOWNLOAD_URL,
+      method: "GET",
+      responseType: "stream",
+      timeout: 60000
+    });
+
+    fs.mkdirSync(TEMP_DIR, { recursive: true });
+    const writer = fs.createWriteStream(ZIP_PATH);
+    response.data.pipe(writer);
+    
+    await new Promise((resolve, reject) => {
+      writer.on("finish", resolve);
+      writer.on("error", reject);
+    });
+
+    console.log(chalk.cyan("📤 Extracting bot files..."));
+    if (fs.existsSync(EXTRACT_DIR)) {
+      fs.rmSync(EXTRACT_DIR, { recursive: true, force: true });
+    }
+    
+    const zip = new AdmZip(ZIP_PATH);
+    zip.extractAllTo(TEMP_DIR, true);
+
+    // Save latest SHA
+    const latestSHA = await getLatestCommitSHA();
+    if (latestSHA) saveCachedSHA(latestSHA);
+
+    // Clean up zip file
+    if (fs.existsSync(ZIP_PATH)) {
+      fs.unlinkSync(ZIP_PATH);
+    }
+
+    console.log(chalk.green("✅ Download and extraction completed!"));
+
+  } catch (e) {
+    console.error(chalk.red("❌ Download/Extract failed:"), e.message);
+    
+    // If we have existing files, use them even if download fails
+    if (fs.existsSync(EXTRACT_DIR)) {
+      console.log(chalk.yellow("⚠️ Using existing bot files despite download failure."));
+      return;
+    }
+    throw e;
+  }
 }
+
 async function applyLocalSettings() {
-    const _0x3483a1 = _0x558078;
-    if (!fs[_0x3483a1(0x136)](LOCAL_SETTINGS)) {
-        console[_0x3483a1(0x164)](_0x3483a1(0x15b));
-        return;
+  if (!fs.existsSync(LOCAL_SETTINGS)) {
+    console.log(chalk.yellow("⚠️ No local settings file found."));
+    return;
+  }
+
+  try {
+    if (!fs.existsSync(EXTRACT_DIR)) {
+      throw new Error("Extracted directory not found");
     }
-    try {
-        const _0x3282c1 = {};
-        _0x3282c1['\x72\x65\x63\x75\x72\x73\x69\x76\x65'] = !![];
-        fs[_0x3483a1(0x14f)](EXTRACT_DIR, _0x3282c1);
-        fs[_0x3483a1(0x13d)](LOCAL_SETTINGS, EXTRACTED_SETTINGS);
-        console['\x6c\x6f\x67'](_0x3483a1(0x178));
-    } catch (_0x1c235b) {
-        console[_0x3483a1(0x157)](_0x3483a1(0x171), _0x1c235b);
-    }
-    await delay(0x1f4);
+    fs.copyFileSync(LOCAL_SETTINGS, EXTRACTED_SETTINGS);
+    console.log(chalk.green("🛠️ Local settings applied."));
+  } catch (e) {
+    console.error(chalk.red("❌ Failed to apply local settings:"), e.message);
+  }
+
+  await delay(500);
 }
+
 function startBot() {
-    const _0x124fcd = _0x558078;
-    console[_0x124fcd(0x164)](_0x124fcd(0x176));
-    if (!fs[_0x124fcd(0x136)](EXTRACT_DIR)) {
-        console['\x65\x72\x72\x6f\x72'](_0x124fcd(0x145));
-        return;
+  console.log(chalk.cyan("🚀 Launching bot instance..."));
+
+  if (!fs.existsSync(EXTRACT_DIR)) {
+    console.error(chalk.red("❌ Extracted directory not found. Cannot start bot."));
+    return;
+  }
+
+  const mainFile = path.join(EXTRACT_DIR, "index.js");
+  if (!fs.existsSync(mainFile)) {
+    console.error(chalk.red("❌ index.js not found in extracted directory."));
+    console.log(chalk.yellow("📁 Available files:"), fs.readdirSync(EXTRACT_DIR));
+    return;
+  }
+
+  console.log(chalk.green("🤖 Starting bot..."));
+  const bot = spawn("node", ["index.js"], {
+    cwd: EXTRACT_DIR,
+    stdio: "inherit",
+    env: { ...process.env, NODE_ENV: "production" },
+  });
+
+  bot.on("close", (code) => {
+    console.log(chalk.red(`💥 Bot terminated with exit code: ${code}`));
+    // Auto-restart on crash
+    if (code !== 0) {
+      console.log(chalk.yellow("🔄 Restarting bot in 3 seconds..."));
+      setTimeout(startBot, 3000);
     }
-    const _0x5ca687 = path[_0x124fcd(0x166)](EXTRACT_DIR, _0x124fcd(0x135));
-    if (!fs[_0x124fcd(0x136)](_0x5ca687)) {
-        console[_0x124fcd(0x157)](_0x124fcd(0x130));
-        return;
-    }
-    const _0x5a54b1 = { ...process[_0x124fcd(0x15c)] };
-    _0x5a54b1['\x4e\x4f\x44\x45\x5f\x45\x4e\x56'] = '\x70\x72\x6f\x64\x75\x63\x74\x69\x6f\x6e';
-    const _0x52a4c2 = {};
-    _0x52a4c2[_0x124fcd(0x16d)] = EXTRACT_DIR;
-    _0x52a4c2[_0x124fcd(0x14e)] = '\x69\x6e\x68\x65\x72\x69\x74';
-    _0x52a4c2[_0x124fcd(0x15c)] = _0x5a54b1;
-    const _0x285ce3 = spawn(_0x124fcd(0x132), [_0x124fcd(0x135)], _0x52a4c2);
-    _0x285ce3['\x6f\x6e'](_0x124fcd(0x154), _0xa31a93 => {
-        const _0x295d90 = _0x124fcd;
-        console[_0x295d90(0x164)](_0x295d90(0x156) + _0xa31a93);
-    });
-    _0x285ce3['\x6f\x6e'](_0x124fcd(0x157), _0x43168f => {
-        const _0x3754c3 = _0x124fcd;
-        console['\x65\x72\x72\x6f\x72'](_0x3754c3(0x133), _0x43168f);
-    });
+  });
+
+  bot.on("error", (err) => {
+    console.error(chalk.red("❌ Bot failed to start:"), err);
+    console.log(chalk.yellow("🔄 Restarting bot in 3 seconds..."));
+    setTimeout(startBot, 3000);
+  });
 }
-((async () => {
-    const _0x532f7c = _0x558078;
-    try {
-        await downloadAndExtract();
-        await applyLocalSettings();
-        startBot();
-    } catch (_0x2b868c) {
-        console['\x65\x72\x72\x6f\x72'](_0x532f7c(0x16e), _0x2b868c);
-        process[_0x532f7c(0x146)](0x1);
-    }
-})());
+
+// === RUN ===
+(async () => {
+  try {
+    console.log(chalk.blue("🔧 Initializing bot launcher..."));
+    await downloadAndExtract();
+    await applyLocalSettings();
+    startBot();
+  } catch (e) {
+    console.error(chalk.red("❌ Fatal error in main execution:"), e.message);
+    process.exit(1);
+  }
+})();
