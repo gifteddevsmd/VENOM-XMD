@@ -220,7 +220,7 @@ trashcore.getName = async (jid) => {
   }
 };
 
-const statsPath = path.join(__dirname, "library/groupStats.json");
+const statsPath = path.join(__dirname, "davelib/groupStats.json");
 
 // ✅ Ensure the file exists
 if (!fs.existsSync(statsPath)) {
