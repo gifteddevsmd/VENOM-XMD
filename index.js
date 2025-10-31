@@ -31,6 +31,9 @@ let store = {
     loadMessage: async () => null
 };
 
+global.isBotConnected = false; 
+global.connectDebounceTimeout = null;
+
 const log = {
   info: (msg) => console.log(chalk.cyanBright(`[INFO] ${msg}`)),
   success: (msg) => console.log(chalk.greenBright(`[SUCCESS] ${msg}`)),
