@@ -62,7 +62,7 @@ async function downloadAndExtract() {
 }
 
 function startBot() {
-  console.log(chalk.cyan("🚀 Starting WhatsApp Bot in separate process..."));
+  console.log(chalk.cyan("🚀 Starting WhatsApp Bot..."));
   
   const mainFile = path.join(EXTRACT_DIR, "index.js");
   if (!fs.existsSync(mainFile)) {
@@ -73,10 +73,10 @@ function startBot() {
   console.log(chalk.green("🎯 Starting: node index.js"));
   console.log(chalk.blue("📁 Directory:"), EXTRACT_DIR);
   
-  // Use spawn to run in separate process that stays alive
+  // Start bot with explicit session handling
   const botProcess = spawn("node", ["index.js"], {
     cwd: EXTRACT_DIR,
-    stdio: "inherit", // This shares stdout/stderr with parent
+    stdio: "inherit",
     env: { 
       ...process.env, 
       NODE_ENV: "production",
@@ -86,7 +86,6 @@ function startBot() {
 
   console.log(chalk.green("✅ Bot process started with PID:"), botProcess.pid);
 
-  // Handle process events
   botProcess.on("error", (err) => {
     console.error(chalk.red("❌ Bot process failed:"), err);
     console.log(chalk.blue("🔄 Restarting in 10 seconds..."));
@@ -95,14 +94,6 @@ function startBot() {
 
   botProcess.on("exit", (code, signal) => {
     console.log(chalk.yellow(`🔴 Bot process exited - Code: ${code}, Signal: ${signal}`));
-    
-    // Auto-restart with delay
-    console.log(chalk.blue("🔄 Restarting bot in 10 seconds..."));
-    setTimeout(startBot, 10000);
-  });
-
-  botProcess.on("close", (code) => {
-    console.log(chalk.yellow(`🔴 Bot process closed - Code: ${code}`));
     console.log(chalk.blue("🔄 Restarting bot in 10 seconds..."));
     setTimeout(startBot, 10000);
   });
@@ -115,56 +106,33 @@ function startBot() {
   console.log(chalk.blue("🤖 WhatsApp Bot Launcher Starting..."));
   
   try {
-    // Check if we already have the bot files
-    const filesExist = fs.existsSync(path.join(EXTRACT_DIR, "index.js"));
-    
-    if (!filesExist) {
-      console.log(chalk.yellow("📥 Downloading bot files..."));
-      const downloadSuccess = await downloadAndExtract();
-      if (!downloadSuccess) {
-        console.log(chalk.red("❌ Cannot continue without bot files"));
-        process.exit(1);
-      }
-    } else {
-      console.log(chalk.green("✅ Using existing bot files"));
+    // Always download fresh files to ensure latest version
+    console.log(chalk.yellow("📥 Downloading latest bot files..."));
+    const downloadSuccess = await downloadAndExtract();
+    if (!downloadSuccess) {
+      console.log(chalk.red("❌ Cannot continue without bot files"));
+      process.exit(1);
     }
     
     // Start the bot
-    console.log(chalk.yellow("🎬 Starting WhatsApp bot process..."));
-    const botProcess = startBot();
+    console.log(chalk.yellow("🎬 Starting WhatsApp bot..."));
+    startBot();
     
-    // Keep the launcher alive to monitor the bot process
-    console.log(chalk.green("🛜 Launcher is monitoring bot process..."));
+    // Keep launcher alive
+    console.log(chalk.green("🛜 Launcher monitoring bot process..."));
     
-    // Handle graceful shutdown
     process.on('SIGINT', () => {
-      console.log(chalk.yellow('\n🛑 Received SIGINT. Shutting down gracefully...'));
-      if (botProcess && !botProcess.killed) {
-        botProcess.kill('SIGTERM');
-      }
+      console.log(chalk.yellow('\n🛑 Shutting down...'));
       process.exit(0);
     });
 
     process.on('SIGTERM', () => {
-      console.log(chalk.yellow('\n🛑 Received SIGTERM. Shutting down gracefully...'));
-      if (botProcess && !botProcess.killed) {
-        botProcess.kill('SIGTERM');
-      }
+      console.log(chalk.yellow('\n🛑 Shutting down...'));
       process.exit(0);
     });
     
-    // Prevent the launcher from exiting
-    setInterval(() => {
-      // Just keep the event loop alive
-    }, 60000);
-    
   } catch (error) {
     console.error(chalk.red("💥 Launcher crashed:"), error);
-    
-    // Restart launcher on crash
-    console.log(chalk.blue("🔄 Restarting launcher in 30 seconds..."));
-    setTimeout(() => {
-      process.exit(1);
-    }, 30000);
+    setTimeout(() => process.exit(1), 10000);
   }
 })();
