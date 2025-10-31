@@ -155,7 +155,7 @@ trashcore.ev.on('connection.update', async (update) => {
 
     initAntiDelete(trashcore, {
       botNumber, // Automatically detected
-      dbPath: './library/antidelete.json',
+      dbPath: './davelib/antidelete.json',
       enabled: true
     });
 
