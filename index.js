@@ -1,17 +1,24 @@
-// fixed-index.js
+
+require('dotenv').config();
 const fs = require('fs');
 const pino = require('pino');
 const path = require('path');
 const chalk = require('chalk');
+const os = require('os');
+const PhoneNumber = require('awesome-phonenumber');
 const {
-  default: makeWASocket,
-  useMultiFileAuthState,
-  makeCacheableSignalKeyStore,
-  fetchLatestBaileysVersion,
-  makeInMemoryStore,
-  downloadContentFromMessage,
-  jidDecode
-} = require('@whiskeysockets/baileys');
+    default: makeWASocket,
+    useMultiFileAuthState,
+    DisconnectReason,
+    fetchLatestBaileysVersion,
+    jidNormalizedUser,
+    makeCacheableSignalKeyStore,
+    delay 
+} = require("@whiskeysockets/baileys")
+const NodeCache = require("node-cache")
+const pino = require("pino")
+const readline = require("readline")
+const { rmSync } = require('fs')
 
 const handleCommand = require('./dave');
 const config = require('./config');
