@@ -156,26 +156,33 @@ function startBot() {
 
   console.log(chalk.green("🤖 Starting: node index.js"));
   
-  // Spawn the bot process with better handling
+  // Spawn the bot process
   const bot = spawn("node", ["index.js"], {
     cwd: EXTRACT_DIR,
     stdio: "inherit",
     env: {
       ...process.env,
       NODE_ENV: "production",
-      FORCE_COLOR: "1"  // Force color output
+      FORCE_COLOR: "1"
     },
     detached: false
   });
 
-  // Add process listeners for better debugging
+  let isBotRunning = true;
+
+  // Add process listeners
   bot.on("close", (code, signal) => {
+    isBotRunning = false;
     console.log(chalk.yellow(`🔴 Bot process closed - Code: ${code}, Signal: ${signal}`));
     
-    // Auto-restart with increasing delay
-    const restartDelay = 5000; // 5 seconds
-    console.log(chalk.blue(`🔄 Restarting bot in ${restartDelay/1000} seconds...`));
-    setTimeout(startBot, restartDelay);
+    // Auto-restart only if it crashed (non-zero exit code)
+    if (code !== 0) {
+      const restartDelay = 5000;
+      console.log(chalk.blue(`🔄 Restarting bot in ${restartDelay/1000} seconds...`));
+      setTimeout(startBot, restartDelay);
+    } else {
+      console.log(chalk.green("✅ Bot stopped gracefully."));
+    }
   });
 
   bot.on("exit", (code, signal) => {
@@ -183,24 +190,30 @@ function startBot() {
   });
 
   bot.on("error", (err) => {
+    isBotRunning = false;
     console.error(chalk.red("❌ Bot failed to start:"), err);
     console.log(chalk.blue("🔄 Restarting bot in 5 seconds..."));
     setTimeout(startBot, 5000);
   });
 
-  // Monitor for inactivity/hanging
-  let activityTimer = setTimeout(() => {
-    console.log(chalk.yellow("⚠️ No bot activity detected for 30 seconds. Checking process..."));
-    
-    // Check if process is still alive but not producing output
-    if (!bot.killed) {
-      console.log(chalk.yellow("⚠️ Bot process seems to be hanging. Restarting..."));
-      bot.kill('SIGTERM');
+  // Health check - only restart if process is actually dead
+  const healthCheck = setInterval(() => {
+    if (!isBotRunning) {
+      clearInterval(healthCheck);
+      return;
     }
-  }, 30000);
+    
+    // Check if process is still alive
+    if (bot.exitCode !== null || bot.signalCode !== null) {
+      console.log(chalk.yellow("⚠️ Bot process died, restarting..."));
+      clearInterval(healthCheck);
+      setTimeout(startBot, 3000);
+    }
+    // If process is still running but no output, that's OK - bot might be idle
+  }, 30000); // Check every 30 seconds
 
   bot.on("close", () => {
-    clearTimeout(activityTimer);
+    clearInterval(healthCheck);
   });
 
   return bot;
@@ -242,6 +255,9 @@ process.on('unhandledRejection', (reason, promise) => {
   } catch (e) {
     console.error(chalk.red("❌ Fatal error in main execution:"), e.message);
     console.log(chalk.yellow("🔄 Restarting launcher in 10 seconds..."));
-    setTimeout(() => process.exit(1), 10000);
+    setTimeout(() => {
+      console.log(chalk.blue("🔄 Restarting launcher..."));
+      process.exit(1);
+    }, 10000);
   }
 })();
