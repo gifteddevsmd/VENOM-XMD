@@ -1,7 +1,6 @@
 
 require('dotenv').config();
 const fs = require('fs');
-const pino = require('pino');
 const path = require('path');
 const chalk = require('chalk');
 const os = require('os');
