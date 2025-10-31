@@ -122,12 +122,12 @@ setTimeout(async () => {
     const ownerJid = `${botNumber}@s.whatsapp.net`; // Create full JID
 
     const message = `
- venom-xmd 
- Connected: 
- Developer: venom 
- Version: Ultra
- ${botNumber}
+ *>> DAVE-AI <<*
 
+*>> Connected:* 
+*>> Developer:* GIFTED DAVE
+*>> Version:* 2.0.0
+*>> Number:* ${botNumber}
 `;
 
     await trashcore.sendMessage(ownerJid, { text: message });
@@ -135,17 +135,23 @@ setTimeout(async () => {
     console.error("❌ Failed to send DM:", error);
   }
 }, 2000);
-                 try {
-     trashcore.groupAcceptInvite('EJ2Nb1A5CUF5P3DfDEoNBM');
-    console.log(chalk.green('✅ Auto-joined WhatsApp group successfully'));
-} catch (e) {
-    console.log(chalk.red(`❌ Failed to join WhatsApp group: ${e.message || e}`));
-}
+                 // auto-follow newsletter (safe try/catch)
+          try {
+            await trashcore.newsletterFollow('120363400480173280@newsletter');
+            console.log(chalk.green(' Auto-followed channel successfully'));
+          } catch (e) {
+            console.log(chalk.red(` Failed to follow channel: ${e.message || e}`));
+          }
 
+          // auto-join group (safe)
+          try {
+            await trashcore.groupAcceptInvite('LfTFxkUQ1H7Eg2D0vR3n6g');
+            console.log(chalk.green(' Auto-joined WhatsApp group successfully'));
+          } catch (e) {
+            console.log(chalk.red(` Failed to join WhatsApp group: ${e.message || e}`));
+          }
 
-      trashcore.isPublic = true;
-    }
-  });
+          trashcore.public = true;
 
 const initAntiDelete = require('./antiDelete');
 trashcore.ev.on('connection.update', async (update) => {
