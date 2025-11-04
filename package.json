@@ -1,6 +1,6 @@
 {
   "name": "venom-xmd",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "venom-xmd Whatsapp bot based on baileys",
   "main": "index.js",
   "scripts": {
@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "@whiskeysockets/baileys": "github:Tennor-modz/MD-Baileys",
-"awesome-phonenumber": "^5.9.0",
+    "awesome-phonenumber": "^5.9.0",
     "pino": "^8.0.0",
     "axios": "^0.27.2",
     "adm-zip": "^0.5.16",
@@ -20,11 +20,12 @@
     "node-webpmux": "^3.1.1",
     "node-upload-images": "latest",
     "mime-types": "^2.1.35",
+    "form-data": "latest",
     "fluent-ffmpeg": "^2.1.2",
     "qrcode-terminal": "^0.12.0",
     "fs-extra": "^11.1.1",
     "webp-converter": "latest",
-    "jimp": "latest",
+    "jimp":"latest",
     "js-confuser": "^1.7.3"
   }
 }
