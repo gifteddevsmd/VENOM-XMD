@@ -7,7 +7,7 @@
     "start": "node index.js"
   },
   "dependencies": {
-           "@whiskeysockets/baileys": "^6.7.21",
+    "@whiskeysockets/baileys":"npm:wileys",
     "pino": "^8.0.0",
     "axios": "^0.27.2",
     "adm-zip": "^0.5.16",
