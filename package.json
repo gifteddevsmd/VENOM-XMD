@@ -17,6 +17,7 @@
     "adm-zip": "^0.5.16",
     "express": "latest",
     "chalk": "^4.1.2",
+    "events": "^3.3.0",
     "dotenv": "^16.3.1",
     "yt-search": "^2.10.4",
     "api-dylux": "^1.8.5",
