@@ -1,5 +1,5 @@
 services:
-  - type: worker
+  - type: web
     name: venom-Xmd
     env: docker
     region: Frankfurt
