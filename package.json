@@ -44,7 +44,7 @@
     "gtts": "^0.2.1",
     "human-readable": "^0.2.1",
     "jimp": "^1.6.0",
-    "js-confuser": "^1.7.3"
+    "js-confuser": "^1.7.3",
     "jsdom": "^22.1.0",
     "libphonenumber-js": "^1.11.18",
     "libsignal": "^2.0.1",
