@@ -14,4 +14,8 @@
   <a href="https://davexsite-sable.vercel.app/">
     <img src="https://img.shields.io/badge/Deploy-venom--xmd-green?style=for-the-badge&logo=heroku" alt="Deploy venom-xmd" width="200">
   </a>
+
+  <a href="https://github.com/gifteddevsmd/VENOM-XMD/archive/refs/heads/main.zip">
+    <img src="https://img.shields.io/badge/Download-ZIP_File-orange?style=for-the-badge&logo=github" alt="Download ZIP" width="200">
+  </a>
 </p>
