@@ -6,7 +6,7 @@
     "keywords": ["nodejs", "bot", "whatsapp bot", "whatsapp automation", "multi device"],
     "env": {
     "SESSION_ID": {
-      "description": "put your session ID here. Must begin with trashcore",
+      "description": "put your session ID here. Must begin with DAVE-AI:~",
       "value": "DAVE-AI:~",
       "required": true
     }
