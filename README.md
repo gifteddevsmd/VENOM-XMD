@@ -45,9 +45,9 @@ During deployment, set these environment variables:
 
 ### Step 4: Get Pair Code
 Once the worker is running:
-1. Go to your Heroku app logs (More → View logs)
+1. Go to pair site 
 2. Look for: `"Enter the WhatsApp number you want to use as a bot"`
 3. Enter your number when prompted in the logs
-4. Get the pair code from logs
+4. Get the pair code 
 5. Enter the code in your WhatsApp → Linked Devices
 
