@@ -38,7 +38,7 @@ During deployment, set these environment variables:
 
 1. Go to your Heroku app dashboard
 2. Click on the "Resources" tab
-3. Find the "worker" process under "Free Dynos"
+3. Find the "worker" process under "Dynos"
 4. Click the pencil/edit icon
 5. Toggle the switch to **ON**
 6. Click "Confirm"
